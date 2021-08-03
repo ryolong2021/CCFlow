@@ -1,0 +1,17 @@
+name: CCflow bulid
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+      with:
+        persist-credentials: false
+    - name: Restore, Build, test, and pack
+      uses: Elskom/build-dotnet@main
+      with:
+        SOLUTION_FILE_PATH: /home/runner/work/ccflow/ccflow/CCFlow
