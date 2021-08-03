@@ -1,0 +1,74 @@
+﻿<!-- メニュー画面カードの形のような一覧画面テンプレート定義 -->
+<!-- 「m-request-info--with-duplicate」がコピーリンク様式専用 -->
+<!-- 「m-request-info--buttons」がコピーリンクとボタン様式専用 -->
+<!--
+    m-request-info--approval:承認
+    m-request-info--waiting:未対応
+    m-request-info--remand:差戻し
+    m-request-info--in-progress:承認待ち
+    m-request-info--draft:下書き
+    m-request-info--denial:否認
+    a-status-info__badge:赤点
+
+    サンプル：
+    <div class="m-request-info m-request-info--approval m-request-info--with-duplicate m-request-info--buttons"></div>
+-->
+<div id="card-list-common-id" class="m-request-info m-request-info--buttons">
+    <div class="m-request-info__content">
+
+        <!-- アイコンエリアの定義 -->
+        <div class="m-request-info__status">
+
+            <!-- ステータス様式の設定 -->
+            <div class="a-status-info">
+                <div class="a-status-info__icon">
+
+                    <!-- ステータスアイコンの設定 -->
+                    <i class="a-icon"></i>
+
+                    <!-- 赤点の様式、ロジックにより追加、削除を行うこと -->
+                    <i class="a-status-info__badge"></i>
+                </div>
+
+                <!-- 文後の様式、ロジックにより追加、削除を行うこと -->
+                <span class="a-status-info__label"></span>
+            </div>
+        </div>
+
+        <!-- 説明エリアの定義 -->
+        <div class="m-request-info__detail">
+
+            <!-- タイトル文言の設定 -->
+            <div class="m-request-info__detail-title"></div>
+
+            <!-- タイトル明細定義 -->
+            <div class="m-request-info__detail-list">
+                <div id="request-detail-info-id" class="a-request-info-item a-request-info-item--long">
+                    <!-- 明細タイトル -->
+                    <span class="a-request-info-item__label"></span>
+                    <span class="a-request-info-item__separator">：</span>
+                    <!-- 明細内容 -->
+                    <span class="a-request-info-item__value"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ボタンがある場合、下記のエリアを表示すること -->
+    <div class="m-button-container m-button-container--horizontal m-request-info__action">
+
+        <!--
+        a-button--third：背景色がグレー
+        a-button--secondary：背景色が薄いピンク
+        a-button--primary：背景色が深いピンク
+        a-button--text：リンクの様式
+
+        サンプル：
+        <button class="a-button  a-button--primary">
+        -->
+        <button type="button" id="btn-action-id" class="a-button">
+            <!-- 文言設定 -->
+            <div class="a-button__label"></div>
+        </button>
+    </div>
+</div>

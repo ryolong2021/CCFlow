@@ -1,0 +1,523 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSSエリア 開始 -->
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <link rel="stylesheet" href="../../../css/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="../../../css/common/app.css">
+    <!-- CSSエリア 終了 -->
+    <!-- jquery -->
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+    <!-- validate コンポーネント(項目入力チェック用)：validate, additional-methods, messages_ja -->
+    <script src="../../../js/vendor/jquery.validate.js"></script>
+    <script src="../../../js/vendor/additional-methods.js"></script>
+    <script src="../../../js/vendor/messages_ja.js"></script>
+    <!-- 日付パネルを表示する方法：datetimepicker -->
+    <script src="../../../js/vendor/jquery.datetimepicker.full.js"></script>
+    <!-- 日付フォーマット用 -->
+    <script src="../../../js/vendor/moment-with-locales.js"></script>
+    <!-- 共通定数：app_const -->
+    <script src="../../../js/common/app_const.js"></script>
+    <!-- 共通関数：app_common -->
+    <script src="../../../js/common/app_common.js"></script>
+</head>
+
+<body>
+    <form id="form1">
+        <div class="o-whole o-whole--with-bg o-whole--with-navigation o-whole--global">
+            <div class="o-whole__body-container" id="bodyContainer">
+                <script>GetSubHtmlDataToHtml("bodyContainer", "../../../pages/common/app_dialog_area.html");</script>
+                <div class="o-modal" id="modal-help">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close" id="modal-help-close"></i></button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header o-modal__header--has-icon">
+                                <i class="a-icon a-icon--help"></i>
+                                <p>香料・供花・弔電とは？</p>
+                            </header>
+                            <h4 class="a-heading a-heading--h4 undefined"><span class="a-heading__label">香料(こうりょう)とは</span></h4>
+                            <p class="a-text a-text--align-left">「御香料」は葬儀などで故人に対してお供えする金品のことです。</p>
+                            <h4 class="a-heading a-heading--h4 undefined"><span class="a-heading__label">供花(きょうか、くげ)とは</span></h4>
+                            <p class="a-text a-text--align-left">「供花」とは故人に供える花のことを指します。供花には死者の霊を慰めると同時に祭壇や会場を飾る意味があり、葬儀の際は、親族や親戚一同と書かれ祭壇の両側に置かれていることが一般的です。</p>
+                            <h4 class="a-heading a-heading--h4 undefined"><span class="a-heading__label">弔電とは</span></h4>
+                            <p class="a-text a-text--align-left">弔電についての一般的な説明がここには入ります弔電についての一般的な説明がここには入ります弔電についての一般的な説明がここには入ります弔電についての一般的な説明がここには入ります。</p>
+                        </main>
+                    </div>
+                </div>
+                <div class="o-modal o-modal--fullscreen o-modal--has-footer" id="full-modal">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" id="my-close-button" type="button">
+                            <i class="a-icon a-icon--close"></i>
+                        </button>
+                        <main class="o-modal__body">
+                            <section class="m-section m-section--border">
+                                <footer class="o-modal__footer">
+                                    <button class="a-button a-button--primary a-button--huge" id="sample-alert" type="button">
+                                        <div class="a-button__label">alert</div>
+                                    </button>
+                                    <button class="a-button a-button--primary a-button--huge" id="sample-confirm" type="button">
+                                        <div class="a-button__label">confirm</div>
+                                    </button>
+                                    <button class="a-button a-button--primary a-button--huge" id="sample-info" type="button">
+                                        <div class="a-button__label">info</div>
+                                    </button>
+                                </footer>
+                                <h3 class="a-heading a-heading--h3 undefined">
+                                    <span class="a-heading__label">テキストボックス／テキストエリア</span>
+                                </h3>
+                                <div class="a-help-button a-help-button--with-children" id="help-opener">
+                                    <i class="a-icon a-icon--help"></i>
+                                    <span class="a-help-button__children">
+                                        を押すと項目の詳しい説明が表示されます。
+                                    </span>
+                                </div>
+                                <p class="a-text a-text--align-left">本連絡に関して弔事手配業者からの連絡先となります。</p>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">電話番号</label>
+                                    <div class="m-form-field__content">
+                                        <div class="a-text-field a-text-field--type-tel">
+                                            <input type="tel" name="tel" id="tel"
+                                                   class="a-text-field__input" value="090-1234-5678" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">メールアドレス</label>
+                                    <div class="m-form-field__content">
+                                        <div class="a-text-field a-text-field--type-email">
+                                            <input type="email" name="email" id="email"
+                                                   class="a-text-field__input" value="dummy@aeon.co.jp" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">否認理由</label>
+                                    <div class="m-form-field__content">
+                                        <div class="a-text-field">
+                                            <textarea name="content" id="content"
+                                                      placeholder="否認理由などをご記入ください。"
+                                                      class="a-text-field__input"
+                                                      rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+                            <section class="m-section m-section--border">
+                                <h3 class="a-heading a-heading--h3 undefined">
+                                    <span class="a-heading__label">その他</span>
+                                </h3>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">ドロップダウンリスト</label>
+                                        <div class="m-form-field__content">
+                                            <div class="a-pulldown" id="pulltest">
+                                                <select name="something" id="something" class="a-pulldown__select">
+                                                    <option value=""></option>
+                                                    <option value="0">修正後再申請</option>
+                                                    <option value="1" selected>手配完了</option>
+                                                    <option value="2">手配不能</option>
+                                                    <option value="3">引き戻し</option>
+                                                    <option value="4">差し戻し</option>
+                                                    <option value="5">取り消し</option>
+                                                    <option value="6">承認</option>
+                                                    <option value="7">否認</option>
+                                                </select>
+                                                <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">ドロップダウンリスト2</label>
+                                        <div class="m-form-field__content" id="ssssss">
+                                            <div class="a-pulldown" id="pulltest2">
+                                                <select name="something2" id="something2" class="a-pulldown__select">
+                                                </select>
+                                                <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">ラジオボタン</label>
+                                        <div class="m-form-field__content">
+                                            <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                <label class="a-radio a-radio--grey undefined">
+                                                    <input type="radio" name="livingliving"
+                                                           value="1" class="a-radio__input" />
+                                                    <div class="a-radio__body">
+                                                        <span class="a-radio__indicator"></span>
+                                                        <div class="a-radio__label">同居</div>
+                                                    </div>
+                                                </label>
+                                                <label class="a-radio a-radio--grey undefined">
+                                                    <input type="radio" name="livingliving"
+                                                           value="0" class="a-radio__input" />
+                                                    <div class="a-radio__body">
+                                                        <span class="a-radio__indicator"></span>
+                                                        <div class="a-radio__label">別居</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">チェックボックス</label>
+                                        <div class="m-form-field__content">
+                                            <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="sample_check" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">男</div>
+                                                    </div>
+                                                </label>
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="sample_check" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">女</div>
+                                                    </div>
+                                                </label>
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="sample_check" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">その他</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="m-section">
+                                <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">通夜について</span></h3>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">日付</label>
+                                    <div class="m-form-field__content">
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                            <div class="a-calendar-field undefined">
+                                                <div class="a-calendar-field__content">
+                                                    <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                        <input type="text"
+                                                               class="a-text-field__input" id="datetest" name="datetest" autocomplete="off" />
+                                                    </div>
+                                                </div>
+                                                <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">時間</label>
+                                    <div class="m-form-field__content">
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                            <div class="a-calendar-field undefined">
+                                                <div class="a-calendar-field__content">
+                                                    <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                        <input type="text"
+                                                               class="a-text-field__input" id="datetest0" name="datetest0" autocomplete="off" />
+                                                    </div>
+                                                </div>
+                                                <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">郵便番号</label>
+                                    <div class="m-form-field__content">
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                            <div class="a-address-search-field">
+                                                <div class="a-text-field"><input class="a-text-field__input" id="address001" name="address001" value="107-0052" /></div><button type="button" class="a-button a-button--third">
+                                                    <div class="a-button__label">住所検索</div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">出張期間</label>
+                                    <div class="m-form-field__content">
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                            <div class="a-date-range-field undefined">
+                                                <div class="a-calendar-field a-date-range-field__start-date">
+                                                    <div class="a-calendar-field__content">
+                                                        <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                            <input type="text"
+                                                                   class="a-text-field__input" name="datetest002" id="datetest002" autocomplete="off" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                                </div><span class="a-date-range-field__line">~</span>
+                                                <div class="a-calendar-field a-date-range-field__end-date">
+                                                    <div class="a-calendar-field__content">
+                                                        <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                            <input type="text"
+                                                                   class="a-text-field__input" name="datetest003" id="datetest003" autocomplete="off" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">出張期間（制限なし）</label>
+                                    <div class="m-form-field__content">
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                            <div class="a-date-range-field undefined">
+                                                <div class="a-calendar-field a-date-range-field__start-date">
+                                                    <div class="a-calendar-field__content">
+                                                        <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                            <input type="text"
+                                                                   class="a-text-field__input" name="datetest004" id="datetest004" autocomplete="off" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                                </div><span class="a-date-range-field__line">~</span>
+                                                <div class="a-calendar-field a-date-range-field__end-date">
+                                                    <div class="a-calendar-field__content">
+                                                        <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                            <input type="text"
+                                                                   class="a-text-field__input" name="datetest005" id="datetest005" autocomplete="off" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="a-upload-field">
+                                    <label class="a-upload-field__input-area">
+                                        <input type="file" name="upload_test1" id="upload_test1"
+                                               accept="image/*" class="a-upload-field__input" multiple="" />
+                                        <div class="a-upload-field__placeholder">
+                                            <span class="a-upload-field__title">ここにファイルをドラッグ<br />または</span><span class="a-upload-field__label">ファイルを選択</span><span class="a-upload-field__description">
+                                                形式：jpg /
+                                                png | サイズ：30MBまで
+                                            </span>
+                                        </div>
+                                    </label>
+                                    <div class="a-upload-field__preview-holder">
+                                        <div class="m-upload-list a-upload-field__file-list a-upload-field__file-list--image a-upload-field__file-list--no-child">
+                                            <label class="m-upload-list__label">アップロード済みファイル</label>
+                                            <ul class="m-upload-list__items"></ul>
+                                            <template class="m-upload-list__template">
+                                                <li class="m-upload-list__item">
+                                                    <div class="m-upload-list__file">
+                                                        <span class="m-upload-list__file-name">_</span><span class="m-upload-list__file-size">40KB</span>
+                                                    </div><button type="button"
+                                                                  class="m-upload-list__button-remove">
+                                                        <i class="a-icon a-icon--close"></i>
+                                                    </button>
+                                                </li>
+                                            </template>
+                                        </div>
+                                    </div><button type="button" class="a-button a-button--text a-upload-field__reset">
+                                        <div class="a-button__label">アップロードしたファイルを削除</div>
+                                    </button>
+                                </div><br />
+                            </section>
+                        </main>
+                        <footer class="o-modal__footer">
+                            <button class="a-button a-button--secondary a-button--huge cancel-confirm-button" type="button">
+                                <div class="a-button__label">下書き保存</div>
+                            </button>
+                            <button class="a-button a-button--primary a-button--huge" id="input-form-check-button" type="button">
+                                <div class="a-button__label">確認</div>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="o-modal o-modal--dialog o-modal--has-footer" id="cancel_dialog">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button">
+                            <i class="a-icon a-icon--close"></i>
+                        </button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header undefined">
+                                <p>中止しますか？</p>
+                            </header>
+                            <p class="a-text a-text--small a-text--align-center">
+                                お申込手続きを終了します。
+                                入力内容は保存されません。
+                                よろしいでしょうか？
+                                このページから移動してもよろしいですか？
+                            </p>
+                        </main>
+                        <footer class="o-modal__footer">
+                            <button class="a-button a-button--third a-button--large" id="cancel_ok" type="button">
+                                <div class="a-button__label">OK</div>
+                            </button><button class="a-button a-button--primary a-button--large" id="cancel_cancel" type="button">
+                                <div class="a-button__label">Cancel</div>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="o-modal o-modal--dialog o-modal--has-footer" id="modal-confirm">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button">
+                            <i class="a-icon a-icon--close"></i>
+                        </button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header undefined">
+                                <p>下書きに保存しますか？</p>
+                            </header>
+                            <p class="a-text a-text--small a-text--align-center">終了する前に編集中の内容を保存できます。</p>
+                        </main>
+                        <footer class="o-modal__footer">
+                            <button class="a-button a-button--third a-button--large">
+                                <div class="a-button__label">破棄する</div>
+                            </button><button class="a-button a-button--primary a-button--large">
+                                <div class="a-button__label">下書き保存</div>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="o-modal o-modal--fullscreen o-modal--has-footer o-modal--has-back-button" id="pageTwo">
+                    <div class="o-modal__window">
+                        <main class="o-modal__body">
+                            <a class="a-modal-back-button o-modal__back-button" id="btn_back">
+                                <i class="a-icon a-icon--back"></i>戻る
+                            </a>
+                            <h1 class="a-heading a-heading--h1 undefined"><span class="a-heading__label">確認画面</span></h1>
+                            <section class="m-section m-section--fill">
+                                <p class="a-text a-text--align-left">香料・供花・弔電について、辞退やキャンセル等の理由で未手配の場合、ご逝去日から1年以内に申請いただければご手配いたします。</p>
+                                <ul class="a-caption-list">
+                                    <li>手配依頼期限：2022年2月10日</li>
+                                    <li>供花・弔電はまとめてのご手配となるため、一方のみを手配された後にもう一方を申請することはできません。予めご了承ください。</li>
+                                </ul><a href="#" class="a-internal-link">手配を申請する<i class="a-icon a-icon--link"></i></a>
+                            </section><br />
+                            <h2 class="a-heading a-heading--h2 undefined"><span class="a-heading__label">手配状況</span></h2>
+                            <div class="m-info-table m-info-table--no-border-header-single">
+                                <div class="m-info-table__container">
+                                    <div class="m-info-table__item">
+                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                            <div class="a-info-table-cell__content">
+                                                <span class="a-info-table-cell__label">香料</span><span>手配済</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-info-table__item">
+                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                            <div class="a-info-table-cell__content">
+                                                <span class="a-info-table-cell__label">供花</span><span>
+                                                    辞退（<a class="a-text-link a-text-link--underline" href="#">手配できます</a>）
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-info-table__item">
+                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                            <div class="a-info-table-cell__content">
+                                                <span class="a-info-table-cell__label">弔電</span><span>
+                                                    辞退（<a class="a-text-link a-text-link--underline" href="#">手配できます</a>）
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="a-caption-list">
+                                <li>手配依頼期限：2022年2月10日</li>
+                                <li>供花・弔電はまとめてのご手配となるため、一方のみを手配された後にもう一方を申請することはできません。予めご了承ください。</li>
+                            </ul>
+                            <h2 class="a-heading a-heading--h2 undefined"><span class="a-heading__label">申請内容</span></h2>
+                            <ul class="m-approval-workflow m-approval-workflow--auto">
+                                <li class="m-approval-workflow__item">
+                                    <div class="a-approval-step a-approval-step--auto a-approval-step--has-requester a-approval-step--done">
+                                        <span class="a-approval-step__icon"><i class="a-icon a-icon--status-a"></i></span><span class="a-approval-step__name">山田太郎</span>
+                                    </div>
+                                </li>
+                                <li class="m-approval-workflow__item">
+                                    <div class="a-approval-step a-approval-step--auto a-approval-step--has-requester a-approval-step--done">
+                                        <span class="a-approval-step__icon"><i class="a-icon a-icon--status-a"></i></span><span class="a-approval-step__name">山田太郎</span>
+                                    </div>
+                                </li>
+                            </ul><br /><a href="#" class="a-internal-link">詳しく見る<i class="a-icon a-icon--link"></i></a>
+                            <h2 class="a-heading a-heading--h2 undefined"><span class="a-heading__label">弔電とは</span></h2>
+                            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">弔電とは</span></h3>
+                            <div class="m-form-field">
+                                <label class="m-form-field__label">電話番号</label>
+                                <div class="m-form-field__content">
+                                    <p class="a-text a-text--align-left">090-1234-5678</p>
+                                </div>
+                            </div>
+                            <div class="m-form-field">
+                                <label class="m-form-field__label">メールアドレス</label>
+                                <div class="m-form-field__content">
+                                    <p class="a-text a-text--align-left">090-1234-5678</p>
+                                </div>
+                            </div>
+                            <div class="m-form-field">
+                                <label class="m-form-field__label">通夜は行いますか</label>
+                                <div class="m-form-field__content">
+                                    <p class="a-text a-text--align-left">はい / 一般参列を辞退する</p>
+                                </div>
+                            </div>
+                            <div class="m-info-table">
+                                <div class="m-info-table__header">差出人情報</div>
+                                <div class="m-info-table__container">
+                                    <div class="m-info-table__item">
+                                        <div class="a-info-table-cell">
+                                            <div class="a-info-table-cell__content">
+                                                <p style="margin-bottom:13px">イオンアイビス(株) <br />社長　佐藤一郎</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-info-table__item">
+                                        <div class="a-info-table-cell">
+                                            <div class="a-info-table-cell__content">
+                                                <p style="margin-bottom:13px">イオンアイビス(株) <br />社長　佐藤一郎</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><br />
+                        </main>
+                        <footer class="o-modal__footer">
+                            <button class="a-button a-button--primary a-button--huge" id="input-form-submit-button">
+                                <div class="a-button__label">申請</div>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- 4dのコンポーネント -->
+    <script src="../../../js/components.js"></script>
+
+    <!-- CCFLOW相関 -->
+    <script language="JavaScript" src="../../../../WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <!-- サンプル -->
+    <script src="../../../js/biz/sample/page_sample.js"></script>
+</body>
+
+</html>

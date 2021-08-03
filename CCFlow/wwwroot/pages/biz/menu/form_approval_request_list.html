@@ -1,0 +1,143 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>承認依頼を見る</title>
+
+    <!-- CSSエリア 開始 -->
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <link rel="stylesheet" href="../../../css/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="../../../css/common/app.css">
+    <!-- CSSエリア 終了 -->
+    <!-- 共通js:jquery -->
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+    <!-- validate コンポーネント(項目入力チェック用)：validate, additional-methods, messages_ja -->
+    <script src="../../../js/vendor/jquery.validate.js"></script>
+    <script src="../../../js/vendor/additional-methods.js"></script>
+    <script src="../../../js/vendor/messages_ja.js"></script>
+    <!-- 日付パネルを表示する方法：datetimepicker -->
+    <script src="../../../js/vendor/jquery.datetimepicker.full.js"></script>
+    <!-- 日付フォーマット用 -->
+    <script src="../../../js/vendor/moment-with-locales.js"></script>
+    <!-- 共通定数：app_const -->
+    <script src="../../../js/common/app_const.js"></script>
+    <!-- 共通関数：app_common -->
+    <script src="../../../js/common/app_common.js"></script>
+    <!-- 画面表示共通メッセージ：meg_comm -->
+    <script src="../../../js/common/msg_comm.js"></script>
+
+    <!-- CCFLOW相関 -->
+    <script language="JavaScript" src="../../../../WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../WF/Comm/Gener.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <!-- 承認依頼を見るフォーム -->
+    <form name="approval_request_list_form" id="approval_request_list_form">
+
+        <!-- 承認依頼を見る画面 -->
+        <div class="o-whole o-whole--with-bg o-whole--with-navigation o-whole--global">
+            <div class="o-whole__body-container" id="whole__body_container">
+
+                <!-- ナビエリア定義 -->
+                <div class="o-whole__navigation" data-simplebar="true" id="pageOne">
+                    <script>GetSubHtmlDataToHtml("pageOne", "../../common/app_left_menu_area.html");</script>
+                </div>
+
+                <!-- 該当画面メイン部分の定義 -->
+                <div class="o-whole__body">
+
+                    <!-- タイトル部分定義 -->
+                    <section id="page_title_area" class="m-section m-section--no-padding">
+                        <div class="m-page-heading m-page-heading--with-actions">
+
+                            <!-- タイトル文言定義 -->
+                            <h1 class="a-heading a-heading--h1 undefined"><span class="a-heading__label">承認依頼を見る</span></h1>
+
+                            <!-- 絞り込み検索ボタンの定義(JSから読み込んで、表示すること) -->
+                            <div class="m-page-heading__actions">
+                                <div id="search-bar-comp" class="m-search-bar" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- カード一覧部分定義 -->
+                    <section class="m-section m-section--no-padding p-search-filter-holder">
+
+                        <!-- 各タブの定義 -->
+                        <div class="m-tabs">
+
+                            <!-- タブタイトル部分定義 -->
+                            <ul class="m-tabs__tab-list">
+                                <li class="m-tabs__tab m-tabs__tab--active"><button type="button" class="a-tab-nav-item a-tab-nav-item--active">承認待ち<i class="" id="a-tab-wait"></i></button></li>
+                                <li class="m-tabs__tab"><button type="button" class="a-tab-nav-item">未完了</button></li>
+                                <li class="m-tabs__tab"><button type="button" class="a-tab-nav-item">完了<i class="" id="a-tab-done"></i></button></li>
+                            </ul>
+
+                            <!-- 表示板文言の定義 -->
+                            <div class="m-tabs__indicator"></div>
+
+                            <!-- 各タブコンテンツの定義 -->
+                            <div class="m-tabs__contents">
+
+                                <!-- 承認待ちタブ定義 -->
+                                <div class="m-tabs__content m-tabs__content--active">
+                                    <div class="a-alert" id="alert-wait" hidden>
+                                        <div class="a-alert__info">新着が <span class="a-alert__text"><span class="a-alert__number">4</span>件</span> あります。</div><a class="a-text-link a-alert__button" id="a-wait">すべて確認済にする</a>
+                                    </div>
+                                    <section class="m-section m-section--no-padding">
+                                        <div id="in-progress-card-list" class="m-request-info-list" />
+                                    </section>
+                                </div>
+
+                                <!-- 未完了タブ定義 -->
+                                <div class="m-tabs__content">
+                                    <section class="m-section m-section--no-padding">
+                                        <div id="in-complete-card-list" class="m-request-info-list" />
+                                    </section>
+                                </div>
+
+                                <!-- 完了タブ定義 -->
+                                <div class="m-tabs__content">
+                                    <div class="a-alert" id="alert-done" hidden>
+                                        <div class="a-alert__info">新着が <span class="a-alert__text"><span class="a-alert__number">4</span>件</span> あります。</div>
+                                        <a class="a-text-link a-alert__button" id="a-done">すべて確認済にする</a>
+                                    </div>
+                                    <section class="m-section m-section--no-padding">
+                                        <div id="complete-card-list" class="m-request-info-list" />
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ダイアログ画面 -->
+                <script>GetSubHtmlDataToHtml("whole__body_container", "../../../pages/common/app_dialog_area.html");</script>
+            </div>
+        </div>
+    </form>
+
+    <!-- 4dのコンポーネント -->
+    <script src="../../../js/components.js"></script>
+    <!-- 業務JS：page_left_menu.js -->
+    <script src="../../../js/biz/menu/comm/page_left_menu.js"></script>
+    <!-- 業務JS：page_tehaigyousyalist.js -->
+    <script src="../../../js/biz/menu/page_approval_request_list.js"></script>
+    <!-- 絞り込み検索ボタン共通：refined_search_common.js -->
+    <script src="../../../js/common/refined_search_common.js"></script>
+    <!-- 検索条件表示共通：search_current_filters_common.js -->
+    <script src="../../../js/common/search_current_filters_common.js"></script>
+    <!-- カードリスト共通：card_list_common.js -->
+    <script src="../../../js/common/card_list_common.js"></script>
+
+</body>
+
+</html>

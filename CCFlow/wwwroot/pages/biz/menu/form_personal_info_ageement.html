@@ -1,0 +1,115 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>個人情報取り扱い同意画面</title>
+
+    <!-- CSSエリア 開始 -->
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <link rel="stylesheet" href="../../../css/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="../../../css/common/app.css">
+    <!-- CSSエリア 終了 -->
+    <!-- 共通js:jquery -->
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+    <!-- 4dのコンポーネント -->
+    <script src="../../../js/components.js"></script>
+    <!-- validate コンポーネント(項目入力チェック用)：validate, additional-methods, messages_ja -->
+    <script src="../../../js/vendor/jquery.validate.js"></script>
+    <script src="../../../js/vendor/additional-methods.js"></script>
+    <script src="../../../js/vendor/messages_ja.js"></script>
+    <!-- 日付パネルを表示する方法：datetimepicker -->
+    <script src="../../../js/vendor/jquery.datetimepicker.full.js"></script>
+    <!-- 日付フォーマット用 -->
+    <script src="../../../js/vendor/moment-with-locales.js"></script>
+
+    <!-- CCFLOW相関 -->
+    <script language="JavaScript" src="../../../../WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <!-- 共通定数：app_const -->
+    <script src="../../../js/common/app_const.js"></script>
+    <!-- 共通関数：app_common -->
+    <script src="../../../js/common/app_common.js"></script>
+    <!-- 画面表示共通メッセージ：meg_comm -->
+    <script src="../../../js/common/msg_comm.js"></script>
+
+    <!-- 業務JS：page_personal_info_ageement.js -->
+    <script src="../../../js/biz/menu/page_personal_info_ageement.js"></script>
+    <!-- 一覧表示共通：table_list_common.js -->
+    <script src="../../../js/common/table_list_common.js"></script>
+</head>
+
+<body>
+    <div class="o-whole o-whole--with-bg o-whole--with-navigation o-whole--settings">
+        <div class="o-whole__body-container" id="whole__body_container">
+
+            <!-- ヘッダーの設定 -->
+            <div class="o-whole__navigation">
+                <div class="m-setting-header" style="background-color:#FCF6F8">
+                    <div class="o-global-navigation__logo"><img src="../../../assets/images/logo.svg" alt="Densin" /></div>
+                </div>
+            </div>
+
+            <!-- ボディ内容の設定 -->
+            <div class="o-whole__body">
+                <section class="m-section m-section--fill-white p-setting-input-form__wrapper">
+                    <section class="m-section m-section--border p-setting-input-form__heading">
+                        <h1 class="a-heading undefined">
+                            <span class="a-heading__label">電子申請より入力される個人情報の取り扱いについて</span>
+                        </h1>
+                    </section>
+                    <section class="m-section p-setting-input-form__body">
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left">
+                                （１）利用目的<br />
+                                このシステムで入力する個人情報は、下記の目的にのみ利用します。<br />
+                                ①出張手配・旅費精算　②立替精算　③入退社・異動・転居その他の従業員情報管理<br />
+                                なお電子申請等（代理申請含む）で連絡された慶弔情報は、下記の目的にも利用します。<br />
+                                ④お祝い、供花、弔電の手配への利用　⑤イオングッドライフクラブからのご案内<br />
+                                （２）同意いただけない場合の処理<br />
+                                個人情報の利用目的に同意いただけない場合は、旅費精算等に支障をきたすことがあります。<br />
+                                （３）委託、第三者への提供について<br />
+                                個人情報の取り扱いを、利用目的の達成に必要な範囲で外部業者等に委託することがあります。<br />
+                                委託する場合は、委託先にも当社の遵守事項を同様に遵守いただきます。<br />
+                                このシステムに入力する情報は第三者に提供いたしません。<br />
+                                （４）共同利用<br />
+                                入力いただいた個人情報は、利用目的の範囲で、電子申請システムを利用するイオングループ各社、及び<br />
+                                健康保険組合、厚生年金基金、慶弔他福利厚生取扱会社、出張業務取扱会社と共同利用します。<br />
+                                （５）共同利用する情報の内容<br />
+                                ・基本情報（氏名、住所、生年月日、性別、電話番号、口座情報など）<br />
+                                ・人事情報（社員番号、資格、学歴、職位、所属部署、組合区分）<br />
+                                ・家族、親族情報（婚姻、家族構成、同・別居、グッドライフ区分）<br />
+                                共同利用に際しての管理責任者：　各社人事担当部署責任者<br />
+                                （６）管理者<br />
+                                入力いただいた個人情報の管理は、イオンアイビス株式会社において行ないます。<br />
+                                （７）問い合わせ先<br />
+                                ①個人情報の問い合わせ<br />
+                                ・個人情報の開示・訂正・利用停止等については、各社の人事担当部署までお問い合わせください。<br />
+                                ・個人情報に係る相談窓口　イオンアイビス株式会社　総務・内部統制推進部<br />
+                                ＴＥＬ　０４３－２１２－６２９４　　　　受付時間　９：３０～１８：００（土日祝日・年末年始を除く）<br />
+                                ②個人情報以外の問い合わせ<br />
+                                ・システムの操作に関するお問い合わせ先：ＴＥＬ　０８００－９１９－０４５１（ヘルプデスク）
+                            </p>
+                        </div>
+                    </section>
+                </section>
+                <footer class="o-modal__footer">
+                    <button type="button" class="a-button a-button--third a-button--huge" id="btn_disagree">
+                        <div class="a-button__label">同意しない</div>
+                    </button>
+                    <button type="button" class="a-button a-button--primary a-button--huge" id="btn_agree">
+                        <div class="a-button__label">同意する</div>
+                    </button>
+                </footer>
+            </div>       
+        </div>
+    </div>
+</body>
+
+</html>

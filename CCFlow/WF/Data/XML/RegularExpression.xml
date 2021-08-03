@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+  <!--
+   TBType= 编号
+   Name=名称
+   Note=描述
+   For=适用于哪些文本框.
+   onblur，onchange，ondblclick，onkeypress，onkeyup
+  -->
+  <!--<Item No="NotNull" Name="字段不能为空" Note="应用于字段不能为空人检查"  ForCtrl="TB" />
+  <Dtl ItemNo="NotNull" ForEvent="onblur" Exp="sdsdsd"   Msg="字段不能为空"   Note=""/>
+  <Dtl ItemNo="NotNull" ForEvent="onkeypress" Exp="sdsds" Msg="字段不能为空"  Note=""/>-->
+  
+  <Item No="Tel" Name="携帯電話の番号が正しく入力されているか確認してください" Note="携帯電話番号の入力チェックに適用します。"  ForCtrl="TB" />
+  <Dtl ItemNo="Tel"  ForEvent="onblur"  Exp="/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/" Msg="不正の携帯番号" />
+
+  <Item No="TelNotNull" Name="携帯電話の番号が正しく入力されているか確認してください（送信時に空にすることはできません）" Note="携帯電話番号の入力チェックに適用します。"  ForCtrl="TB" />
+  <Dtl ItemNo="TelNotNull"  ForEvent="onblur"   Exp="/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/" Msg="不正な携帯番号" />
+  <Dtl ItemNo="TelNotNull"  ForEvent="onsubmit" Exp="/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/" Msg="携帯番号は必ず記入してください" />
+
+  <Item No="NotNull" Name="空かどうかを確認する" Note="フォームを提出する際に値のチェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="NotNull"  ForEvent="onsubmit"  Exp="/\S/" Msg="必須項目、空できない" />
+
+  <Item No="Mail" Name="メールアドレスが正しく入力されていることを確認します" Note="メールアドレスの入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="Mail"  ForEvent="onblur"  Exp="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/" Msg="メールアドレスが入力不正です" />
+  
+  <Item No="MailNotNull" Name="メールアドレスが正しく入力されていることを確認します（入力必須）" Note="メールアドレスの入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="MailNotNull"  ForEvent="onblur"  Exp="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/" Msg="メールアドレスが入力不正です" />
+  <Dtl ItemNo="MailNotNull"  ForEvent="onsubmit"  Exp="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/" Msg="必須項目、空できない" />
+
+  <Item No="Num" Name="入力内容が数値かどうかを確認します" Note="入力されるが数値かどうかの入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="Num"  ForEvent="onblur"  Exp="/^[0-9]*$/" Msg="数字のみを入力してください" />
+
+  <Item No="NumNotNull" Name="入力内容が数値かどうかを確認します（入力必須）" Note="入力されるが数値かどうかの入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="NumNotNull"  ForEvent="onblur"  Exp="/^[0-9]*$/" Msg="数字のみを入力してください" />
+  <Dtl ItemNo="NumNotNull"  ForEvent="onsubmit"  Exp="/^[0-9]*$/" Msg="必須項目、数字のみを入力してください" />
+
+  <Item No="Eng" Name="入力内容が英字かどうかを確認します" Note="入力されるが英文字かどうかの入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="Eng"  ForEvent="onblur"  Exp="/^[A-Za-z]+$/" Msg="英文字のみを入力してください" />
+
+  <Item No="EngNotNull" Name="入力内容が英字かどうかを確認します（入力必須）" Note="入力されるが英文字かどうかの入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="EngNotNull"  ForEvent="onblur"  Exp="/^[A-Za-z]+$/" Msg="英文字のみを入力してください" />
+  <Dtl ItemNo="EngNotNull"  ForEvent="onsubmit"  Exp="/^[A-Za-z]+$/" Msg="必須項目、英文字のみを入力してください" />
+
+  <Item No="Shen" Name="入力したID番号を確認してください" Note="入力されるID番号の入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="Shen"  ForEvent="onblur"  Exp="/^(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/" Msg="不正なID番号" />
+
+  <Item No="ShenNotNull" Name="入力したID番号を確認してください（入力必須）" Note="入力されるID番号の入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="ShenNotNull"  ForEvent="onblur"  Exp="/^\d{15}|\d{}18$/" Msg="不正なID番号" />
+  <Dtl ItemNo="ShenNotNull"  ForEvent="onsubmit"  Exp="/^\d{15}|\d{}18$/" Msg="必須項目、空できない" />
+
+  <Item No="Chinese" Name="入力内容が漢字かどうかを確認します" Note="入力されるが文字列かどうかの入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="Chinese"  ForEvent="onblur"  Exp="/^[\u4e00-\u9fa5]/" Msg="漢字のみを入力してください" />
+
+  <Item No="ChineseNotNull" Name="入力内容が漢字かどうかを確認します（入力必須）" Note="入力されるが文字列かどうかの入力チェック用"  ForCtrl="TB" />
+  <Dtl ItemNo="ChineseNotNull"  ForEvent="onblur"  Exp="/^[\u4e00-\u9fa5]/" Msg="漢字のみを入力してください" />
+  <Dtl ItemNo="ChineseNotNull"  ForEvent="onsubmit"  Exp="/^[\u4e00-\u9fa5]/" Msg="必須項目、漢字のみを入力してください" />
+
+
+  <Item No="BaiFenBi" Name="入力はパーセンテージでなければなりません" Note="入力内容が有効なパーセンテージかどうかを確認します。"  ForCtrl="TB" />
+  <Dtl ItemNo="BaiFenBi"  ForEvent="onblur"  Exp="/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/" Msg="有効なパーセンテージを入力してください、例：50.55%。" />
+  <Dtl ItemNo="BaiFenBi"  ForEvent="onsubmit"  Exp="/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/" Msg="有効なパーセンテージを入力してください、例：50.5%。" />
+
+</NewDataSet>

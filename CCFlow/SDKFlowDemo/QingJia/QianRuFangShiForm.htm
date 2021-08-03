@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+        function Save() {
+
+            try {
+
+                //return false;
+                //alert('保存成功, 当前的url: ' + location.href);
+
+                return "@JinE=1000@QingJiaTianShu=9";
+                //需要传入参数到ccbpm工作流程引擎, 如果值里面有@符号，请用 \@ 符号标识.
+                //return true; //标识保存成功，而不需要向ccbpm传入参数。 return false 标识保存失败，就阻止发送动作继续向下进行.
+            } catch (e) {
+                return false;
+            }
+        }
+    </script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+</head>
+<body>
+
+    <table style="width:100%;">
+        <caption>休暇申請書</caption>
+        <tr>
+            <td>申請者</td>
+            <td> <input type="text" id="" name="" /> </td>
+            <td>申請日</td>
+            <td> <input type="text" id="" name="" /> </td>
+        </tr>
+
+        <tr>
+            <td>申請者部門</td>
+            <td colspan="3"> <input type="text" id="" name="" /> </td>
+        </tr>
+
+        <tr>
+            <td>開始日付</td>
+            <td> <input type="text" id="" name="" /> </td>
+            <td>終了日付</td>
+            <td> <input type="text" id="" name="" /> </td>
+        </tr>
+
+        <tr>
+            <td>休暇の原因</td>
+            <td colspan="3"> <input type="text" id="" name="" /> </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+

@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>ワークフローエンジン-インストール実行</title>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+
+        //初始化页面函数.....
+        $(function () {
+
+            //显示和隐藏说明
+            var shuoming = "<p><font color=green>待ちたくなくて、インストールの時間を節約したいなら、このインストール操作を実行しなくてもいいです。<br />次に、jflowパッケージのルートディレクトリに移動できます：【環境のデプロイメントおよび設計ドキュメント/データベースインストールスクリプト】ディレクトリ、<br />必要なjflowデータベーススクリプトを取得して、データベースにインポートします。<br /></font></p>";
+            if (plant == "JFlow")
+                $("#shuoming").html(shuoming);
+
+
+            $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue >ワークフローのエンジンccbpmはインストールの準備をしています。</font>");
+            document.getElementById("Btn_Submit").disabled = 'disabled';
+
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
+            var data = handler.DoMethodReturnString("DBInstall_Init"); //执行方法，返回执行结果.
+
+            if (data.indexOf('err@') == 0) {
+
+                var html = "インストール準備に失敗しました";
+
+                html += " <a href='http://ccbpm.mydoc.io/?v=5404&t=296303' target=_blank >データベース構成情報を変更します。</a>";
+
+                //                html += "<ul style='text-align:left'>";
+                //                html += "<li>准备一个空白的数据库.</li>";
+                //                html += "<li>配置数据库连接.</li>";
+                //                html += "<li>.net版本请打开 web.config 的 AppCenterDSN 节点, 配置数据库类型与连接字符串. </li>";
+                //                html += "<li>java版本请打开 \\jflow-web\\src\\main\\resources\\jflow.properties 文件, AppCenterDSN 配置项,修改相应的配置信息. </li>";
+                //                html += "<li>python版本在开发中. </li>";
+                //                html += "</ul>";
+
+                $("#Msg").html(html + "<font color=red><br>" + data + "</font> .");
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+
+            //转json.
+            data = JSON.parse(data);
+
+            //给控件赋值.
+            GenerFullAllCtrlsVal(data);
+
+            $("#Msg").html("<font color=green>ワークフローエンジンのインストール準備が完了しました。インストールを実行してください。</font>");
+
+            document.getElementById("Btn_Submit").disabled = false;
+
+            // $("#Msg").html("<font color=green>" + data + "</font>");
+        });
+
+        //执行安装.
+        function DoInstall() {
+
+            var osRunModel = GetRadioValue("RB_OSRunModel"); //
+            if (osRunModel == null) {
+                alert('インストールモードを選択してください。GPMをインストールしますか？');
+                return;
+            }
+
+
+            var demoType = GetRadioValue("DemoType"); //
+            if (demoType == null) {
+                alert('インストールモードを選択してください。Demoが必要ですか？');
+                return;
+            }
+
+            var info = "";
+            info += " インストールは間もなく行われます。次のような問題について確認が必要です。";
+            info += "\t\n 1. GPLオープンソース契約を遵守しなければなりません。確認をクリックしたら、GPL契約の内容を理解したということです。";
+            info += "\t\n 2. ビジネスの評価が必要でしたら、ご連絡ください。http://ccflow.org 。";
+            info += "\t\n 3. 設定された接続データベースのユーザは管理者権限が必要です。システムはテーブル、ビュー、索引、キー、およびデータを削除する権限を作成します。";
+
+            if (confirm(info) == false)
+                return;
+
+            $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpmをインストールしています。お待ちください…</font>");
+
+            document.getElementById("Btn_Submit").disabled = 'disabled';
+            document.getElementById("Btn_Submit").value = 'インストールを実行中…';
+
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
+            handler.AddPara("DemoType", demoType);
+
+            var data = handler.DoMethodReturnString("DBInstall_Submit"); //执行方法，返回执行结果.
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+
+            document.getElementById("Btn_Submit").value = 'おめでとうございます、インストールが完了しました。';
+
+            $("#Msg").html("<font color=green><h3>" + data + "</h3></font>");
+        }
+
+        //公共方法
+        function ajaxService(param, callback, scope, levPath) {
+
+            $.ajax({
+                type: "GET", //使用GET或POST方法访问后台
+                dataType: "text", //返回json格式的数据
+                contentType: "text/plain; charset=utf-8",
+                url: Handler, //要访问的后台地址
+                data: param, //要发送的数据
+                async: true,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                complete: function () { }, //AJAX请求完成时隐藏loading提示
+                error: function (XMLHttpRequest, errorThrown) {
+                    callback(XMLHttpRequest);
+                },
+                success: function (msg) {//msg为返回的数据，在这里做数据绑定
+                    var data = msg;
+                    callback(data, scope);
+                }
+            });
+        }
+    </script>
+</head>
+<body onkeypress="Esc();">
+    <form id="cc">
+        <center>
+            <table style="text-align: center; width: 600px">
+                <tr>
+                    <td>
+                        <div style='float: left'>
+                            <img src='../../DataUser/ICON/LogBiger.png' width="300px" border="0px" alt="ccbpm" />
+                        </div>
+                        <div style='float: right'>
+                            <img src='../Img/ccflowWX.jpg' width="110px" border="0px" alt="WeChat" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        ヘルプが必要ですか？
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        ccbpmテクニカルサポートを購入するには、0531-82374939,18660153393（WeChatの同じ番号）までお問い合わせください。セルフサービスhttp://ccbpm.mydoc.io
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        現在のデータベースのインストールタイプは<a href="http://ccbpm.mydoc.io/?v=5404&t=296303" target="_blank">データベース構成情報を変更します。</a>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="RB_DBType_MSSQL" type="radio" disabled="false" name="RB_DBType" value="MSSQL" /><label for="RB_DBType_MSSQL">SQLServer2000、2005、2008 ...シリーズ</label>
+                        <br />
+                        <input id="RB_DBType_Oracle" type="radio" disabled="false" name="RB_DBType" value="Oracle" /><label for="RB_DBType_Oracle">Oracle、Oracle9i、10g ... シリーズ</label>
+                        <br />
+                        <input id="RB_DBType_DM" type="radio" disabled="false" name="RB_DBType" value="DM" /><label for="RB_DBType_DM">Dameng 7.6+ シリーズ</label>
+                        <br />
+                        <input id="RB_DBType_MySQL" type="radio" disabled="false" name="RB_DBType" value="MySQL" /><label for="RB_DBType_MySQL">MySQLシリーズ</label>
+                        <br />
+                        <input id="RB_DBType_Informix" type="radio" disabled="false" name="RB_DBType" value="Informix" /><label for="RB_DBType_Informix">Informix シリーズ（まず実行する必要があります：D:\\ccflow\\trunk\\CCFlow\\WF\\Data\\Install\\Informix.sql)</label>
+                        <br />
+                        <input id="RB_DBType_PostgreSQL" type="radio" disabled="false" name="RB_DBType" value="PostgreSQL" /><label for="RB_DBType_PostgreSQL">PostgreSQL</label>
+                        <br />
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                <th>组织结构的运行模式,我们已经不再提供对OneOne的模式支持.</th>
+                </tr>
+
+                <tr>
+                <td>
+                <input id="RB_OSModel_1" type="radio" name="RB_OSModel" disabled="false"  value="1" checked=true  /><label for="RB_OSModel_1">OneMoreひとりで多くの部署に配属される</label>
+                </td>
+                </tr>-->
+                <tr>
+                    <th>
+                        GPMシステムをインストールしますか？
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input id="RB_OSRunModel_0" type="radio" name="RB_OSRunModel" value="0" checked="true" /><b>ミドルウェアモード：</b>自分の開発フレームワークを統合し、自分の組織構造を統合し、フローエンジンとフォームエンジンを使用したいだけです。
+                        </label>
+                        <br />
+                        <label>
+                            <input id="RB_OSRunModel_1" type="radio" name="RB_OSRunModel" value="1" /><b>BPMモード：</b>ccbpmは組織構造の管理、メニュー、権限グループの管理を提供してほしい。
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        フローのモデルを読み込みます。
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <!--<input id="RB_DemoType_0" type="radio" name="DemoType" value="0"  /><label for="RB_DemoType_0">我是技术人员，我安装技术类的设计演示模版.(估计在<font
+                            color="red">8-15分钟</font>内安装完成)。</label>
+                        <br />-->
+                        <!--<input id="RB_DemoType_1" type="radio" name="DemoType" value="1"  /><label for="RB_DemoType_1">我是业务人员，我想了解与使用常用的业务流程(估计在<font color=red>5-13分钟</font>内安装完成)。</label>
+                        <br />
+                        -->
+                        <input id="RB_DemoType_2" type="radio" name="DemoType" value="2" checked="checked" /><label for="RB_DemoType_2">いいえ：デモをインストールせず、空のccbpm環境をインストールするだけです（インストールは<font color="red">2～3分</font>で完了する見込みです）。</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="text-align: left">
+                            <div id="shuoming">
+                            </div>
+                            <input type="button" value="ccbpmのGPLオープンソース契約を受けてインストールを実行します。" id="Btn_Submit" onclick="DoInstall()" />
+                            <a href="https://baike.baidu.com/item/GPL/2357903?fr=aladdin" target="_blank">GPLオープンソース協議とは？</a>
+                        </div>
+                        <div style="text-align: right; font-style-color: green">
+                            現在の小バージョン番号：<div id="Ver" />
+                            スクリプトのダウンロード：http://140.143.236.168:7080/svn/CCBPMDOCS/InstallDataBaseScriptユーザー名/パスワード：ccbpm
+                            <br />
+                        </div>
+                        <center>
+                            <div id="Msg" />
+                        </center>
+                        <!--
+                        <fieldset>
+                        <legend>如果自动安装失败请到群里下载脚本文件</legend>
+
+                        <ul>
+                        <li>百度云网盘下载数据库文件: </li>
+                        <li><a href="https://pan.baidu.com/s/1NlH9ntNUva5t8wio80yGrg" target=_blank>下载sql脚本</a> </li>
+                        </ul>
+                        </fieldset>-->
+                    </td>
+                </tr>
+            </table>
+        </center>
+    </form>
+</body>
+</html>

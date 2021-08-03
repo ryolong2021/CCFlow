@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>ワークフロー</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/style.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("読み込み中です。しばらくお待ちください......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+        //初始化数据.
+        function InitPage() {
+
+            var fk_node = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", fk_node);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(node);
+
+            var doc = node.TurnToDealDoc.replace('~', '\'');
+            doc = doc.replace('~', '\'');
+            doc = doc.replace('~', '\'');
+            doc = doc.replace('~', '\'');
+
+            switch (node.TurnToDeal) {
+                case '0':
+                case '1':
+                    $('#TB_SpecMsg').val(doc);
+                    break;
+                case '2':
+                case '3':
+                    $('#TB_SpecURL').val(doc);
+                    break;
+                default:
+            }
+            rb_onchange(node.TurnToDeal);
+            return;
+        }
+
+
+        function Btn_Save_Click() {
+            var frmData = $("#cc").serialize();
+
+
+            var fk_node = GetQueryString("FK_Node");
+
+            var node = new Entity("BP.WF.Node", fk_node);
+            var turnToDeal = $("input[name='TurnToDeal']:checked").val();
+            node.TurnToDeal = turnToDeal;
+
+            if (node.TurnToDeal == 1) {
+                $("#TB_SpecURL").val("");
+                node.TurnToDealDoc = $("#TB_SpecMsg").val();
+            }
+
+            if (node.TurnToDeal == 2) {
+                $("#TB_SpecMsg").val("");
+                node.TurnToDealDoc = $("#TB_SpecURL").val();
+            }
+
+            if (node.TurnToDeal == 0 || node.TurnToDeal == 3) {
+                $("#TB_SpecMsg").val("");
+                $("#TB_SpecURL").val("");
+            }
+
+            if (node.TurnToDeal != 0 && node.TurnToDeal != 3) {
+                if (node.TurnToDealDoc == '') {
+                    alert('実行内容は記入していません。');
+                    return;
+                }
+            }
+
+            node.Update();
+
+            window.location.href = window.location.href;
+
+        }
+
+        function rb_onchange(obj) {
+
+            if (obj == 1) {
+
+                document.getElementById("TB_SpecURL").readOnly = true;
+                document.getElementById("TB_SpecMsg").readOnly = false;
+            } else if (obj == 2) {
+
+                document.getElementById("TB_SpecMsg").readOnly = true;
+                document.getElementById("TB_SpecURL").readOnly = false;
+            } else {
+                document.getElementById("TB_SpecMsg").readOnly = true;
+                document.getElementById("TB_SpecURL").readOnly = true;
+            }
+        }
+    </script>
+</head>
+<body  >
+
+    <form id="cc">
+        <div id="bar" class="cs-tr cs-bar">
+            <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
+        </div>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_TurnToDeal_0" name="TurnToDeal" runat="server" value="0"
+                       onclick="rb_onchange(0)" /><label for="RB_TurnToDeal_0"> ccflowのデフォルト情報を表示する</label>
+            </legend>
+            <ul style="color: Gray">
+                <li>デフォルトでは設定されていません。マシンによって自動的に生成される言語ヒントです。これは標準的なメッセージです。</li>
+                <li>例： あなたの現在の仕事はすでに処理済みです。次の作業は自動的に起動し、xxx処理に提出しました。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_TurnToDeal_1" name="TurnToDeal" value="1"
+                       onClick="rb_onchange(1)" /><label for="RB_TurnToDeal_1">指定情報を提示する</label> - <a href="javascript:ShowHidden('SpecMsg')">ヘルプ：</a>
+            </legend>
+            <br>
+            <div id="SpecMsg" style="display: none">
+                <ul style="color: Gray">
+                    <li>定義された情報フォーマットに従って、操作が完了したユーザに提示します。</li>
+                    <li>例： あなたの申請はすでにXXXユーザーに発送して承認してもらう</li>
+                    <li>カスタム情報はccbpm式をサポートしています。詳細については、右側のヘルプドキュメントを参照してください。</li>
+                    <li>送信後のシステム変数は以下の通りです。</li>
+                    <li>このように設定する：該当タスクは:【 @VarAcceptersName 】に送信して処理してもらう。</li>
+                    <li>例：貴方の休暇申請書はすでに@VarAcceptersNameに提出しました。@VarToNodeNameに提出して@QingJiaTianTianShu日の休暇を申請しました。</li>
+                </ul>
+
+            </div>
+            <input type="text" ID="TB_SpecMsg" name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3 style="width:90%" />
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_TurnToDeal_2" name="TurnToDeal" runat="server" value="2"
+                       onClick="rb_onchange(2)" /><label for="RB_TurnToDeal_2"> 指定されたURLに移動</label>- <a href="javascript:ShowHidden('SpecUrl')">ヘルプ：</a>
+            </legend>
+            <br />
+            <div id="SpecUrl" style="display: none">
+                <ul style="color: Gray">
+                    <li>定義されたurlによって、より複雑な業務論理処理が可能です。</li>
+                    <li>例：URLはMyFlow.htmページまたは</li>
+                    <li>このURLはccbpmパラメータ形式をサポートしています。具体的な転送値は右側のヘルプを参照してください。</li>
+                    <li>サブフローの起動例：/WF/MyFlow.htm?FK_Flow=003&PFlowNo=002</li>
+                </ul>
+            </div>
+            <input type="text" ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%" />
+        </fieldset>
+
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_TurnToDeal_3" name="TurnToDeal" runat="server" value="3"
+                       onClick="rb_onchange(3)" /><label for="RB_TurnToDeal_3"> 送信が完了したら終了します。メッセージはありません。</label>
+            </legend>
+
+            <ul style="color: Gray">
+                <li>送信後、メッセージなしにウィンドウを閉じます。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>ヘルプ</legend>
+            <ul style="color: Gray">
+                <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">ccflowのデフォルト情報を表示する</a></li>
+                <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">指定情報を提示する</a></li>
+                <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">指定されたURLに移動</a></li>
+            </ul>
+        </fieldset>
+
+
+        <fieldset>
+            <legend>送信後システムパラメータ</legend>
+            <br>
+            <table class="table table-hover">
+                <tr> <th>変数名</th> <th>日本語名</th> </tr>
+                <tr>
+                    <td>VarCurrNodeID</td>
+                    <td>現在のノードID</td>
+                </tr>
+
+                <tr>
+                    <td>VarCurrNodeName</td>
+                    <td>現在のノード名</td>
+                </tr>
+
+                <tr>
+                    <td>VarToNodeID</td>
+                    <td>到着ノードID</td>
+                </tr>
+
+                <tr>
+                    <td>VarToNodeName</td>
+                    <td>到着ノード名</td>
+                </tr>
+
+                <tr>
+                    <td>VarAcceptersName</td>
+                    <td>受信者グループの名前(コンマで区切る)</td>
+                </tr>
+
+                <tr>
+                    <td>VarAcceptersID</td>
+                    <td>受信者グループのID(コンマで区切る)</td>
+                </tr>
+
+                <tr>
+                    <td>VarAcceptersNID</td>
+                    <td>受信者グループのID&Name(コンマで分ける)</td>
+                </tr>
+            </table>
+        </fieldset>
+
+        
+
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>コントロールの属性を計算</title>
+        <script type="text/javascript" src="../internal.js"></script>
+        <script type="text/javascript" src="../../../jquery.js"></script>
+        <script type="text/javascript" src="../../../bootstrap/bootstrap.js"></script>
+        <link rel="stylesheet" href="../../../bootstrap/bootstrap.css">
+        <link rel="stylesheet" href="../../../bootstrap/bootstrap-responsive.css">
+        <style type="text/css">
+            *{color: #838383;margin: 0;padding: 0}
+            html,body {font-size: 12px;}
+            body {
+                padding-left: 20px;padding-right: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="tblwrap">
+            <table class="table table-striped table-bordered" style="margin-top:18px;margin-bottom: 0;">
+                <tr>
+                    <th><span>コントロール名称</span> <span class="label label-important">*</span></th>
+                    <th><span>計算精度</span> </th>
+                </tr>
+                <tr>
+                    <td> <input id="itemName" type="text" placeholder="必須項目" size="20" /> </td>
+                    <td> <input id="itemPrec" type="text" value="4" size="10" /> <span class="help-inline">デフォルトでは、小数点以下4桁が保持されます</span> </td>
+                </tr>
+                <tr>
+                    <th colspan="2"><span>スタイル</span></th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="controls">
+                            <div class="input-prepend input-append">
+                                <span class="add-on">フォントサイズ</span><input id="itemSize" size="1" type="text"><span class="add-on">px</span>&nbsp;&nbsp;
+                                <span class="add-on">幅</span><input id="itemWidth" size="1" type="text"><span class="add-on">px</span>&nbsp;&nbsp;
+                                <span class="add-on">高さ</span><input id="itemHeight" size="1" type="text"><span class="add-on">px</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <span>数式を計算</span><span class="label label-important">*</span>
+                        <span style="float:right">
+                            <a class="btn" title="計算コントロールの説明" onclick="fnShowGuide();"><i class="icon-question-sign"></i></a>
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea id="itemValue" style="width: 440px;height: 60px;"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="display:none;margin-bottom: 27px;">
+            <div class="page-header">
+                <h3>計算コントロールの説明<span style="position: fixed;right: 20px;"><a title="コントロールのプロパティーページに戻る" onclick="fnShowGuide();" class="btn"><i class="icon-home"></i></a></span></h3>
+            </div>
+            <div>
+                <blockquote>
+                    <p>日常の仕事の中で、フォームを記入する時、よくある計算項目が存在します。例えば、金額の計算、日数の計算など、計算コントロールを使って、人員の操作を簡単にして、正確性を高めます。</p>
+                    <p>以下の例では、計算コントロールの使用方法（カレンダーコントロールでの日数計算の例）を示します：</p>
+                </blockquote>
+                <p>まず、計算に参加する項目を作成します。図のように、開始時間と終了時間という二つのカレンダーコントロールを作成します。もちろん、各カレンダーコントロールには、対応する入力ボックスコントロールがあります。</p><br/><br/>
+                <img src="helper/calc/calc1.jpg">
+                <p>次にコントロールを計算するボタンをクリックして、計算コントロールを新規作成します。設定する場合は、計算式を入力する必要があります。数式の規則は四則演算規則です。括弧と加減乗除を利用できます。数式の計算項目は、上記で作成した1行のエディットボックスコントロールの名前です。図に示すように：
+					作成した1行の入力ボックスコントロールの名前は、図の通り：</p><br/><br/>
+                <img src="helper/calc/calc2.jpg" width="453px"><br/><br/>
+                <p>上記の日付差の実装の効果は、図で示しています。<span  class="label label-important">計算コントロールの入力内容は変更できません。</span></p><br/><br/>
+                <img src="helper/calc/calc3.jpg">
+                <p>計算式は、+-*/^と半角の括弧、および次のような特定の計算関数をサポートします：(値1+値2)*値3-ABS(値4)、ここで値1、値2などはフォームコントローラー名です。計算コントローラーでサポートされる関数は、以下の通り：</p><br/><br/>
+                <p>1、MAX(値1,値2,値3…)は、パラメータをコンマで区切って、最大値をリターンします。</p><br/><br/>
+                <p>2、MIN(値1,値2,値3…)は、パラメータをコンマで区切って、最小値をリターンします。</p><br/><br/>
+                <p>3、ABS(値1)は、絶対値をリターンします。</p><br/><br/>
+                <p>4、AVG(値1,値2,値3は、平均値をリターンします。</p><br/><br/>
+                <p>5、RMB(値1)は、XX形式でリターンします。値の範囲は0〜9999999999.99です。</p><br/><br/>
+                <p>6、DAY(日付1-日付)は、経過日数の整数日数をリターンします。</p><br/><br/>
+                <p>7、HOUR(日付1-日付)は、経過時間をリターンします。</p><br/><br/>
+                <p>8、DATE(日付1-日付)は、経過時間をリターンします。次のようになります。xx日xx時間xx分xx秒。</p><br/><br/>
+                <p>9、LIST(リストコントロール名,どの列)は、リストコントロールの指定された列の合計を計算します。</p><br/><br/>
+                <p>説明に値するのはLIST関数で、リストコントロールのある列のデータの合計を読み取ることができます。以下の例で説明します。</p><br/><br/>
+                <p>デザインしたリストコントロールが次の図のようになったら</p><br/><br/>
+                <img src="helper/calc/calc4.jpg" width="453px"><br/><br/>
+                <p>価格という列のデータを計算コントロールで取り出し、計算コントロールを追加します。数式は次のように書きます。</p><br/><br/>
+                <img src="helper/calc/calc5.jpg" width="453px"><br/><br/>
+                <p>実現効果は以下の通りです。</p><br/><br/>
+                <p>LIST関数は主にリストコントロールのデータ参加条件設定の場合に使用されます。</p><br/><br/>
+                <span class="label label-important">注：日付計算コントロールに参加するは、日付タイプまたは日付+時刻タイプである必要があります。</span>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var oNode = null;
+            var oListText;
+            window.onload = function() {
+                //弹出窗口初始化函数，这里主要是判断是编辑下拉列表还是新增
+                if( UE.plugins['calc'].editdom ){
+                    oNode = UE.plugins['calc'].editdom;
+                    $G('itemName').value = oNode.getAttribute('title');
+                    $G('itemValue').value = oNode.getAttribute('value');
+                    var sPrec = oNode.getAttribute('prec') ;
+                    if( sPrec ) {
+                        $G('itemPrec').value = sPrec;
+                    }
+                    var sFontSize = oNode.style.fontSize;
+                    $G('itemSize').value = sFontSize.substr(0, sFontSize.length - 2);//这里的substr是为了去掉末尾的'px'
+                    var sItemWidth = oNode.style.width;
+                    $G('itemWidth').value = sItemWidth.substr(0, sItemWidth.length - 2);
+                    var sItemHeight = oNode.style.height;
+                    $G('itemHeight').value = sItemHeight.substr(0, sItemHeight.length - 2);
+                }
+            }
+            function fnShowGuide(){
+                $('#tblwrap').slideToggle().siblings().slideToggle();
+            }
+            dialog.oncancel = function () {
+                if( UE.plugins['calc'].editdom ) {
+                    delete UE.plugins['calc'].editdom;
+                }
+            };
+            dialog.onok = function (){
+                if( $G('itemName').value == '') {
+                    alert('コントロール名は空にできません。');
+                    $('#itemName').focus();
+                    return false;
+                } else if( $G('itemValue').value == '' ) {
+                    alert('計算式を追加してください。');
+                    $('#itemValue').focus();
+                    return false;
+                }
+                //检查公式
+                if( $G('itemValue').value.indexOf("(")>=0 ) {
+                    var nNum1 = $G('itemValue').value.split("(").length - 1;
+                    var nNum2 = $G('itemValue').value.split(")").length - 1;
+                    if( nNum1!=nNum2 ) {
+                        alert("数式の表記が間違っています。括弧のマッチングを確認してください。");
+                        return false;
+                    }
+                }
+                if( !oNode ) {
+                    var sUrl =  parent.getItemUrl;
+                    var nItemId = null;
+                    ajax.request(sUrl, {timeout:60000,onsuccess:function (xhr) {
+                            try {
+                                nItemId = xhr.responseText;
+                                oNode = document.createElement("input");
+                                oNode.setAttribute('name', 'data_' + nItemId);
+                                oNode.setAttribute('title', $G('itemName').value.replace("\"","&quot;") );
+                                oNode.setAttribute('class', 'calc');
+                                oNode.setAttribute('className', 'calc');
+                                oNode.setAttribute('value',$.trim($G('itemValue').value));
+                                oNode.setAttribute('prec',$G('itemPrec').value);
+                                if( $G('itemSize').value!="" ) {
+                                    oNode.style.fontSize = $G('itemSize').value + 'px';
+                                }
+                                if( $G('itemWidth').value!="" ) {
+                                    oNode.style.width = $G('itemWidth').value + 'px';
+                                }
+                                if( $G('itemHeight').value!="" ) {
+                                    oNode.style.height = $G('itemHeight').value + 'px';
+                                }
+                                editor.execCommand('insertHtml',oNode.outerHTML);
+                                return true ;
+                            } catch ( e ) {
+                                alert ( 'コントロールの挿入エラーが発生しました。OA管理者に連絡して解決してください。');
+                                return false;
+                            }
+                        },onerror:function() {
+                            alert('Request TimeOut');
+                        }});
+                } else {
+                    oNode.setAttribute('title', $G('itemName').value.replace("\"","&quot;") );
+                    oNode.setAttribute('value',$.trim($G('itemValue').value));
+                    oNode.setAttribute('prec',$G('itemPrec').value);
+                    if( $G('itemSize').value!="" ){
+                        oNode.style.fontSize = $G('itemSize').value + 'px';
+                    }
+                    if( $G('itemWidth').value!="" ){
+                        oNode.style.width = $G('itemWidth').value + 'px';
+                    }
+                    if( $G('itemHeight').value!="" ){
+                        oNode.style.height = $G('itemHeight').value + 'px';
+                    }
+                    delete UE.plugins['calc'].editdom; //使用后清空这个对象，变回新增模式
+                }
+            };
+        </script>
+    </body>
+</html>

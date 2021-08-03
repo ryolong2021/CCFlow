@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSSエリア 開始 -->
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <link rel="stylesheet" href="../../../css/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="../../../css/common/app.css">
+    <!-- CSSエリア 終了 -->
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+
+    <!-- validate コンポーネント(項目入力チェック用)：validate, additional-methods, messages_ja -->
+    <script src="../../../js/vendor/jquery.validate.js"></script>
+    <script src="../../../js/vendor/additional-methods.js"></script>
+    <script src="../../../js/vendor/messages_ja.js"></script>
+    <!-- 日付パネルを表示する方法：datetimepicker -->
+    <script src="../../../js/vendor/jquery.datetimepicker.full.js"></script>
+    <!-- 日付フォーマット用 -->
+    <script src="../../../js/vendor/moment-with-locales.js"></script>
+    <!-- 共通定数：app_const -->
+    <script src="../../../js/common/app_const.js"></script>
+    <!-- 共通関数：app_common -->
+    <script src="../../../js/common/app_common.js"></script>
+    <!-- 共通関数：msg_comm -->
+    <script src="../../../js/common/msg_comm.js"></script>
+
+
+</head>
+<body>
+    <div class="o-whole o-whole--with-navigation o-whole--settings">
+        <div class="o-whole__body-container">
+            <div class="o-whole__navigation">
+                <div class="m-setting-header">
+                    <!--<button type="button" class="a-setting-back-button"><i class="a-icon a-icon--back-white"></i><span class="a-setting-back-button__label">ホームへ</span></button>-->
+                    <div class="m-setting-header__title">設定</div>
+                    <button class="m-visit-record-input__button-close">
+                        <i class="a-icon a-icon--close"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="o-whole__body">
+                <div class="p-wrapper">
+                    <h1 class="a-heading a-heading--h1 undefined"><span class="a-heading__label">埋め込みコマンド</span></h1>
+                    <p class="a-text a-text--align-left p-setting-option__instruction">埋め込みコマンドをコピーしてそのままテキストに貼り付けてください。</p>
+                    <section class="m-section p-setting-option__body">
+                        <div class="m-data-table undefined">
+                            <div class="m-data-table__container-card">
+                                <div class="m-data-table__card">
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-id"><span class="m-data-table__card-header m-data-table__card-header--type-id">ID</span><span class="m-data-table__card-content m-data-table__card-content--type-id m-data-table__card-content--align-left m-data-table__card-content--valign-top">1</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">項目名</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">申請番号</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">埋め込みコマンド</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">%%OID%%</span></div>
+                                </div>
+                                <div class="m-data-table__card">
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-id"><span class="m-data-table__card-header m-data-table__card-header--type-id">ID</span><span class="m-data-table__card-content m-data-table__card-content--type-id m-data-table__card-content--align-left m-data-table__card-content--valign-top">2</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">項目名</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">申請区分</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">埋め込みコマンド</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">%%APP_KBN%%</span></div>
+                                </div>
+                                <div class="m-data-table__card">
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-id"><span class="m-data-table__card-header m-data-table__card-header--type-id">ID</span><span class="m-data-table__card-content m-data-table__card-content--type-id m-data-table__card-content--align-left m-data-table__card-content--valign-top">3</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">項目名</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">対象者社員番号</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">埋め込みコマンド</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">%%SHAINBANGO%%</span></div>
+                                </div>
+                                <div class="m-data-table__card">
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-id"><span class="m-data-table__card-header m-data-table__card-header--type-id">ID</span><span class="m-data-table__card-content m-data-table__card-content--type-id m-data-table__card-content--align-left m-data-table__card-content--valign-top">4</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">項目名</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">対象者氏名</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">埋め込みコマンド</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">%%SEIMEI_KANJI%%</span></div>
+                                </div>
+                                <div class="m-data-table__card">
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-id"><span class="m-data-table__card-header m-data-table__card-header--type-id">ID</span><span class="m-data-table__card-content m-data-table__card-content--type-id m-data-table__card-content--align-left m-data-table__card-content--valign-top">5</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">項目名</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">対象者所属</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">埋め込みコマンド</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">%%SYOZOKU1%%</span></div>
+                                </div>
+                                <div class="m-data-table__card">
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-id"><span class="m-data-table__card-header m-data-table__card-header--type-id">ID</span><span class="m-data-table__card-content m-data-table__card-content--type-id m-data-table__card-content--align-left m-data-table__card-content--valign-top">6</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">項目名</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">対象者社籍</span></div>
+                                    <div class="m-data-table__card-item m-data-table__card-item--type-data"><span class="m-data-table__card-header m-data-table__card-header--type-data">埋め込みコマンド</span><span class="m-data-table__card-content m-data-table__card-content--type-data m-data-table__card-content--align-left m-data-table__card-content--valign-top">%%KAISYAMEI%%</span></div>
+                                </div>
+                            </div>
+                            <div class="m-data-table__container">
+                                <div class="m-data-table__header">
+                                    <div class="m-data-table__header-content m-data-table__header-content--type-id">ID</div>
+                                    <div class="m-data-table__header-content m-data-table__header-content--type-data" style="width:150px">項目名</div>
+                                    <div class="m-data-table__header-content m-data-table__header-content--type-data">埋め込みコマンド</div>
+                                </div>
+                                <div class="m-data-table__container-item">
+                                    <div class="m-data-table__item"><span class="m-data-table__content m-data-table__content--type-id m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">1</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">受付番号</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">%%OID%%</span></span></div>
+                                    <div class="m-data-table__item"><span class="m-data-table__content m-data-table__content--type-id m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">2</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">申請区分</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">%%APP_KBN%%</span></span></div>
+                                    <div class="m-data-table__item"><span class="m-data-table__content m-data-table__content--type-id m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">3</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">対象者社員番号</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">%%SHAINBANGO%%</span></span></div>
+                                    <div class="m-data-table__item"><span class="m-data-table__content m-data-table__content--type-id m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">4</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">対象者氏名</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">%%SEIMEI_KANJI%%</span></span></div>
+                                    <div class="m-data-table__item"><span class="m-data-table__content m-data-table__content--type-id m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">5</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">対象者所属</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">%%SYOZOKU1%%</span></span></div>
+                                    <div class="m-data-table__item"><span class="m-data-table__content m-data-table__content--type-id m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">6</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">対象者社籍</span></span><span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center"><span class="m-data-table__truncate-content">%%KAISYAMEI%%</span></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 4dのコンポーネント -->
+    <script src="../../../js/components.js"></script>
+
+    <!-- CCFLOW相関 -->
+    <script language="JavaScript" src="../../../../WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../js/common/table_list_common.js"></script>
+    <script src="../../../js/biz/mailset/page_mailset.js"></script>
+</body>
+</html>

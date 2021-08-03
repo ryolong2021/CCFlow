@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ワークフロー</title>
+    <!-- 引用通用的js文件. -->
+    <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"
+            type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="../Img/ccbpm.ico" type="image/x-icon" />
+    <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+
+        var node = null; //公共变量.
+
+        $(function () {
+
+            //   alert(html);
+            $("#Msg").html('読み込み中です。少々お待ちください。');
+
+            var nodeID = GetQueryString("FK_Node");
+            var workID = GetQueryString("WorkID");
+
+            node = new Entity("BP.WF.Node", nodeID);
+
+            //子线程流程引擎注册表.
+            var gwfs = new Entities("BP.WF.GenerWorkFlows");
+            gwfs.Retrieve("FID", workID);
+
+            //工作人员表.
+            var gwls = new Entities("BP.WF.GenerWorkerLists");
+            gwls.Retrieve("FID", workID);
+
+            //获得子线节点的数量,如果1个，就用单独列表的模式展现，多个就用多列表模式展现.
+            var numOfSubNods = 0;
+            var numOfSubNodsStrs = "";
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+                if (gwl.IsPass == -2)
+                    continue; //这个节点是干流程发起的人员.
+
+                if (numOfSubNodsStrs.indexOf(gwl.FK_Node) == -1) {
+                    numOfSubNodsStrs += gwl.FK_Node + ",";
+                    numOfSubNods++;
+                }
+            }
+
+            //只有一个子线程，就是用列表模式.
+            if (numOfSubNods == 1) {
+                BindModelOne(gwfs, gwls);
+            } else {
+                //使用分组列表的模式.
+                BindModelMore(gwfs, gwls);
+            }
+        })
+
+        function BindModelOne(gwfs, gwls) {
+
+            var strs = "<table style='width:100%;'>";
+            strs += "<caption>サブスレッド情報</caption>";
+            strs += "<tr>";
+            strs += "<th>順序</th>";
+            strs += "<th>ノード</th>";
+            strs += "<th>処理者</th>";
+            strs += "<th>状態</th>";
+            strs += "<th>予定の完了日</th>";
+            strs += "<th>実際の完成日</th>";
+            strs += "<th>フォーム</th>";
+            if (node.ThreadKillRole == 1)
+                strs += "<th>終了</th>";
+            strs += "<th>操作</th>";
+            strs += "</tr>";
+
+            var idx = 0;
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+                if (gwl.IsPass == -2)
+                    continue; //这个节点是干流程发起的人员.
+                idx++;
+                strs += "<tr>";
+                strs += "<td class=Idx >" + idx + "</td>";
+                strs += "<td>" + gwl.FK_NodeText + "</td>";
+
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
+
+
+                var openStr = "";
+                if (gwl.IsPass == 1) {
+
+                    strs += "<td>完成済</td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>" + gwl.RDT + "</td>";
+                    openStr += "<a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >戻る</a>";
+
+                } else {
+                    if (gwl.IsRead == 0)
+                        strs += "<td> 未読</td>";
+                    else
+                        strs += "<td> 読んだ、未処理</td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>なし</td>";
+                }
+
+                strs += "<td><a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">フォーム</a></td>";
+
+
+                if (node.ThreadKillRole == 1)
+                    strs += "<td><a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>終了</a></td>";
+
+                strs += "<td>" + openStr + "</td>";
+
+                strs += "<tr>";
+            }
+
+            strs += "</table>";
+
+            $("#Msg").html(strs);
+
+        }
+
+        function BindModelMore(gwfs, gwls) {
+
+            //判断有几个子子线程ID, 如果只有一个，就用列表模式展现.
+            var html = "<table style='width:100%;' >";
+            html += "<caption>サブスレッド情報</caption>";
+            html += "<tr>";
+            html += "<th>タイトル</th>";
+            html += "<th>滞在ノード</th>";
+            html += "<th>状態</th>";
+            html += "<th>処理者</th>";
+            html += "<th>起票日</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < gwfs.length; i++) {
+
+                var gwf = gwfs[i];
+
+                html += "<tr class=Sum >";
+                html += "<td>" + gwf.Title + "</td>";
+                html += "<td>" + gwf.NodeName + "</td>";
+                html += "<td>" + gwf.WFStateText + "</td>";
+                html += "<td>" + gwf.TodoEmps + "</td>";
+                html += "<td>" + gwf.RDT + "</td>";
+                html += "</tr>";
+
+                html += "<tr>";
+                html += "<td colspan=5 > " + GenerHtml(gwf, gwls) + " </td>";
+                html += "</tr>";
+            }
+
+            $("#Msg").html(html);
+        }
+
+        function GenerHtml(gwf, gwls) {
+
+            var strs = "<table style='width:100%;'>";
+
+            strs += "<tr>";
+            strs += "<td>順序</td>";
+            strs += "<td>ノード</td>";
+            strs += "<td>処理者</td>";
+            // strs += "<td>名称</td>";
+            strs += "<td>状態</td>";
+            strs += "<td>予定の完了日</td>";
+            strs += "<td>実際の完成日</td>";
+            strs += "<td>操作</td>";
+            strs += "</tr>";
+
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+
+                if (gwl.WorkID != gwf.WorkID)
+                    continue;
+
+                if (gwl.IsPass == -2)
+                    continue; //这个节点是干流程发起的人员.
+
+                strs += "<tr>";
+                strs += "<td>" + i + "</td>";
+                strs += "<td>" + gwl.FK_NodeText + "</td>";
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
+
+                var openStr = "";
+                openStr += "<a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">フォーム</a>";
+
+                if (gwl.IsPass == 1) {
+
+                    strs += "<td>完成済</td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>" + gwl.RDT + "</td>";
+                    openStr += "-<a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >戻る</a>";
+
+                } else {
+
+                    if (gwl.IsRead == 0)
+                        strs += "<td> 未読</td>";
+                    else
+                        strs += "<td> 読んだ、未処理</td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>なし</td>";
+                }
+
+                if (node.ThreadKillRole == 1)
+                    openStr += "-<a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>終了</a>";
+
+                strs += "<td>" + openStr + "</td>";
+
+                strs += "<tr>";
+            }
+
+            strs += "</table>";
+            return strs;
+        }
+
+        function OpenFrm(workID, fid, flowNo, nodeID) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+
+            handler.AddPara("FromWorkOpt", "1");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FID", fid);
+
+            var data = handler.DoMethodReturnString("Runing_OpenFrm");
+
+            data = data.replace('url@./CCForm', 'url@../CCForm');
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                //alert(data);
+
+                //window.location.href = data;
+                window.open(data);
+                return;
+            }
+
+            alert(data);
+        }
+
+        //删除子线城.
+        function DoDelSubFlow(flowNo, workID) {
+
+            if (confirm('この子スレッドを終了してもよろしいですか？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("WorkID", workID);
+
+            var data = handler.DoMethodReturnString("ThreadDtl_DelSubFlow");
+            window.location.href = window.location.href;
+        }
+
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <center>
+            <div id="Msg">
+                <img src='../Img/loading.gif' alt="" />読み込み中です。少々お待ちください。
+            </div>
+        </center>
+    </form>
+</body>
+</html>

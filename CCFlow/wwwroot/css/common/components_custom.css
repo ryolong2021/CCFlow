@@ -1,0 +1,38 @@
+﻿/* ▼▼▼　三階層メニューの対応 　▼▼▼ */
+.a-nav-item--opened .a-nav-item__link > .a-nav-item__arrow .a-icon--arrow-up, .a-nav-item__link > .a-nav-item__arrow .a-icon--arrow-down {
+    display: none
+}
+
+.a-nav-item--opened .a-nav-item__link > .a-nav-item__arrow .a-icon--arrow-down {
+    display: inline-block
+}
+.a-nav-item--opened > .a-nav-item__link > .a-nav-item__arrow .a-icon--arrow-up, .a-nav-item__link > .a-nav-item__arrow .a-icon--arrow-down {
+    display: inline-block
+}
+.a-nav-item--opened > .a-nav-item__link > .a-nav-item__arrow .a-icon--arrow-down {
+    display: none
+}
+/* ▲▲▲　三階層メニューの対応 　▲▲▲ */
+
+/* ▼▼▼　非活性の対応 　▼▼▼ */
+.a-text-field__input:disabled {
+    color: #000;
+    -webkit-text-fill-color: #000;
+}
+
+.a-radio--disabled .a-radio__label {
+    color: #000;
+}
+
+.a-radio--disabled .a-radio__input:checked + .a-radio__body .a-radio__label {
+    color: #000;
+}
+
+.a-pulldown--disabled > .is-disabled > .choices__inner {
+    color: #000;
+}
+
+.a-button--disabled, .a-button:disabled {
+    color: #000;
+}
+/* ▲▲▲　非活性の対応  　▲▲▲ */

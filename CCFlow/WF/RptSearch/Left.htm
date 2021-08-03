@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            var user = new WebUser();
+
+            if (user.No == "admin") {
+
+            }
+
+        });
+
+    </script>
+</head>
+<body>
+    <fieldset>
+        <legend>グローバルフロークエリ</legend>
+        <ul>
+            <li><a href="../Watchdog.htm" target="mainS">フローモニタ</a></li>
+
+            <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyFlows" target="mainS">承認したフロー</a></li>
+            <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" target="mainS">私が起票したフロー</a></li>
+            <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyDeptFlows" target="mainS">うちの部署からのフロー</a></li>
+            <li>
+                <a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyDeptTodolists" target="mainS">
+                    私の部署の対応
+                </a>
+            </li>
+            <li><a href="../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs" target="mainS">フローの削除するログ</a></li>
+        </ul>
+    </fieldset>
+    <!--
+    <fieldset>
+    <legend>キーワード検索</legend>
+    <ul>
+    <li><a href="KeySearchBS.htm" target="mainS">キーワード検索</a></li>
+    </ul>
+    </fieldset>
+    -->
+   
+    <fieldset>
+        <legend>フローでクェリする</legend>
+        <ul>
+            <li><a href="Flowlist.htm" target="mainS">フローに従って詳細にクェリする</a></li>
+         
+
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>仕事の分配</legend>
+        <ul>
+            <li><a href="DistributedOfMy.htm" target="mainS">私の仕事の分配</a></li>
+        </ul>
+    </fieldset>
+</body>
+</html>

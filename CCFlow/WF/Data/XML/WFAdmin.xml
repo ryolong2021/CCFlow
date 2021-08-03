@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+
+  <!--此处的Truck、Track的No不要改了，改的话，要搜索整个解决方案中CurrTab=Truck与CurrTab=Track的地方，全部改掉-->
+  <OneWork No="Frm" CH="フォームを表示"  UrlCCFlow="FrmGuide.htm" UrlJFlow="FrmGuide.htm" IsDefault="0" />
+  <OneWork No="Truck" CH="軌跡図" UrlCCFlow="Chart.htm" UrlJFlow="Chart.htm" IsDefault="1" />
+  <OneWork No="TimeBase" CH="時間軸"  UrlCCFlow="TimeBase.htm" UrlJFlow="TimeBase.htm"  IsDefault="0"/>
+  <OneWork No="Table" CH="スケジュール"  UrlCCFlow="Table.htm" UrlJFlow="Table.htm" IsDefault="0" />
+  <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm" IsDefault="0"/>
+  
+
+  <!-- 可以配置的. -->
+  <OneWork1 No="LogOfTable" CH="フローログ（フォーム）"   UrlCCFlow="LogOfTable.aspx" UrlJFlow="LogOfTable.htm" />
+  <OneWork1 No="CH" CH="ノードの時間制限"  UrlCCFlow="CH.aspx" UrlJFlow="CH.htm" />
+  <OneWork1 No="FlowBBS" CH="コメント"   UrlCCFlow="FlowBBS.htm" UrlJFlow="FlowBBS.htm"  />
+  <OneWork1 No="Ath" CH="付属フロー" UrlCCFlow="Ath.htm" UrlJFlow="Ath.htm"/>
+  <OneWork1 No="TrackTime" CH="ポイントインタイムログ" />
+  <OneWork1 No="ChartTime" CH="ガントチャート" />
+  <OneWork11 No="CheckTrack" CH="監査記録" />
+  
+  <!--<OneWork No="CH" CH="考核信息" />-->
+    <OneWork222 No="NDRpt" CH="フローレポート" />
+     <OneWork1 No="OP" CH="歴史を始める" />
+
+    <RptFlow1 No="Home_My" CH="ホームページ" URL="Home.aspx?DoType=My"   ICON="/WF/Img/Btn/Home.gif" />
+    <RptFlow No="Search_My" CH="フローに参加した" URL="Search.htm?DoType=My"   ICON="/WF/Img/Table.gif" />
+    <RptFlow No="Search_Dept" CH="部門フロー"   URL="Search.htm?DoType=Dept"   ICON="/WF/Img/Table.gif"  />
+
+    <RptFlow No="Group_My" CH="フローに参加した" URL="Group.htm?DoType=My"   ICON="/WF/Img/Btn/Chart.gif" />
+    <RptFlow No="Group_Dept" CH="部門フロー"   URL="Group.htm?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
+    <RptFlow No="D3_Dept" CH="クロスレポート"   URL="D3.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
+    <RptFlow No="D3_DB" CH="比較解析"   URL="Contrast.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
+
+    <!--<RptFlow No="Bill_MyFlow" CH="我打印的单据" URL="Bill.aspx?DoType=My"   ICON="/WF/Img/Btn/Word.gif" />
+    <RptFlow No="Bill_DeptFlow" CH="部门单据"   URL="Bill.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Word.gif" />-->
+
+    <RptFlow1 No="Chat" CH="フローチャート"   URL="Chat.aspx?DoType=Dept"   ICON="/WF/Img/Chart.gif" />
+</NewDataSet>

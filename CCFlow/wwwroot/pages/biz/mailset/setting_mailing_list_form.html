@@ -1,0 +1,119 @@
+<form id="setmailingform">
+    <div class="o-modal o-modal--fullscreen o-modal--has-footer" id="setmailingarea">
+        <!--<div class="p-wrapper">-->
+        <div class="o-modal__window">
+            <main class="o-modal__body">
+                <a class="a-modal-back-button o-modal__back-button back-to-list-page">
+                    <i class="a-icon a-icon--back"></i>
+                    一覧へ
+                </a>
+                <section class="m-section p-setting-input-form__heading">
+                    <h1 class="a-heading a-heading--h1 undefined"><span class="a-heading__label">メーリングリスト設定</span></h1>
+                </section>
+                <section class="m-section m-section--fill-white p-setting-input-form__wrapper">
+                    <section class="m-section p-setting-input-form__body">
+                        <p class="a-text a-text--align-left">同一のグループ名、ワークフロー、会社、送信先タイプの組み合わせは、複数登録できません。</p>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">
+                                グループ名
+                                <span class="m-form-field__label-addons">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="a-text-field a-text-field--type-text">
+                                    <input type="text" class="a-text-field__input" id="group_name" name="group_name" />
+                                    <input type="hidden" id="rnrakusaki_id">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">
+                                ワークフロー
+                                <span class="m-form-field__label-addons">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="a-pulldown" id="workflow_p_div">
+                                    <select class="a-pulldown__select" name="workflow" id="workflow">
+                                    </select>
+                                    <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">
+                                会社
+                                <span class="m-form-field__label-addons company-span-marck">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="a-pulldown" id="company_p_div">
+                                    <select class="a-pulldown__select" name="company" id="company">
+                                    </select>
+                                    <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">
+                                送信先タイプ
+                                <span class="m-form-field__label-addons">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="a-pulldown" id="sousinsaki_type_p_div">
+                                    <select class="a-pulldown__select" name="sousinsaki_type" id="sousinsaki_type">
+                                    </select>
+                                    <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">
+                                送信アドレス
+                                <span class="m-form-field__label-addons address-span email-span-marck">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-recipient-input">
+                                    <template class="m-recipient-input__template">
+                                        <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                    </template>
+                                    <ul class="m-recipient-input__list" id="email_ul">
+                                        <li class="m-recipient-input__item">
+                                            <div class="m-recipient-input__input">
+                                                <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input input-group-email" name="email_input1" id="email_input1" /></div>
+                                            </div>
+                                            <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                        </li>
+                                        <li class="m-recipient-input__item">
+                                            <div class="m-recipient-input__input">
+                                                <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input input-group-email" name="email_input2" id="email_input2" /></div>
+                                            </div>
+                                            <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                        </li>
+                                    </ul>
+                                    <div class="m-recipient-input__add-button"><button type="button" class="a-add-item-button"><i class="a-icon a-icon--add-item"></i>メールアドレスを追加</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+                <section class="m-section p-footer-action p-footer-action--small">
+                    <div class="m-button-container m-button-container--horizontal">
+                        <button class="a-button a-button--third back-to-list-page" type="button">
+                            <div class="a-button__label">キャンセル</div>
+                        </button><button class="a-button a-button--primary" type="button">
+                            <div class="a-button__label">登録</div>
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+</form>

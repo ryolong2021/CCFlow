@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>フィールド</title>
+    <!--引入jquery-->
+    <script src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <!--引入bootstrap-->
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--引入easyui-->
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js"></script>
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" />
+
+    <!--引入通用的JS-->
+    <script src="../../Scripts/QueryString.js"></script>
+    <script src="../../Scripts/config.js"></script>
+    <script src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/PinYin.js"></script>
+    <script src="../../Scripts/vue.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script src="js/ueditor/dialogs/internal.js"></script>
+    <script src="DialogCtr/Public.js"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
+</head>
+<body>
+
+    <center>
+        <table id="App" style="width:90%;" class="table mt-3">
+            <tr>
+                <th>順序</th>
+                <th>フィールド</th>
+                <th>英語名</th>
+                <th>タイプ</th>
+                <th colspan="3">操作1</th>
+            </tr>
+
+            <tr v-for="(value,index) in delData">
+                <td>{{index+1}}</td>
+                <td>{{value.KeyOfEn}}</td>
+                <td>{{value.Name}}</td>
+                <td>{{value.contralType}}</td>
+                <td> <a href="#" @click="Edit(value.MyPK);">編集</a></td>
+                <td> <a href="#" @click="Insert(value.MyPK);">挿入</a></td>
+                <td> <a href="#" @click="Delete(value.MyPK);">削除</a></td>
+            </tr>
+        </table>
+    </center>
+
+    <script type="text/javascript">
+
+
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                //listData: [],
+                delData: []
+            },
+            created() {
+                this.delData =  InitData();
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+                handler.AddPara("FrmID", frmID);
+                var html = handler.DoMethodReturnString("Fields_Init");
+             //   console.log(html);
+
+                var list = ens.GetEns();
+                var deldate = [];
+                list.data.map(function (item, index) {
+                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 7) {
+                        item.contralType = GetFieldType(item);
+
+                        if (item.UIVisable != 0
+                            && item.KeyOfEn != 'Emps'
+                            && item.KeyOfEn != 'FK_NY'
+                            && item.KeyOfEn != 'FK_Dept'
+                             && item.KeyOfEn != 'MyNum'
+                            && item.KeyOfEn != 'Rec') {
+                            deldate.push(item);
+                        }
+                    }
+                });
+                this.delData = deldate;
+            },
+            methods: {
+                Edit: function (myPK) {
+                    var attr = new Entity("BP.Sys.MapAttr", myPK);
+                    if (attr.LGType == 0 && attr.UIContralType == 1) {
+                        EditTableSQL(attr.MyPK, attr.KeyOfEn);
+                    }
+
+                    if (attr.LGType == 0) {
+                        Edit(attr.MyPK, attr.MyDataType, attr.GroupID, attr.FK_MapData, attr.UIContralType);
+                    }
+
+                    if (attr.LGType == 1) {
+                        EditEnum(attr.FK_MapData, attr.MyPK, attr.KeyOfEn);
+                    }
+                    if (attr.LGType == 2) {
+                        EditTable(attr.FK_MapData, attr.MyPK, attr.KeyOfEn);
+                    }
+                },
+                Insert: function (myPK) {
+                    var attr = new Entity("BP.Sys.MapAttr", myPK);
+                    InsertHtmlToEditor(GetDataType(attr), attr.KeyOfEn, attr.Name, attr.UIBindKey, attr);
+                    dialog.close(true);
+                },
+                Delete: function (myPK) {
+                    if (window.confirm('削除してよろしいですか？') == false)
+                        return;
+
+                     var attr = new Entity("BP.Sys.MapAttr", myPK);
+                     attr.Delete();
+                     alert('削除に成功しました、手動で更新する必要があります。');
+                     window.location.href = window.location.href;
+                }
+            }
+        })
+
+        function InitData() {
+            var frmID = GetQueryString("FrmID");
+                var ens = new Entities("BP.Sys.MapAttrs");
+                ens.Retrieve("FK_MapData", frmID, "Idx");
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+                handler.AddPara("FrmID", frmID);
+                var html = handler.DoMethodReturnString("Fields_Init");
+
+                var list = ens.GetEns();
+                var deldate = [];
+                list.data.map(function (item, index) {
+                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 7) {
+                        item.contralType = GetFieldType(item);
+                        deldate.push(item);
+                    }
+                });
+            return deldate;
+               
+        }
+        
+        function GetFieldType(mapAttr) {
+
+            if (mapAttr.UIContralType == 0) {
+                //控件数据类型
+                if (mapAttr.MyDataType == "1") {
+                    return "テキストボックスString";
+                } else if (mapAttr.MyDataType == "2") {
+                    return "テキストボックスInt";
+                } else if (mapAttr.MyDataType == "3") {
+                    return "テキストボックスFloat";
+                } else if (mapAttr.MyDataType == "4") {
+                    return "テキストボックスBoolean";
+                } else if (mapAttr.MyDataType == "5") {
+                    return "テキストボックスDouble";
+                } else if (mapAttr.MyDataType == "6") {
+                    return "テキストボックスDate";
+                } else if (mapAttr.MyDataType == "7") {
+                    return "テキストボックスDateTime";
+                } else if (mapAttr.MyDataType == "8") {
+                    return "テキストボックスMoney";
+                }
+            } else if (mapAttr.UIContralType == 1) {
+                //枚举下拉框
+                if (mapAttr.LGType == 1) {
+                    return "列挙コンボボックス";
+                } //外键下拉框
+                else if (mapAttr.LGType == 2) {
+                    return "外部キーコンボボックス";
+                }
+                //外部数据源
+                else if (mapAttr.LGType == 0) {
+                    return "外部データソース";
+                }
+            } else if (mapAttr.UIContralType == 2) {//复选框
+                if (mapAttr.MyDataType == "1")
+                    return "リストボックス";
+                return "チェックボックス";
+            } else if (mapAttr.UIContralType == 3) {//单选框
+                return "列挙ラジオボタン";
+            }
+            if (mapAttr.MyDataType == 1) {
+                if (mapAttr.UIContralType == 8)//手写签字版
+                    return "手書きのサインボード";
+                if (mapAttr.UIContralType == 11)//图片
+                    return "画像";
+                if (mapAttr.UIContralType == 4)//地图
+                    return "地図";
+                if (mapAttr.UIContralType == 101)//评分
+                    return "評価";
+            }
+            return "その他タイプ";
+        }
+
+        function Edit(mypk, ftype, gf, fk_mapdata, uiContralType) {
+
+            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata + '&GroupField=' + gf;
+            var title = '';
+            if (ftype == 1) {
+
+
+                if (uiContralType == 0) {
+                    title = 'フィールドString属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 9) {
+                    title = 'フィールドStringリンク';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 8) {
+                    title = '手書きのサインボード';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 6) {
+                    title = '添付コンポーネント';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 11) {
+
+                    debugger;
+                    var imgEn = new Entity("BP.Sys.FrmUI.ExtImg");
+                    imgEn.SetPKVal(mypk);
+
+                    if (imgEn.RetrieveFromDBSources() == 0) {
+                        var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+
+                        imgEn.CopyJSON(mapAttr);
+                        imgEn.MyPK = mypk;
+                        imgEn.Insert();
+                    }
+
+                    title = '装飾画像のプロパティ';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 8) {
+                    title = '手書きサインボード';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 4) {
+                    title = '地図';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 50) {
+                    title = 'フロープログレスチャート';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 101) {
+                    title = '評価コントローラー';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+            }
+
+            if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
+                title = 'フィールドNum属性';
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 6 || ftype == 7) {
+                title = 'フィールドdate属性';
+
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 6 || ftype == 7) {
+                title = 'フィールドdatetime属性';
+
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 4) {
+                title = 'フィールドboolean属性';
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
+                 Baseinfo.delData =  InitData();
+            });
+           
+            return;
+        }
+
+        function EditEnum(fk_mapdata, mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '列挙' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function EditTableSQL(mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '外部キーSQLフィールド:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function EditTable(fk_mapData, mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '外部キーフィールド:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+
+
+
+    </script>
+
+
+</body>
+</html>

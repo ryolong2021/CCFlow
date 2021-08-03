@@ -1,0 +1,784 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>辞書テーブル作成ウィザード</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../Comm/JS/Ctrls.js" type="text/javascript"></script>
+	<script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+		closeWhileEscUp();
+
+        function showInfo(title, msg, autoHiddenMillionSeconds) {
+            $.messager.show({
+                title: title,
+                msg: msg,
+                timeout: autoHiddenMillionSeconds,
+                showType: 'slide',
+                style: {
+                    right: '',
+                    top: document.body.scrollTop + document.documentElement.scrollTop,
+                    bottom: ''
+                }
+            });
+        }
+
+        function showInfoAndGo(title, msg, icon, url) {
+            if (url == undefined || url == null || url.length == 0) {
+                $.messager.alert(title, msg, icon);
+            }
+            else {
+                $.messager.alert(title, msg, icon, function () {
+                    self.location = url;
+                });
+            }
+        }
+
+        function showInfoAndBack(title, msg, icon) {
+            $.messager.alert(title, msg, icon, function () {
+                history.back();
+            });
+        }
+
+        var CONST_TYPES = [{ NO: '0', NAME: 'ローカルクラス' }, { NO: '1', NAME: 'テーブルを作成' }, { NO: '2', NAME: 'テーブルまたはビュー' }, { NO: '3', NAME: 'SQL検索テーブル' }, { NO: '4', NAME: 'WebServices' }, { NO: '5', NAME: '動的SQLクエリ' }];
+        var CONST_STRUCTS = [{ NO: '0', NAME: '通常のコーディングテーブル（No、Nameがあります）' }, { NO: '1', NAME: 'ツリー構造（No、Name、ParentNoがあります）'}];
+        var CONST_RETURNTYPES = [{ NO: 'DataTable', NAME: 'DataTableデータテーブル' }, { NO: 'DataSet', NAME: 'DataSetデータセット' }, { NO: 'Json', NAME: 'Json文字列' }, { NO: 'Xml', NAME: 'Xml文字列'}];
+        var CONST_GROUPTITLE = "class='GroupTitle'";
+        var t;
+        var srcType = 0;
+        var sfno;
+        var sftable = {};
+        var classes;
+        var srcs;
+        var tvs;
+        var cols;
+        var mtds;
+
+        $(function () {
+            t = new CtrlFactory('mtable');
+            sfno = t.getQueryString('sfno');
+            $('#srcTypes').change(function () {
+                loadSrcType(this.value, this.options[this.selectedIndex].text);
+            });
+
+            if (sfno) {
+                //获取信息
+                t.ajax(Handler, { DoType: 'SFGuide_GetInfo', sfno: sfno }, false, function (msg) {
+                    if (!msg || msg.indexOf("err@") != -1) {
+                        alert('取得番号は' + sfno + '次のデータソーステーブルのときにエラーが発生しました' + msg);
+                        return;
+                    }
+
+                    var d = $.parseJSON(msg);
+
+                    if (d.length == 1) {
+                        sftable = d[0];
+
+                        $('#srcTypes').val(sftable.SrcType, null);
+                        loadSrcType(sftable.SrcType, null);
+                        t.disabled("srcTypes");
+                        t.disabled("TB_No");
+                    }
+                    else {
+                        alert('エラー:番号が' + sfno + 'のデータソーステーブルを取得できませんでした！');
+                    }
+                }, function (msg) {
+                    alert('取得番号は' + sfno + '次のデータソーステーブルのときにエラーが発生しました' + msg);
+                });
+            }
+            else {
+                loadSrcType(CONST_TYPES[0].No, CONST_TYPES[0].Name);
+            }
+        });
+
+        function loadSrcType(value, text) {
+            srcType = value;
+
+            //清除第2行下面所有行
+            while ($('#mtable tr').length > 2) {
+                $('#mtable tr').last().remove();
+            }
+
+            var struct = (sftable.CodeStruct | 0).toString();
+            var src = sftable.FK_SFDBSrc ? (sfno ? sftable.FK_SFDBSrc : 'local') : 'local';
+
+            switch (parseInt(value)) {
+                case 0: //BP类
+
+                    t.addTR(null, 'r2')
+                     .addTD('r2', 'c20', CONST_GROUPTITLE, 'エンティティのタイプ:')
+                     .addTD('r2', 'c21')
+                     .addSelect('c21', 'CodeStruct', CONST_STRUCTS, struct, loadStructClass)
+                     .addTD('r2', 'c22', null, '特定のフィールドがあるエンティティタイプを選択します。')
+                     .addTR(null, 'r3')
+                     .addTD('r3', 'c30', CONST_GROUPTITLE, 'クラス:')
+                     .addTD('r3', 'c31')
+                     .addSelect('c31', 'Class', getStructClass(struct), sfno)
+                     .addTD('r3', 'c32', null, 'クラスを選択');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rp')
+                         .addTD('rp', 'cp0', CONST_GROUPTITLE, 'ルートノード値：')
+                         .addTD('rp', 'cp1')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                         .addTD('rp', 'cp2', null, 'このツリーのルートポイントを記入してください。');
+                    }
+                    break;
+                case 1: //创建表
+                    loadNormalInfo();
+
+                    t.addTR(null, 'r4')
+                     .addTD('r4', 'c40', CONST_GROUPTITLE, 'データソース：')
+                     .addTD('r4', 'c41')
+                     .addSelect('c41', 'SFDBSrc', getSrcs(), src)
+                     .addTD('r4', 'c42', null, '辞書表が属するデータソースを選択します。')
+                     .addTR(null, 'r5')
+                     .addTD('r5', 'c50', CONST_GROUPTITLE, 'データフォーマット:')
+                     .addTD('r5', 'c51')
+                     .addSelect('c51', 'CodeStruct', CONST_STRUCTS, struct, loadStructTable)
+                     .addTD('r5', 'c52', null, '特定のフィールドがある書式を選択します。');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rp')
+                         .addTD('rp', 'cp0', CONST_GROUPTITLE, 'ルートノード値：')
+                         .addTD('rp', 'cp1')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                         .addTD('rp', 'cp2', null, 'このツリーのルートポイントを記入してください。');
+                    }
+                    break;
+                case 2: //表或视图
+                    loadNormalInfo();
+                    var stable = sftable.SrcTable ? sftable.SrcTable : '';
+                    var colval = sftable.ColumnValue ? sftable.ColumnValue : '';
+                    var coltext = sftable.ColumnText ? sftable.ColumnText : '';
+                    var colparent = sftable.ParentValue ? sftable.ParentValue : '';
+                    var rootvalue = sftable.DefVal ? sftable.DefVal : '0';
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
+
+                    t.addTR(null, 'r4')
+                     .addTD('r4', 'c40', CONST_GROUPTITLE, 'データソース：')
+                     .addTD('r4', 'c41')
+                     .addSelect('c41', 'SFDBSrc', getSrcs(), src, loadTableViews)
+                     .addTD('r4', 'c42', null, '辞書表が属するデータソースを選択します。')
+                     .addTR(null, 'r5')
+                     .addTD('r5', 'c50', CONST_GROUPTITLE, 'テーブル/ビュー:')
+                     .addTD('r5', 'c51')
+                     .addSelect('c51', 'SrcTable', getTableViews(src), stable, loadColumns)
+                     .addTD('r5', 'c52', null, 'テーブルまたはビューを選択します。')
+                     .addTR(null, 'r6')
+                     .addTD('r6', 'c60', CONST_GROUPTITLE, 'データフォーマット:')
+                     .addTD('r6', 'c61')
+                     .addSelect('c61', 'CodeStruct', CONST_STRUCTS, struct, loadStructSet)
+                     .addTD('r6', 'c62', null, '特定のフィールドがある書式を選択します。')
+                     .addTR(null, 'r7')
+                     .addTD('r7', 'c70', CONST_GROUPTITLE, 'ソースコード列:')
+                     .addTD('r7', 'c71')
+                     .addSelect('c71', 'ColumnValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colval)
+                     .addTD('r7', 'c72', null, '該当No列')
+                     .addTR(null, 'r8')
+                     .addTD('r8', 'c80', CONST_GROUPTITLE, 'ラベル列：')
+                     .addTD('r8', 'c81')
+                     .addSelect('c81', 'ColumnText', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), coltext)
+                     .addTD('r8', 'c82', null, '該当Name列');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rpc')
+                         .addTD('rpc', 'cpc0', CONST_GROUPTITLE, '親ノードの列:')
+                         .addTD('rpc', 'cpc1')
+                         .addSelect('cpc1', 'ParentValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colparent)
+                         .addTD('rpc', 'cpc2', null, '該当ParentNo列')
+                         .addTR(null, 'rpv')
+                         .addTD('rpv', 'cpv0', CONST_GROUPTITLE, 'ルートノード値：')
+                         .addTD('rpv', 'cpv1')
+                         .addTextbox('cpv1', 'RootValue', null, rootvalue)
+                         .addTD('rpv', 'cpv2', null, 'このツリーのルートポイントを記入してください。');
+                    }
+
+                    t.addTR(null, 'r9')
+                     .addTD('r9', 'c90', CONST_GROUPTITLE, 'フィルタSQL:')
+                     .addTD('r9', 'c91', 'colspan="2"')
+                     .addTextbox('c91', 'SelectStatement', "style='width:98%'", sql)
+                     .add('#c91', "<br />例 ：XXX = '002' AND YYY = 3、以下のパラメータ式をサポートします：@WebUser.No、@WebUser.Name、@WebUser.FK_Dept、@WebUser.FK_DeptName");
+                    break;
+                case 3: //SQL查询表
+                case 5: //动态SQL查询
+                    loadNormalInfo();
+
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
+
+                    t.addTR(null, 'r4')
+                     .addTD('r4', 'c40', CONST_GROUPTITLE, 'データソース：')
+                     .addTD('r4', 'c41')
+                     .addSelect('c41', 'SFDBSrc', getSrcs(), src)
+                     .addTD('r4', 'c42', null, '辞書表が属するデータソースを選択します。')
+                     .addTR(null, 'r5')
+                     .addTD('r5', 'c50', CONST_GROUPTITLE, 'データフォーマット:')
+                     .addTD('r5', 'c51')
+                     .addSelect('c51', 'CodeStruct', CONST_STRUCTS, struct, loadStructSQL)
+                     .addTD('r5', 'c52', null, '特定のフィールドがある書式を選択します。');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rp')
+                         .addTD('rp', 'cp0', CONST_GROUPTITLE, 'ルートノード値：')
+                         .addTD('rp', 'cp1')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                         .addTD('rp', 'cp2', null, 'このツリーのルートポイントを記入してください。');
+                    }
+
+                    if (srcType == "3") {
+                        t.addTR(null, 'r6')
+                         .addTD('r6', 'c60', CONST_GROUPTITLE, 'SQLステートメント:')
+                         .addTD('r6', 'c61', 'colspan="2"')
+                         .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
+                         .add('#c61', "<br />whereの後にfilterステートメントを入力するだけです、たとえば、XXX = '002' AND YYY = 3。以下のようなパラメータ式をサポートします：@WebUser.No、@WebUser.Name、@WebUser.FK_Dept、@WebUser.FK_DeptName。");
+                    }
+
+                    if (srcType == "5") {
+                        t.addTR(null, 'r6')
+                         .addTD('r6', 'c60', CONST_GROUPTITLE, 'SQLステートメント:')
+                         .addTD('r6', 'c61', 'colspan="2"')
+                         .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
+                         .add('#c61', "<br />完全なSQLクエリステートメントを入力してください。戻りフィールドにはNo、Nameが含まれている必要があります[ツリー構造の場合は、ParentNoが含まれている必要があります]。以下のようなパラメータをサポートします：@WebUser.No、@WebUser.Name、@WebUser.FK_Dept、@WebUser.FK_DeptName。");
+                    }
+
+                    break;
+                case 4: //WebServices
+                    loadNormalInfo();
+
+                    var stable = sftable.SrcTable ? sftable.SrcTable : '';
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
+                    src = sftable.FK_SFDBSrc ? (sfno ? sftable.FK_SFDBSrc : '') : '';
+                    var tabledesc = sftable.TableDesc ? sftable.TableDesc.split(',') : ['', ''];
+
+                    t.addTR(null, 'r4')
+                     .addTD('r4', 'c40', CONST_GROUPTITLE, 'データソース：')
+                     .addTD('r4', 'c41')
+                     .addSelect('c41', 'SFDBSrc', getSrcs(100), src, loadWSMethods)
+                     .addTD('r4', 'c42', null, '辞書表が属するWebServiceデータソースを選択します。')
+                     .addTR(null, 'r5')
+                     .addTD('r5', 'c50', CONST_GROUPTITLE, 'メソッド：')
+                     .addTD('r5', 'c51')
+                     .addSelect('c51', 'Method', getWSMethods(src.length > 0 ? src : srcs && srcs.length > 0 ? srcs[0].No : ''), tabledesc[0])
+                     .addTD('r5', 'c52', null, 'この辞書データを提供するためのWebSerivceのインターフェース方法を選択します。')
+                     .addTR(null, 'r6')
+                     .addTD('r6', 'c60', CONST_GROUPTITLE, 'パラメータを設定：')
+                     .addTD('r6', 'c61', 'colspan="2"')
+                     .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
+                     .add('#c61', "<br />例： aaa=002&bbb=3。以下のようなパラメータをサポートします：@WebUser.No、@WebUser.Name、@WebUser.FK_Dept、@WebUser.FK_DeptName")
+                     .addTR(null, 'r7')
+                     .addTD('r7', 'c70', CONST_GROUPTITLE, '戻り値の種類:')
+                     .addTD('r7', 'c71')
+                     .addSelect('c71', 'ReturnType', CONST_RETURNTYPES, tabledesc[1])
+                     .addTD('r7', 'c72', null, '特定のフィールドがある書式を選択します。')
+                     .addTR(null, 'r8')
+                     .addTD('r8', 'c80', CONST_GROUPTITLE, 'データフォーマット:')
+                     .addTD('r8', 'c81')
+                     .addSelect('c81', 'CodeStruct', CONST_STRUCTS, struct, loadStructWS)
+                     .addTD('r8', 'c82', null, '特定のフィールドがある書式を選択します。');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rp')
+                         .addTD('rp', 'cp0', CONST_GROUPTITLE, 'ルートノード値：')
+                         .addTD('rp', 'cp1')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                         .addTD('rp', 'cp2', null, 'このツリーのルートポイントを記入してください。');
+                    }
+                    break;
+            }
+        }
+
+        function loadNormalInfo() {
+            t.addTR(null, 'r2')
+            .addTD('r2', 'c20', CONST_GROUPTITLE, '辞書番号:')
+            .addTD('r2', 'c21')
+            .addTextbox('c21', 'No', null, sftable.No ? sftable.No : '')
+            .addTD('r2', 'c22', null, '辞書表の英字名を作成します。数字で始まるのではなく、表の作成にエラーが発生します。')
+            .addTR(null, 'r3')
+            .addTD('r3', 'c30', CONST_GROUPTITLE, '辞書の名前:')
+            .addTD('r3', 'c31')
+            .addTextbox('c31', 'Name', null, sftable.Name ? sftable.Name : '')
+            .addTD('r3', 'c32', null, '辞書表の日本語名を作成します。');
+        }
+
+        function loadStructClass(value, text) {
+            $('#DDL_Class').remove();
+
+            t.addSelect('c31', 'Class', getStructClass(value), sfno);
+
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点值设置行
+                $('#rp').remove();
+            }
+            else {
+                //增加父结点值设置行
+                t.addTR(null, 'rp', null, '#r3')
+                 .addTD('rp', 'cp0', CONST_GROUPTITLE, 'ルートノード値：')
+                 .addTD('rp', 'cp1')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                 .addTD('rp', 'cp2', null, 'このツリーのルートポイントを記入してください。');
+            }
+        }
+
+        function loadStructTable(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点值设置行
+                $('#rp').remove();
+            }
+            else {
+                //增加父结点值设置行
+                t.addTR(null, 'rp')
+                 .addTD('rp', 'cp0', CONST_GROUPTITLE, 'ルートノード値：')
+                 .addTD('rp', 'cp1')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                 .addTD('rp', 'cp2', null, 'このツリーのルートポイントを記入してください。');
+            }
+        }
+
+        function loadStructSet(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点列/值设置行
+                $('#rpc').remove();
+                $('#rpv').remove();
+            }
+            else {
+                //增加父结点列/值设置行
+                var stable = $('#DDL_SrcTable').val();
+                var colparent = sftable.ParentValue ? sftable.ParentValue : '';
+                var rootvalue = sftable.DefVal ? sftable.DefVal : '0';
+
+                t.addTR(null, 'rpc', null, '#r8')
+                 .addTD('rpc', 'cpc0', CONST_GROUPTITLE, '親ノードの列:')
+                 .addTD('rpc', 'cpc1')
+                 .addSelect('cpc1', 'ParentValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colparent)
+                 .addTD('rpc', 'cpc2', null, '該当ParentNo列')
+                 .addTR(null, 'rpv', null, '#rpc')
+                 .addTD('rpv', 'cpv0', CONST_GROUPTITLE, 'ルートノード値：')
+                 .addTD('rpv', 'cpv1')
+                 .addTextbox('cpv1', 'RootValue', null, rootvalue)
+                 .addTD('rpv', 'cpv2', null, 'このツリーのルートポイントを記入してください。');
+            }
+        }
+
+        function loadStructSQL(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点值设置行
+                $('#rp').remove();
+            }
+            else {
+                //增加父结点值设置行
+                t.addTR(null, 'rp', null, '#r5')
+                 .addTD('rp', 'cp0', CONST_GROUPTITLE, 'ルートノード値：')
+                 .addTD('rp', 'cp1')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                 .addTD('rp', 'cp2', null, 'このツリーのルートポイントを記入してください。');
+            }
+        }
+
+        function loadStructWS(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点值设置行
+                $('#rp').remove();
+            }
+            else {
+                //增加父结点值设置行
+                t.addTR(null, 'rp')
+                 .addTD('rp', 'cp0', CONST_GROUPTITLE, 'ルートノード値：')
+                 .addTD('rp', 'cp1')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                 .addTD('rp', 'cp2', null, 'このツリーのルートポイントを記入してください。');
+            }
+        }
+
+        function loadTableViews(value, text) {
+            $('#DDL_SrcTable').remove();
+
+            t.addSelect('c51', 'SrcTable', getTableViews(value), sftable.SrcTable ? sftable.SrcTable : '', loadColumns);
+
+            var selectedTable = $('#DDL_SrcTable').val();
+
+            if (selectedTable.length > 0) {
+                loadColumns(selectedTable, $('#DDL_SrcTable').text());
+            }
+        }
+
+        function loadWSMethods(value, text) {
+            $('#DDL_SrcTable').remove();
+            t.addSelect('c51', 'SrcTable', getWSMethods(value), sftable.SrcTable ? sftable.SrcTable : '')
+        }
+
+        function loadColumns(value, text) {
+            var haveparent = $('#DDL_CodeStruct').val() == CONST_STRUCTS[1].No;
+
+            $('#DDL_ColumnValue').remove();
+            $('#DDL_ColumnText').remove();
+
+            if (haveparent) {
+                $('#DDL_ParentValue').remove();
+            }
+
+            var colval = sftable.ColumnValue ? sftable.ColumnValue : '';
+            var coltext = sftable.ColumnText ? sftable.ColumnText : '';
+            var colparent = sftable.ParentValue ? sftable.ParentValue : '';
+
+            t.addSelect('c71', 'ColumnValue', getColumns(value), colval)
+             .addSelect('c81', 'ColumnText', getColumns(value), coltext);
+
+            if (haveparent) {
+                t.addSelect('cpc1', 'ParentValue', getColumns(value), colparent);
+            }
+        }
+
+        function getStructClass(struct) {
+            classes = [];
+
+            t.ajax(Handler, { DoType: 'SFGuide_GetClass', struct: struct, sfno: sfno }, false, function (msg) {
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('クラスの取得エラー:' + msg);
+                    classes = [];
+                    return;
+                }
+
+                classes = $.parseJSON(msg);
+
+            }, function (msg) {
+
+                alert('クラスの取得エラー:' + msg);
+                classes = [];
+            });
+
+            return classes;
+        }
+
+        function getSrcs(type) {
+            srcs = [];
+
+            t.ajax(Handler, { DoType: 'SFGuide_GetSrcs', type: type }, false, function (msg) {
+
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('データソースリストの取得エラー:' + msg);
+                    srcs = [];
+                    return;
+                }
+
+                srcs = $.parseJSON(msg);
+            }, function (msg) {
+                alert('データソースリストの取得エラー:' + msg);
+                srcs = [];
+            });
+
+            return srcs;
+        }
+
+        function getTableViews(src) {
+            tvs = [];
+
+            t.ajax(Handler, { DoType: 'SFGuide_GetTVs', src: src }, false, function (msg) {
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('テーブル/ビューリストの取得エラー:' + msg);
+                    tvs = [];
+                    return;
+                }
+
+                tvs = $.parseJSON(msg);
+            }, function (msg) {
+                alert('テーブル/ビューリストの取得エラー:' + msg);
+                tvs = [];
+            });
+
+            return tvs;
+        }
+
+        function getColumns(table) {
+            cols = [];
+            var src = $('#DDL_SFDBSrc').val();
+
+            t.ajax(Handler, { DoType: 'SFGuide_GetCols', src: src, table: table }, false, function (msg) {
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('列情報の取得エラー:' + msg);
+                    cols = [];
+                    return;
+                }
+
+                cols = $.parseJSON(msg);
+            }, function (msg) {
+                alert('列情報の取得エラー:' + msg);
+                cols = [];
+            });
+
+            return cols;
+        }
+
+        function getWSMethods(src) {
+            mtds = [];
+
+            t.ajax(Handler, { DoType: 'SFGuide_Getmtds', src: src }, false, function (msg) {
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('WebServiceメソッドのリストの取得エラー:' + msg);
+                    mtds = [];
+                    return;
+                }
+
+                mtds = $.parseJSON(msg);
+            }, function (msg) {
+                alert('WebServiceメソッドのリストの取得エラー:' + msg);
+                mtds = [];
+            });
+
+            return mtds;
+        }
+
+        function SaveSFTable() {
+
+            sftable.SrcType = parseInt(srcType);
+            sftable.No = sfno ? sfno : null;
+            sftable.Name = "";
+            sftable.CodeStruct = 0;
+            sftable.FK_VAL = "";
+            sftable.TableDesc = "";
+            sftable.DefVal = "";
+            sftable.CASHDT = "";
+            sftable.CASHMINUTE = 0;
+            sftable.FK_SFDBSrc = "";
+            sftable.SrcTable = "";
+            sftable.ColumnValue = "";
+            sftable.ColumnText = "";
+            sftable.ParentValue = "";
+            sftable.SelectStatement = "";
+            sftable.RDT = "";
+
+            switch (sftable.SrcType) {
+                case 0: //BP类
+                    if (!sftable.No) {
+                        sftable.No = t.getValue("DDL_Class");
+
+                        if (!sftable.No || sftable.No.length == 0) {
+                            alert("クラスは必ず選択します！");
+                            $("#DDL_Class").focus();
+                            return;
+                        }
+
+                        sftable.Name = t.getText("DDL_Class");
+                        var idx = sftable.Name.indexOf('[');
+                        sftable.Name = sftable.Name.substr(idx + 1, sftable.Name.length - idx - 1 - 1);
+                    }
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+                    break;
+                case 1: //创建表
+                    if (false == getNormalInfoValue()) {
+                        return;
+                    }
+
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+                    break;
+                case 2: //表或视图
+                    if (false == getNormalInfoValue()) {
+                        return;
+                    }
+
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+                    sftable.SrcTable = t.getValue("DDL_SrcTable");
+
+                    if (!sftable.SrcTable || sftable.SrcTable.length == 0) {
+                        alert("テーブル/ビューは必ず選択してください。");
+                        $("#DDL_SrcTable").focus();
+                        return;
+                    }
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+
+                    sftable.ColumnValue = t.getValue("DDL_ColumnValue");
+                    sftable.ColumnText = t.getValue("DDL_ColumnText");
+
+                    if (!sftable.ColumnValue || !sftable.ColumnText) {
+                        alert("コード列とラベル列は必ず選択してください！");
+                        $("#DDL_ColumnValue").focus();
+                        return;
+                    }
+
+                    if (sftable.CodeStruct == CONST_STRUCTS[1].No) {
+                        sftable.ParentValue = t.getValue("DDL_ParentValue");
+
+                        if (!sftable.ParentValue) {
+                            alert("親ノードの列を選択してください！");
+                            $("#DDL_ParentValue").focus();
+                            return;
+                        }
+                    }
+
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
+                    break;
+                case 3: //SQL查询表
+                case 5: //动态SQL查询
+                    if (false == getNormalInfoValue()) {
+                        return;
+                    }
+
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
+
+                    if (!sftable.SelectStatement || sftable.SelectStatement.length == 0) {
+                        alert("SQLステートメントは必ず記入してください！");
+                        $("#TB_SelectStatement").focus();
+                        return;
+                    }
+                    break;
+                case 4: //WebServices
+                    if (false == getNormalInfoValue()) {
+                        return;
+                    }
+
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+
+                    if (!sftable.FK_SFDBSrc || sftable.FK_SFDBSrc.length == 0) {
+                        alert("データソースは必ず選択してください。");
+                        $("#DDL_SFDBSrc").focus();
+                        return;
+                    }
+
+                    sftable.TableDesc = t.getValue("DDL_Method");
+
+                    if (!sftable.TableDesc || sftable.TableDesc.length == 0) {
+                        alert("方法は必ず選択してください！");
+                        $("#DDL_Method").focus();
+                        return;
+                    }
+
+                    sftable.TableDesc += "," + t.getValue('DDL_ReturnType');
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+                    break;
+            }
+
+            sftable.DoType = 'SFGuide_SaveInfo';
+            sftable.IsNew = sfno == null;
+
+            t.ajax(Handler, sftable, false, function (msg) {
+
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('保存エラー：' + msg);
+                    return;
+                }
+
+                alert(msg);
+
+                //暂时屏蔽，报异常
+                /*if (sfno == null) {
+                    var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.SFTables&No=' + sftable.No + '&t=' + Math.random();
+                    location.href = url;
+                    return;
+                }
+
+                if (sfno != null) {
+                    var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.SFTables&No=' + sftable.No + '&t=' + Math.random();
+                    location.href = url;
+                    return;
+                }*/
+
+
+                //                if (sfno) {
+                //                    location.href = location.href.indexOf("&t=") != -1 ? location.href.replace("&t=" + t.getQueryString("t"), "&t=" + Math.random()) : (location.href + "&t=" + Math.random());
+                //                }
+                //                else {
+                //                    location.href += "&sfno=" + sftable.No + "&t=" + Math.random();
+                //                }
+            }, function (msg) {
+                alert(msg);
+            });
+        }
+
+        function getNormalInfoValue() {
+            if (!sftable.No) {
+                sftable.No = t.getValue("TB_No");
+
+                if (!sftable.No || sftable.No.length == 0) {
+                    alert("辞書番号は必ず記入してください。");
+                    $('#TB_No').focus();
+                    return false;
+                }
+            }
+
+            sftable.Name = t.getValue("TB_Name");
+
+            if (!sftable.Name || sftable.Name.length == 0) {
+                alert("辞書の名前は必ず記入してください。");
+                $('#TB_Name').focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        function getCodeStructValue() {
+            sftable.CodeStruct = parseInt(t.getValue("DDL_CodeStruct"));
+
+            if (sftable.CodeStruct == CONST_STRUCTS[1].No) {
+                sftable.DefVal = t.getValue("TB_RootValue");
+
+                if (sftable.DefVal.length == 0) {
+                    alert("ルートポイントは必ず記入してください！");
+                    $('#TB_RootValue').focus();
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        function ToNewVer() {
+            window.location.href = './SFTable/Default.htm';
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+        <table id="mtable" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 98%;  padding:5px; margin:5px;">
+            <tr>
+                <td class="GroupTitle" width="120px">アイテム</td>
+                <td class="GroupTitle" width="300px"> 値</td>
+                <td class="GroupTitle"> コメント</td>
+            </tr>
+            <tr>
+                <td class="GroupTitle"> データソーステーブルタイプ：</td>
+                <td width="300px">
+                    <select id="srcTypes">
+                        <option value="0">ローカルクラス</option>
+                        <option value="1">テーブルを作成</option>
+                        <option value="2">テーブルまたはビュー</option>
+                        <option value="3">SQL検索テーブル</option>
+                        <option value="4">WebServices</option>
+                        <option value="5">動的SQLクエリ</option>
+                    </select>
+                </td>
+                <td>
+                    5種類の中の1つを選択します。
+                </td>
+            </tr>
+        </table>
+        <a href="javascript:void(0)" id="Btn_Create" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+           onclick="SaveSFTable()">保存</a> | <a href="javascript:void(0)" id="Btn_ShowData" class="easyui-linkbutton"
+                                             data-options="iconCls:'icon-open'" onclick="ToNewVer()">新規バージョン作成ウィザード</a>
+           <!--<a href="javascript:void(0)" id="Btn_ShowData" class="easyui-linkbutton"
+                                             data-options="iconCls:'icon-open'" onclick="ShowData()">データを表示</a>-->
+</body>
+</html>

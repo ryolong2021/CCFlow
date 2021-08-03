@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+   <AdminTools>
+		<ICON> ../../Images/System/User_1.gif </ICON>
+		<URL> /WF/Port/SignInOfRe.aspx?IsChangeUser=1 </URL>
+		<Name> ユーザー切替  </Name>
+		<DESC> ユーザー切替。</DESC>
+		<Enable>0</Enable>		
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/Sys.gif </ICON>
+		<URL> ../Port/ChangePass.aspx  </URL>
+		<Name> パスワード変更  </Name>
+		<DESC> パスワード変更してください。</DESC>
+		<Enable>1</Enable>		
+	</AdminTools>
+	
+	<AdminTools>
+		<ICON> ../../Images/System/Sys.gif </ICON>
+		<URL> ../Port/Authorize.aspx</URL>
+		<Name> 承認/許可されたログインモード/許可されたログインモードを終了します </Name>
+		<DESC> システムは、現在のログイン状態によって、対応する操作メニューを自動的に選択する。</DESC>
+		<Enable>1</Enable>		
+	</AdminTools>
+	
+	<AdminTools>
+		<ICON> ../../Images/System/UI.gif </ICON>
+		<URL> ../Port/Personal.aspx</URL>
+		<Name> ユーザーインタフェイス設定  </Name>
+		<DESC> ユーザースタイルを設定。</DESC>
+		<Enable>0</Enable>
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/Ring.gif </ICON>
+		<URL> ../Port/NoticeSound.aspx</URL>
+		<Name> メッセージ着信音設定  </Name>
+		<DESC>  新しいメッセージが届いたときに通知する着信音の種類。</DESC>
+		<Enable>0</Enable>		
+		
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/NewMsg.gif </ICON>
+		<URL>  ../Msg/Reader.aspx </URL>
+		<Name>マイメッセージ</Name>
+		<DESC> システムまたは同僚から送信されたメッセージ。</DESC>
+		<Enable>0</Enable>		
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/NewMsg.gif </ICON>
+		<URL>  ../Msg/Sender.aspx</URL>
+		<Name>メッセージを送る</Name>
+		<DESC> メッセージを送る</DESC>
+		<Enable>0</Enable>
+	</AdminTools>
+	<AdminTools>
+		<ICON>../../Images/System/NewMsg.gif </ICON>
+		<URL>../FAQ/FAQ.aspx</URL>
+		<Name> 私の質問</Name>
+		<DESC>管理者に依頼されて解決待つの私の質問。</DESC>
+		<Enable>1</Enable>		
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/DataIO.gif </ICON>
+		<URL> DTS.aspx</URL>
+		<Name> データ同期  </Name>
+		<DESC> 彼は手動でシステムの配置を実行する</ DESC>
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/Users.gif </ICON>
+		<URL>../../Comm/Port/OnlineUsers.aspx</URL>
+		<Name> オンラインユーザー  </Name>
+		<DESC> ユーザーのオンライン状況を確認する</DESC>
+	</AdminTools>
+</NewDataSet>

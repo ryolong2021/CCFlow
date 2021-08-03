@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="App">
+        <div id="bar">
+        </div>
+        <fieldset>
+            <legend>設定</legend>
+            <ul>
+                <li><a href="javascript:void(0)" @click="OpenDialog()">処理者が選択できる範囲を設定します。</a> </li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>説明</legend>
+            <ul>
+                <li>関連付けされた全員は、ノードの動作を処理することができる。</li>
+                <li>特別な説明：<font color="red"> 現在のノードが開始ノードの場合、すべての担当者が開始できます。</font></li>
+            </ul>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                deliverWay: DeliveryWay.BySelectedForPrj
+            },
+            methods: {
+                OpenDialog: function () {
+                        var url = "../../../Comm/En.htm?EnName=BP.WF.Template.Selector";
+                        var nodeID = GetQueryString("FK_Node");
+                        url += '&NodeID=' + nodeID;
+                        OpenEasyUiDialogExt(url, 'セレクタ', 950, 500, false);
+                }
+            },
+            created() {
+                InitBar(this.deliverWay);
+                
+            }
+        });
+
+        //保存
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.Update();
+        }
+    </script>
+</body>
+</html>

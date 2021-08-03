@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>フィールドを隠す</title>
+    <!-- 增加一个配置  -->
+    <script src="../../../Scripts/QueryString.js"></script>
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+</head>
+<body>
+
+    <table id="tabApp" style="width:100%;">
+        <caption>フィールドを隠す</caption>
+        <tr>
+            <th>#</th>
+            <th>フィールド</th>
+            <th>フィールド名</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="(value,index) in listData.data" v-if="value.UIVisible==0">
+            <td>{{index+1}}</td>
+            <td>{{ value.KeyOfEn }}</td>
+            <td><a href="#" v-on:click="OpenEn(value.MyPK)">{{value.Name}}</a> </td>
+
+            <!-- 操作 -->
+            <!--<td v-if="value.UIVisible==0">隐藏字段</td>-->
+            <!--<td v-if="value.UIVisible==1"> -  </td>-->
+
+            <!-- 操作 -->
+            <td v-if="value.EditType==0"><a href="#" v-on:click="Delete(value.MyPK)">削除</a> </td>
+            <td v-if="value.EditType==1"> - </td>
+            <td v-if="value.EditType==2"> - </td>
+        </tr>
+    </table>
+
+    <script src="../../../Scripts/vue.js"></script>
+    <script language="javascript" type="text/javascript">
+
+        var appTidan = new Vue({
+            el: '#tabApp',
+            data: {
+                sum: 0,
+                listData: []
+            },
+            created() {
+                var frmID = GetQueryString("FK_MapData");
+                var ens = new Entities("BP.Sys.MapAttrs");
+                ens.Retrieve("FK_MapData", frmID);
+                this.listData = ens.GetEns();
+            },
+            methods: {
+                OpenEn: function (myPK) {
+                    var url = "/WF/Comm/En.htm?EnName=BP.Sys.MapAttr&MyPK=" + myPK;
+                    WinOpen(url);
+                },
+                Delete: function (myPK) {
+                    if (window.confirm('削除してよろしいですか？') == false)
+                        return;
+
+                    var en = new Entity("BP.Sys.MapAttr", myPK);
+                    en.Delete();
+                    window.location.href = window.location.href;
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>

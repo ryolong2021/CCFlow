@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>ワークフロー</title>
+    <!-- 于庆海 -->
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("読み込み中です。しばらくお待ちください......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+        //初始化数据.
+        function InitPage() {
+
+            var fk_node = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", fk_node);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(node);
+
+            $("#TB_Alert").val(node.BlockAlert);
+            switch (parseInt(node.BlockModel)) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    $("#TB_SpecSubFlow").val(node.BlockExp);
+                    break;
+                case 3:
+                    $("#TB_SQL").val(node.BlockExp);
+                    break;
+                case 4:
+                    $("#TB_Exp").val(node.BlockExp);
+                    break;
+                case 5:
+                    $("#TB_SpecSubFlowNode").val(node.BlockExp);
+                    break;
+                case 6:
+                    $("#TB_SameLevelSubFlow").val(node.BlockExp);
+                    break;
+                default:
+                    break;
+            }
+            return;
+        }
+
+
+        function Btn_Save_Click() {
+
+            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("CheckBoxIDs", checkBoxIDs);
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("BlockModel_Save");
+
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            window.location.href = window.location.href;
+            return;
+
+        }
+    </script>
+</head>
+<body>
+    
+    <form id="cc">
+        <div id="bar" class="cs-tr cs-bar"> 
+            <input type="button" id="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
+        </div>
+        <fieldset>
+            <legend>
+                <input type="radio" id="RB_BlockModel_0" value="0" name="RB_BlockModel" runat="server" /><label for="RB_BlockModel_0">ブロックしない</label>
+            </legend>
+            <ul style="color: Gray;">
+                <li>デフォルトモード、ブロックしない。</li>
+                <li>以下のいくつかのパターンが需要を満たすことができなければ、送信成功前のイベントに異常を投げて、下の動きを阻止することができます。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" id="RB_BlockModel_1" value="1" runat="server" name="RB_BlockModel" /><label for="RB_BlockModel_1">現在ノードに未完成のサブフローがある場合</label>
+            </legend>
+            <ul style="color: Gray;">
+                <li>現在ノードがサブフローを吊り上げており、未完成のサブフローがある場合は下に移動できません。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" id="RB_BlockModel_2" value="2" runat="" name="RB_BlockModel" /><label for="RB_BlockModel_2">約束の書式によって未完成サブフローをブロックする</label>
+            </legend>
+            <br /><a href="javascript:ShowHidden('flows')">式を設定してください:</a>
+            <div id="flows" style="color: Gray; display: none">
+                <ul>
+                    <li>ノードが下に移動するときは、指定された履歴ノードが起動した指定されたサブフローがすべて完了したことを条件として確認します。</li>
+                    <li>例、Dノードでは、Cノードで起動した甲サブフローが全部完了しているかどうかを確認し、完成すればブロックしない。</li>
+                    <li>構成形式：@指定のノード1=サブフロー番号1、@指定のノードn=サブフロー番号n。</li>
+                </ul>
+            </div>
+            <input type="text" id="TB_SpecSubFlow" name="TB_SpecSubFlow" runat="server" style="width: 95%" />
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" id="RB_BlockModel_5" value="5" runat="" name="RB_BlockModel" /><label for="RB_BlockModel_5">親フローを有効にしますか、子フローは指定されたノードに対して実行されません</label>
+            </legend>
+            <br /><a href="javascript:ShowHidden('SpecSubFlow')"></a>
+            <div id="SpecSubFlow" style="color: Gray; display: none">
+                <ul>
+                    <li>ノードが下に移動するときは、指定されたサブフローが指定されたノードを実行しているかどうかを条件としてチェックします。</li>
+                    <li>例、Dノードでは、起動されたサブフローがすべて指定されたノードに実行されているかどうかを確認し、完了すればブロックされない。</li>
+                    <li>構成形式：@指定のノード1=サブフローノード番号1、@指定のノードn=サブフロー番号n。。</li>
+                </ul>
+            </div>
+            <input type="text" id="TB_SpecSubFlowNode" name="TB_SpecSubFlowNode" runat="server" style="width: 95%" />
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" id="RB_BlockModel_6" value="6" runat="" name="RB_BlockModel" /><label for="RB_BlockModel_6">サブフローは指定されたノードまでに到着していない場合は、同じ階層のサブフローを有効にしない</label>
+            </legend>
+            <br /><a href="javascript:ShowHidden('SameLevelSubFlow')">式を設定してください:</a>
+            <div id="SameLevelSubFlow" style="color: Gray; display: none">
+                <ul>
+                    <li>このノードが下に移動する場合、条件として指定されたフラットサブフローが実行されているかどうかを確認します。</li>
+                    <li>例：Dノードでは、開始されたすべての並列サブフローが指定されたノードで実行されているかどうかを確認する必要があり、完了した場合、ブロックされません。</li>
+                    <li>構成形式：402，503。</li>
+                </ul>
+            </div>
+            <input type="text" id="TB_SameLevelSubFlow" name="TB_SameLevelSubFlow" runat="server" style="width: 95%" />
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" id="RB_BlockModel_3" value="3" runat="server" name="RB_BlockModel" /><label for="RB_BlockModel_3">SQLでブロックする</label>
+            </legend>
+            <br /><a href="javascript:ShowHidden('sql')">SQLを入力してください:</a>
+            <div id="sql" style="color: Gray; display: none">
+                <ul>
+                    <li>SQLを設置する、該当SQLは一項目だけ、数値型の値を返すSQLである。</li>
+                    <li>この値が0より大きい場合、ブロック送信、逆にブロックされない。</li>
+                    <li>設定されたパラメータはccbpm表現式をサポートします。</li>
+                </ul>
+            </div>
+            <input type="text" id="TB_SQL" name="TB_SQL" runat="server" textmode="MultiLine"
+                   rows="1" style="width: 95%" />
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" id="RB_BlockModel_4" value="4" runat="server" name="RB_BlockModel" /><label for="RB_BlockModel_4">数式でブロックする</label>
+            </legend>
+            <br /><a href="javascript:ShowHidden('exp')">表現式を入力してください:</a>
+            <div id="exp" style="color: Gray; display: none">
+                <ul>
+                    <li>表現式を設置する、'＠MyFieldName=1'という表式が成立すると、システムは送信できなくなります。</li>
+                    <li>表現式：@+フィールド名+スペース+演算子+スペース+値、フィールド名はノードフォームのすべてのフィールドであり、スペースは半角スペース、演算子は=、!=、>、>=、<、<=、LIKE </li>
+                    <li>注意：一つだけの表現式をサポートします。例、@JinE > 10000 </li>
+                </ul>
+            </div>
+            <input type="text" id="TB_Exp" name="TB_Exp" runat="server" style="width: 95%" />
+        </fieldset>
+        <fieldset>
+            <legend>その他のオプション設定</legend>
+            <br /><font color="gray">ブロックされた時のメッセージ(デフォルトでは送信ブロック規則に適合しています。次へ送信できません)。</font>
+            <input type="text" id="TB_Alert" name="TB_Alert" runat="server" style="width: 95%" />
+        </fieldset>
+        <fieldset>
+            <legend id="help" class="form-instructor"></legend>
+            <ul>
+                <li>ブロック送信ということは、現在のノードを次へ動かすことができないというルールです。</li>
+                <li>一定の条件を満たせば、次へ遷移させてはいけません。</li>
+            </ul>
+        </fieldset>
+    </form>
+    
+</body>
+</html>

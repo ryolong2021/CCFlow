@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="UTF-8"/>
+    <title>フローの複数のノードにフォームを追加する</title>
+</head>
+<body>
+<form id="cc">
+
+<!-- edit by xushuhao -->
+
+<%
+    string flowNo = this.Request.QueryString["FK_Flow"];
+    if (flowNo == null)
+        flowNo = "001";
+    
+    BP.WF.Flow fl = new BP.WF.Flow(flowNo);
+    
+     %>
+<table style="width:100%">
+<caption > フォームをフロー[<%=fl.Name %>]の複数のノードに追加する</caption>
+<tr>
+<td valign=top style="30%;">
+<fieldset>
+<legend>ヘルプ</legend>
+<ul>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+</ul>
+</fieldset>
+</td>
+
+<td valign="top" style="70%;" >
+
+<fieldset>
+<legend>フォームライブラリからバインドするフォームを選択してください。</legend>
+<%
+    //BP.Sys.SysFormTrees trees = new BP.Sys.SysFormTrees();
+    //trees.RetrieveAll();
+%>
+</fieldset>
+
+
+<fieldset>
+<legend>バインディングするノードを選択</legend>
+<%
+    //BP.WF.Nodes nds = new BP.WF.Nodes(flowNo);
+    //nds.RetrieveAll();
+%>
+</fieldset>
+
+<input type="button" value="保存" />
+
+</td>
+</tr>
+</table>
+
+
+</form>
+</body>
+</html>

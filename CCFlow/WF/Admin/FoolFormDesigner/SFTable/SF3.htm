@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>SQL検索テーブル-外部データソース</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript" > </script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="SFTable.js" type="text/javascript"></script>
+
+    <base target="_self" />
+    <style type="text/css">
+        .style1 {
+            width: 184px;
+        }
+    </style>
+    <script type="text/javascript" language="javascript">
+
+        var CONST_STRUCTS = [{ No: '0', Name: '通常のコーディングテーブル（No、Nameがあります）' }, { No: '1', Name: 'ツリー構造（No、Name、ParentNoがあります）' }];
+
+        /**
+         * データフォーマットの切り替え
+         */
+        function loadStructSet(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                $("#rootTr").hide();
+            } else {
+                $("#rootTr").show();
+                // 根节点值
+                $("#TB_RootValue").val("0");
+            }
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            //绑定数据源.
+            GenerBindEntities("DDL_FK_DBSrc", "BP.Sys.SFDBSrcs", "local");
+
+            var mytb = document.getElementById("TB_Name");
+            mytb.focus();
+            $('#TB_Name').blur(function () //文本失去焦点时触发的事件
+            {
+                var TB_Name = document.getElementById("TB_Name").value;
+                var val = $('input:radio[name="RB_QPJP"]:checked').val();
+                if (TB_Name == "") {
+                    document.getElementById("TB_No").value = "";
+                    return;
+                }
+
+                if (val == "ziduanquanpin") {
+                    ParsePinYin(TB_Name, true, "TB_No");
+                }
+                else {
+                    ParsePinYin(TB_Name, false, "TB_No");
+                }
+
+            });
+            //点击全拼
+            $('input[id=RB_QP]').change(function () {
+                var TB_Name = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(TB_Name, true, "SQL");
+            });
+            //点击简拼
+            $('input[id=RB_JP]').change(function () {
+                var TB_Name = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(TB_Name, false, "SQL");
+            });
+
+        });
+
+        // 保存
+        function Save() {
+
+            var no = $("#TB_No").val() || "";
+            var name = $("#TB_Name").val() || "";
+            if (no == "" || name == "") {
+                alert('番号を入力してください。');
+                return;
+            }
+
+            if ($("#DDL_CodeStruct").val() == CONST_STRUCTS[1].No) {
+
+                var rootValue = $("#TB_RootValue").val() || "";
+                if (rootValue == "") {
+                    alert("ルートポイントは必ず記入してください！");
+                    return;
+                }
+            }
+
+            if (!$("#TB_SelectStatement").val() || $("#TB_SelectStatement").val().length == 0) {
+                alert("SQLステートメントは必ず記入してください！");
+                $("#TB_SelectStatement").focus();
+                return;
+            }
+
+            if (!CheckID(no)) {
+                alert("番号が規則に合わない");
+                return;
+            }
+
+            var en = new Entity("BP.Sys.SFTable");
+            en.CopyForm();
+
+            var doc = $("#TB_SelectStatement").val();
+            doc = doc.replace(/[+]/g, "/#");
+            doc = doc.replace(/-/g, '/$');
+            en.SelectStatement = doc;
+            //替换
+
+            if (en.IsExits() == true) {
+                alert("番号はすでに存在します[" + en.No + "]");
+                return;
+            }
+
+            en.SrcType = 3; //自定义数据表.
+            en.FK_Val = en.No;
+            en.Insert();
+
+            alert("正常に保存しました。");
+            window.location.href = "Default.htm";
+
+        }
+    </script>
+</head>
+<body>
+    <form action="" id="cc">
+        <table style="width: 95%; margin: 5px; padding: 5px;">
+            <caption>
+                <a href="./Default.htm">戻る</a> - SQL検索テーブル-外部データソース
+            </caption>
+            <tr>
+                <th>アイテム</th>
+                <th class="style1">値</th>
+                <th>コメント</th>
+            </tr>
+
+            <tr>
+                <td>辞書名</td>
+                <td class="style1"><input type="text" id="TB_Name" name="TB_Name" /></td>
+                <td>辞書表の日本語名を作成します。</td>
+            </tr>
+
+            <tr>
+                <td>辞書番号</td>
+                <td class="style1"><input type="text" id="TB_No" name="TB_No" /></td>
+                <td>
+                    <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" /> <label for="RB_QP">アルファベット名（全称）</label>
+                    <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />  <label for="RB_JP">略称</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>データソース</td>
+                <td class="style1"><select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" /></td>
+                <td>辞書表が属するデータソースを選択します。</td>
+            </tr>
+            <tr>
+                <td>データフォーマット</td>
+                <td class="style1">
+                    <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)">
+
+                        <option value="0" selected=true> 通常のコーディングテーブル（No、Nameがあります） </option>
+                        <option value="1"> ツリー構造（No、Name、ParentNoがあります）</option>
+
+
+                    </select>
+                </td>
+                <td>特定のフィールドがある書式を選択します。</td>
+            </tr>
+            <tr id="rootTr" style="display: none;">
+                <td>ルートノード値</td>
+                <td class="style1"><input type="text" id="TB_RootValue" name="TB_RootValue" /></td>
+                <td>このツリーのルートポイントを記入してください。ある表現式でも記入できます。例えば、WebUser.FK_Deptです。</td>
+            </tr>
+            <tr>
+                <td>SQL文</td>
+                <td class="style1" colspan="2">
+
+                    <textarea type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;"></textarea>
+
+                    <br />
+                    次のようなcc表現式をサポートします：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <input type=button value="Save" onclick="Save()" />
+                    <!--  <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="Save()">保存</a>-->
+                </td>
+            </tr>
+        </table>
+
+
+        <font color=gray>
+            <fieldset>
+                <legend>ヘルプ</legend>
+                <ul>
+                    <li>SQLステートメントは、指定された構造で指定された列を含む必要があります。</li>
+                    <li>Sql文はccbpm表現式をサポートします。</li>
+                    <li>例１：SELECT No,Name FROM Port_Emp WEHRE FK_Dept='@WebUser.FK_Dept' </li>
+                    <li>例２：SELECT No,Name,ParnetNo FROM Port_Dept WEHRE ParentNo='@WebUser.FK_Dept' </li>
+                </ul>
+            </fieldset>
+        </font>
+
+    </form>
+</body>
+</html>

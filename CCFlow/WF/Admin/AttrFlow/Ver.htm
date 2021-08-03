@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>バージョン管理</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script type="text/javascript"
+            src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <base target="_self" />
+
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;読み込み中です。しばらくお待ちください......");
+            InitPage();
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var flowNo = GetQueryString("FK_Flow");
+            var en = new Entity("BP.WF.Flow", flowNo);
+
+            var data = en.DoMethodReturnJSON("VerGenerVerList");
+
+            var html = "";
+            html += "<table class='table table-bordered  table-hover table-condensed' style='width:100%;'>";
+            html += "<caption><img style='vertical-align:middle' src='../../Img/Event.png' />バージョン管理</caption>";
+            html += "<tr>";
+            html += "<th>バージョン番号</th>";
+            html += "<th>フロー番号</th>";
+            html += "<th>名前</th>";
+            html += "<th>リリース状態</th>";
+            html += "<th>稼働中の量</th>";
+            html += "<th>完了数量</th>";
+            html += "<th>削除</th>";
+            html += "<th>操作</th>";
+            html += "<th>編集</th>";
+            html += "<th>インポート/エクスポート</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+
+                html += "<tr>";
+
+                var ver = item.Ver;
+                if (ver == "")
+                    ver = "オリジナル版";
+
+                html += "<td>" + ver + "</td>";
+                html += "<td>" + item.No + "</td>";
+                html += "<td>" + item.Name + "</td>";
+                html += "<td>" + item.IsRel + "</td>";
+                html += "<td>" + item.NumOfRuning + "</td>";
+                html += "<td>" + item.NumOfOK + "</td>";
+
+                if (item.IsRel == 0) {
+                    html += "<td><a href=\"javascript:Del('"
+                        + item.No
+                        + "')\"><img src='../../Img/Btn/Delete.gif' /></a></td>";
+                    html += "<td><a href=\"javascript:SetCurrentVer('" + item.No
+                        + "')\">メインバージョンの設定</a></td>";
+                } else {
+                    html += "<td>--</td>";
+                    html += "<td>メインバージョン</td>";
+                }
+
+               
+                html += "<td><a class='btn btn-default btn-sm' href='javaScript:void(0)' onclick='changeOrOpenTab(\""
+                    + item.Name + "\",\"" + item.No + "\")'>編集</a></td>";
+
+                html += "<td><a class='btn btn-default btn-sm' href='Imp.htm?FK_Flow=" + item.No + "'>インポート</a>&nbsp&nbsp<a class='btn btn-default btn-sm' href='Exp.htm?FK_Flow=" + item.No + "'>エクスポート</a></td>";
+
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#docs").html(html);
+        }
+
+        function changeOrOpenTab(flowName, flowNo) {
+            //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
+            var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo
+                + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
+            window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
+                "icon-flow1");
+        }
+
+        function Del(no) {
+
+            if (window.confirm('削除してもよろしいですか？') == false)
+                return;
+
+            var en = new Entity("BP.WF.Flow", no);
+            var data = en.DoMethodReturnString("DoDelete");
+
+            alert("削除に成功しました");
+            window.location.href = window.location.href;
+        }
+        //创建新版本.
+        function NewVer() {
+
+            if (window.confirm('本当に新しいバージョンを作成しますか？') == false)
+                return;
+
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>作成中です。しばらくお待ちください......</blue><br><br><br><br></center>");
+
+            var flowNo = GetQueryString("FK_Flow");
+            var en = new Entity("BP.WF.Flow", flowNo);
+            var data = en.DoMethodReturnString("VerCreateNew");
+
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>バージョンの作成に成功しました。フローチェックが実行されています。。。</blue><br><br><br><br></center>");
+
+            en = new Entity("BP.WF.Flow", data);
+            en.DoMethodReturnString("DoCheck");
+
+            //alert(data);
+            // $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在创建,请稍后......</blue><br><br><br><br></center>");
+
+            window.location.href = window.location.href;
+        }
+        function SetCurrentVer(no) {
+
+            if (window.confirm('本当に現在のバージョンに設定しますか？') == false)
+                return;
+
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>設定を実行しています。しばらくお待ちください......</blue><br><br><br><br></center>");
+
+            var en = new Entity("BP.WF.Flow", no);
+            var data = en.DoMethodReturnString("VerSetCurrentVer");
+            en.DoMethodReturnString("DoCheck");
+            window.location.href = window.location.href;
+        }
+
+        function More() {
+
+            var url = "https://blog.csdn.net/ccflow/article/details/100854967";
+            WinOpen(url);
+        }
+
+    </script>
+    <style type="text/css">
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="docs"></div>
+    <div style="right:30px; position:absolute; z-index:100; top:-3px">
+        <input type="button" value="新規バージョン" onclick="NewVer();" />
+        <input type="button" value="ヘルプ" onclick="More();" />
+    </div>
+    
+
+    <div style="position:relative;" id="Msg"></div>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 数据源:
+  No 编号标记一定要唯一.
+  SrcType 类型:  SrcType=DB 是数据库, SrcType=WS 是WebServices.
+  URL: 链接的字串. 如果是DBType=DB 
+  -->
+  <Item No="ccflow" Name="ccflowアプリケーションデータソース" SrcType="DB" Url="AppCenterDSN" DESC="システムディフォルトの設定より、その人の情報を削除できない。"   />
+  <Item No="ccflowWS" Name="ccflow提供されるインターフェース"   SrcType="DB" Url="AppCenterDSN" DESC="."   />
+
+</NewDataSet>

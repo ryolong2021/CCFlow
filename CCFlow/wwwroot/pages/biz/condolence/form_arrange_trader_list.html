@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>手配業者依頼一覧</title>
+
+    <!-- CSSエリア 開始 -->
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <link rel="stylesheet" href="../../../css/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="../../../css/common/app.css">
+    <!-- CSSエリア 終了 -->
+    <!-- 共通js:jquery -->
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+    <!-- 4dのコンポーネント -->
+    <script src="../../../js/components.js"></script>
+    <!-- validate コンポーネント(項目入力チェック用)：validate, additional-methods, messages_ja -->
+    <script src="../../../js/vendor/jquery.validate.js"></script>
+    <script src="../../../js/vendor/additional-methods.js"></script>
+    <script src="../../../js/vendor/messages_ja.js"></script>
+    <!-- 日付パネルを表示する方法：datetimepicker -->
+    <script src="../../../js/vendor/jquery.datetimepicker.full.js"></script>
+    <!-- 日付フォーマット用 -->
+    <script src="../../../js/vendor/moment-with-locales.js"></script>
+
+    <!-- CCFLOW相関 -->
+    <script language="JavaScript" src="../../../../WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <!-- 共通定数：app_const -->
+    <script src="../../../js/common/app_const.js"></script>
+    <!-- 共通関数：app_common -->
+    <script src="../../../js/common/app_common.js"></script>
+    <!-- 画面表示共通メッセージ：meg_comm -->
+    <script src="../../../js/common/msg_comm.js"></script>
+
+    <!-- 業務JS：page_tehaigyousyalist.js -->
+    <script src="../../../js/biz/condolence/page_arrange_trader_list.js"></script>
+    <script src="../../../js/biz/condolence/page_arrange_trader_detail.js"></script>
+    <!-- 一覧表示共通：table_list_common.js -->
+    <script src="../../../js/common/table_list_common.js"></script>
+    <!-- 検索条件表示共通：search_current_filters_common.js -->
+    <script src="../../../js/common/search_current_filters_common.js"></script>
+
+</head>
+<body>
+
+    <!-- 手配業者依頼一覧フォーム -->
+    <form name="arrange_trader_list_form" id="arrange_trader_list_form">
+
+        <!-- 全画面背景色設定 -->
+        <div class="o-whole o-whole--with-navigation o-whole--settings">
+            <div class="o-whole__body-container" id="whole__body_container">
+
+                <!-- ヘッダーの設定 -->
+                <div class="o-whole__navigation">
+                    <div class="m-setting-header">
+                        <button type="button" class="a-setting-back-button" id="btn_logout">
+                            <i class="a-icon a-icon--back-white"></i>
+                            <span class="a-setting-back-button__label">ログアウト</span>
+                        </button>
+                        <div class="m-setting-header__title">手配業者依頼一覧</div>
+                    </div>
+                </div>
+
+                <!-- ボディ内容の設定 -->
+                <div class="o-whole__body">
+
+                    <!-- タイトル文字列表示 -->
+                    <h1 class="a-heading a-heading--h1 undefined">
+                        <span class="a-heading__label">手配業者依頼一覧</span>
+                    </h1>
+
+                    <!-- ヘッダーのボタンエリア定義 -->
+                    <section class="m-section m-section--no-padding">
+                        <div class="m-page-heading m-page-heading--with-actions">
+                            <h1 class="a-heading a-heading--h1 undefined">
+                                <span class="a-heading__label"></span>
+                            </h1>
+                            <div class="m-page-heading__actions">
+                                <button id="show-search-screen" type="button" class="a-search-button a-search-button--dark a-search-button--inline">
+                                    <i class="a-icon a-icon--search-white"></i>
+                                    <span class="a-search-button__label">絞り込み</span>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 検索条件表示エリア(ＪＳで動的に追加すること) -->
+                    <section id="search-current-filters" class="m-section m-section--no-padding p-search-filter-holder"></section>
+
+                    <!-- 一覧表示内容とページング表示 -->
+                    <section class="m-section m-section--no-padding p-data-table-holder">
+                        <div id="table"/>
+                    </section>
+
+                    <!-- 検索条件エリア -->
+                    <div id="search-condition-area" class="o-modal o-modal--medium o-modal--has-footer">
+                        <div class="o-modal__window">
+
+                            <!-- ×ボタン -->
+                            <button id="close_btn_search" class="o-modal__close-button" type="button">
+                                <i class="a-icon a-icon--close"></i>
+                            </button>
+
+                            <!-- 検索所条件項目設定エリア -->
+                            <main class="o-modal__body">
+
+                                <!-- タイトルの設定 -->
+                                <header class="o-modal__header undefined">
+                                    <p>絞り込み検索</p>
+                                </header>
+
+                                <!-- 条件項目設定 -->
+                                <!-- 申請番号、申請日 -->
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+
+                                    <!-- 申請番号 -->
+                                    <div>
+                                        <label id="app_code_search_title" class="m-form-field__label">申請番号</label>
+                                        <div class="m-form-field__content">
+                                            <div class="a-text-field a-text-field--type-text">
+                                                <input type="text" class="a-text-field__input" id="app_code_search" name="app_code_search" maxlength="18" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 申請日 -->
+                                    <div>
+
+                                        <!-- 申請日 -->
+                                        <label id="app_date_search_title" class="m-form-field__label">申請日</label>
+                                        <div class="m-form-field__content">
+                                            <div class="a-date-range-field undefined">
+                                                <!-- 開始日 -->
+                                                <div class="a-calendar-field a-date-range-field__start-date">
+                                                    <div class="a-calendar-field__content">
+                                                        <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                            <input type="text" class="a-text-field__input" name="app_date_search_from" id="app_date_search_from" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="a-calendar-field__icon">
+                                                        <i class="a-icon a-icon--calendar"></i>
+                                                    </div>
+                                                </div>
+
+                                                <!-- ~の設定 -->
+                                                <span class="a-date-range-field__line">~</span>
+
+                                                <!-- 終了日 -->
+                                                <div class="a-calendar-field a-date-range-field__end-date">
+                                                    <div class="a-calendar-field__content">
+                                                        <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                            <input type="text" class="a-text-field__input" name="app_date_search_to" id="app_date_search_to" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="a-calendar-field__icon">
+                                                        <i class="a-icon a-icon--calendar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 会社コード、納品希望日 -->
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+
+                                    <!-- 会社コード -->
+                                    <div>
+                                        <label id="company_code_search_title" class="m-form-field__label">会社コード</label>
+                                        <div class="m-form-field__content">
+                                            <div class="a-text-field a-text-field--type-text">
+                                                <input type="text" class="a-text-field__input" id="company_code_search" name="company_code_search" maxlength="4" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 納品希望日 -->
+                                    <div>
+                                        <label id="delivery_date_search_title" class="m-form-field__label">納品希望日</label>
+                                        <div class="m-form-field__content">
+
+                                            <!-- 日付範囲の設定エリア -->
+                                            <div class="a-date-range-field undefined">
+
+                                                <!-- 開始日 -->
+                                                <div class="a-calendar-field a-date-range-field__start-date">
+                                                    <div class="a-calendar-field__content">
+                                                        <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                            <input type="text" class="a-text-field__input" name="delivery_date_search_from" id="delivery_date_search_from" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="a-calendar-field__icon">
+                                                        <i class="a-icon a-icon--calendar"></i>
+                                                    </div>
+                                                </div>
+
+                                                <!-- ~の設定 -->
+                                                <span class="a-date-range-field__line">~</span>
+
+                                                <!-- 終了日 -->
+                                                <div class="a-calendar-field a-date-range-field__end-date">
+                                                    <div class="a-calendar-field__content">
+                                                        <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                            <input type="text" class="a-text-field__input" name="delivery_date_search_to" id="delivery_date_search_to" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="a-calendar-field__icon">
+                                                        <i class="a-icon a-icon--calendar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 会社名、申請者カナ -->
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+
+                                    <!-- 会社名 -->
+                                    <div>
+                                        <label id="company_name_search_title" class="m-form-field__label">会社名</label>
+                                        <div class="m-form-field__content">
+                                            <div class="a-text-field a-text-field--type-text">
+                                                <input type="text" class="a-text-field__input" id="company_name_search" name="company_name_search" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 申請者カナ -->
+                                    <div>
+                                        <label id="app_emp_kana_search_title" class="m-form-field__label">申請者カナ</label>
+                                        <div class="m-form-field__content">
+                                            <div class="a-text-field a-text-field--type-text">
+                                                <input type="text" class="a-text-field__input" id="app_emp_kana_search" name="app_emp_kana_search" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- 手配区分 -->
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+
+                                    <!-- 手配区分 -->
+                                    <div>
+                                        <label id="arrange_class_search_title" class="m-form-field__label">手配区分</label>
+                                        <div class="m-form-field__content">
+                                            <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-3">
+                                                <!-- 供花と弔電の両方 -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="arrange_class_search" value="3" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">供花と弔電の両方</div>
+                                                    </div>
+                                                </label>
+
+                                                <!-- 供花のみ -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="arrange_class_search" value="1" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">供花のみ</div>
+                                                    </div>
+                                                </label>
+
+                                                <!-- 弔電のみ -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="arrange_class_search" value="2" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">弔電のみ</div>
+                                                    </div>
+                                                </label>
+
+                                                <!-- なし -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="arrange_class_search" value="0" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">なし</div>
+                                                    </div>
+                                                </label>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- 処理区分 -->
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+
+                                    <!-- 処理区分 -->
+                                    <div>
+                                        <label id="process_class_search_title" class="m-form-field__label">処理区分</label>
+                                        <div class="m-form-field__content">
+                                            <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-4">
+                                                <!-- 未手配 -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="process_class_search" value="0" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">未手配</div>
+                                                    </div>
+                                                </label>
+
+                                                <!-- 確認中 -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="process_class_search" value="3" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">確認中</div>
+                                                    </div>
+                                                </label>
+
+                                                <!-- 手配不能 -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="process_class_search" value="2" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">手配不能</div>
+                                                    </div>
+                                                </label>
+
+                                                <!-- 完了 -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="process_class_search" value="1" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">完了</div>
+                                                    </div>
+                                                </label>
+
+                                                <!-- キャンセル -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="process_class_search" value="4" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">キャンセル</div>
+                                                    </div>
+                                                </label>
+
+                                                <!-- キャンセル(有償) -->
+                                                <label class="a-checkbox a-checkbox--button">
+                                                    <input type="checkbox" class="a-checkbox__input" name="process_class_search" value="5" />
+                                                    <div class="a-checkbox__body">
+                                                        <span class="a-checkbox__indicator">
+                                                            <i class="a-icon a-icon--check-purple"></i>
+                                                        </span>
+                                                        <div class="a-checkbox__label">キャンセル(有償)</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </main>
+
+                            <!-- ボタンエリアの定義 -->
+                            <footer class="o-modal__footer">
+                                <button id="clear_btn_search" type="button" class="a-button a-button--third a-button--huge">
+                                    <div class="a-button__label">クリア</div>
+                                </button>
+                                <button id="search_btn_search" type="button" class="a-button a-button--primary a-button--huge">
+                                    <div class="a-button__label">検索</div>
+                                </button>
+                            </footer>
+                        </div>
+                    </div>
+
+                    <!-- 詳細画面 -->
+                    <div id="detail-screen" class="o-modal o-modal--fullscreen o-modal--has-footer">
+                        <div class="o-modal__window" id="arrange_trader_detail">
+                            <script>GetSubHtmlDataToHtml("arrange_trader_detail", "form_arrange_trader_detail.html");</script>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ダイアログ画面 -->
+                <script>GetSubHtmlDataToHtml("whole__body_container", "../../../pages/common/app_dialog_area.html");</script>
+            </div>
+        </div>
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>レポート検索条件の設定</title>
+    <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js"></script>
+    <script language="javascript" type="text/javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;読み込み中です。しばらくお待ちください......");
+
+            InitPage();
+
+            $("#Msg").html("");
+
+        });
+
+        function InitPage() {
+            if (GetQueryString("RptNo").indexOf("RptMyDept") == -1)
+                $("#LevelDiv").hide();
+
+            var checkBoxIDs = GetSelectedCheckIDs();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_RptDfine");
+            handler.AddPara("RptNo", GetQueryString("RptNo"));
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            var data = handler.DoMethodReturnString("S5SearchCond_Init");
+
+            if (data.indexOf("@") == 0) {
+                alert(data);
+                return;
+            }
+            var jsData = JSON.parse(data);
+
+            var md = jsData["Main"][0]; //主表数据.
+            var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
+            var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
+            //关键字查询.
+            document.getElementById("CB_Key").checked = (md.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
+
+             document.getElementById("CB_NextLeavel").checked = (md.AtPara.indexOf("@IsSearchNextLeavel=1@") != -1);
+
+            var js = md.AtPara.split("@");
+            var RptSearchKeys = null;
+            var RptDTSearchWay = null;
+            var RptDTSearchKey = null;
+            for (var i = 0; i < js.length; i++) {
+                if (js[i].indexOf("RptSearchKeys") != -1)
+                    RptSearchKeys = js[i].replace("RptSearchKeys=", "")
+                if (js[i].indexOf("RptDTSearchWay") != -1)
+                    RptDTSearchWay = js[i].replace("RptDTSearchWay=", "")
+                if (js[i].indexOf("RptDTSearchKey") != -1)
+                    RptDTSearchKey = js[i].replace("RptDTSearchKey=", "")
+            }
+            //绑定外键字段.
+            for (var i = 0, length = Sys_MapAttr.length; i < length; i++) {
+                var attr = Sys_MapAttr[i],
+                            flag = false;
+
+                if (attr.UIContralType != 1) {
+                    continue;
+                }
+                if (RptSearchKeys) {
+                    flag = (RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1);
+                }
+                $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
+            }
+
+            $("#DDL_DTSearchWay").val(RptDTSearchWay);
+
+            //绑定日期下拉框.
+            if (Sys_MapAttrOfDate != null) {
+                GenerBindDDL("DDL_DTSearchKey", Sys_MapAttrOfDate, "KeyOfEn", "Name", RptDTSearchKey);
+            }
+
+            return;
+        }
+
+        function Save() {
+
+            var FK_Flow = GetQueryString("FK_Flow"),
+                RptNo = GetQueryString("RptNo"),
+                IsSearchKey = document.getElementById("CB_Key").checked ? 1 : 0,
+                DTSearchWay = document.getElementById("DDL_DTSearchWay").value,
+                DTSearchKey = document.getElementById("DDL_DTSearchKey").value,
+                Fields = "";
+
+            var oChecks = document.getElementById("FKeys").getElementsByTagName("input");
+            for (var i = 0, len = oChecks.length; i < len; i++) {
+                var item = oChecks[i];
+                if (item.checked) {
+                    Fields += "*" + item.id;
+                }
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_RptDfine");
+            handler.AddPara("RptNo", GetQueryString("RptNo"));
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+
+            handler.AddPara("Fields", Fields);
+            handler.AddPara("IsSearchKey", IsSearchKey); //是否按照关键字查询?
+
+            handler.AddPara("DTSearchWay", DTSearchWay); //日期查询方式?
+            handler.AddPara("DTSearchKey", DTSearchKey); //日期字段
+
+            handler.AddPara("IsSearchNextLeavel",document.getElementById("CB_NextLeavel").checked ? 1 : 0)
+
+            var data = handler.DoMethodReturnString("S5SearchCond_Save");
+            alert(data);
+
+        }
+
+        //获得所有的checkbox 的id组成一个string用逗号分开, 以方便后台接受的值保存.
+        function GetSelectedCheckIDs() {
+
+            var checkBoxIDs = "";
+            var arrObj = document.getElementsByTagName("input");
+
+            for (var i = 0, len = arrObj.length; i < len; i++) {
+
+                if (arrObj[i].type == 'checkbox') {
+                    if (arrObj[i].checked)
+                        checkBoxIDs += arrObj[i].id + ',';
+                }
+            }
+            return checkBoxIDs;
+        }
+
+    </script>
+    <base target="_self" /> 
+</head>
+<body class="easyui-layout">
+
+    <form id="cc">
+        <div data-options="region:'center',title:'4. レポート検索条件の設定',border:false" style="padding: 5px;
+        height: auto">
+            <div style='width: 100%' id="LevelDiv">
+                <div class='easyui-panel' title='サブ部門を検索しますか？' data-options="iconCls:'icon-tip',fit:true"
+                     style='height: auto; padding: 10px' >
+                    サブ部門の検索はこのサブ部門の次のレベルを調べることです。<br />
+                    <input id="CB_NextLeavel" type="checkbox" name="CB_NextLeavel" /><label for="CB_NextLeavel">サブ部門を検索しますか？</label>
+                </div>
+            </div>
+
+            <div style='width: 100%'>
+                <div class='easyui-panel' title='検索キーワードを追加しますか？' data-options="iconCls:'icon-tip',fit:true"
+                     style='height: auto; padding: 10px'>
+                    キーワード検索は、ユーザーが入力されたキーワードより、レポートフォームのすべての表示列で曖昧検索で検索することです。（外部キー、列挙、数値タイプを除く）<br />
+                    <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">検索キーワードを追加しますか？</label>
+                </div>
+            </div>
+            <br />
+            <div style='width: 100%'>
+                <div id='FKeys' class='easyui-panel' title='外部キーと列挙の種類' data-options="iconCls:'icon-tip',fit:false"
+                     style='height: auto; padding: 10px'>
+                    外部キー、列挙タイプのデータは検索条件に追加できます。追加する検索条件を選択してください。<br />
+
+                </div>
+            </div>
+            <br />
+            <div style='width: 100%'>
+                <div class='easyui-panel' title='時間帯' data-options="iconCls:'icon-tip',fit:true"
+                     style='height: auto; padding: 10px'>
+                    データは時間帯で検索します。例えば、フローの開始時間によって指定された時間帯で検索します。<br />
+                    選択方式：<select name="DDL_DTSearchWay" id="DDL_DTSearchWay">
+                        <option selected="selected" value="0">有効にしない</option>
+                        <option value="1">日付によって</option>
+                        <option value="2">日付時刻によって</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;フィールド:<select name="DDL_DTSearchKey"
+                                                                            id="DDL_DTSearchKey">
+                        <!--<option value="FlowEnderRDT">FlowEnderRDT 结束时间</option>
+                <option selected="selected" value="FlowStartRDT">FlowStartRDT フロー開始時間</option>-->
+                    </select>
+                </div>
+            </div>
+
+            <br />
+            <br />
+            <a id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;"
+               href="javascript:Save()">
+                保存
+            </a>
+        </div>
+    </form>
+
+
+</body>
+</html>

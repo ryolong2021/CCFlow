@@ -1,0 +1,632 @@
+<html>
+<head>
+    <title>組織構造管理</title>
+    <meta charset="UTF-8" />
+
+    <link rel="stylesheet" type="text/css" href="themes/default/easyui.css" />
+    <script type="text/javascript" src="../WF/Scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery/jquery.easyui.min.js"></script>
+    <script src="../WF/Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引入新版本的类库. -->
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <script src="../WF/Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+    <script src="../WF/Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+    <script src="../WF/Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../WF/Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/bootstrap/BootstrapUIDialog.js" type="text/javaScript"></script>
+    <!--引入zTree树. -->
+    <link href="../WF/Scripts/zTree_v3/css/metroStyle/metroStyle.css" rel="stylesheet"
+          type="text/css" />
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.all.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.core.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.excheck.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.exedit.js" type="text/javascript"></script>
+    <style type="text/css">
+
+        .small-menu {
+            margin-top: 10px;
+            position: absolute;
+            width: 120px;
+            z-index: 99999;
+            border: 0px;
+            background: #FFF;
+            padding: 0px;
+            display: none;
+            box-shadow: 0 0 6px rgba(0,0,0,.2);
+        }
+
+        .small-menu div {
+            height: 38px !important;
+            padding-left: 20px;
+            margin: 0px;
+            border-bottom: solid 1px #CCC;
+            cursor:pointer;
+            line-height :38px
+        }
+        .small-menu div img{
+            
+            padding-right: 10px;
+            margin: 0px;
+            
+        }
+
+        .small-menu div:hover {
+            
+            background-color: #EAF2FF;
+        }
+
+        .small-menu-separator {
+            padding-bottom: 0;
+            border-bottom: 1px solid #DDD;
+        }
+
+        .small-menu div.edit A {
+            background-image: url(images/page_white_edit.png);
+        }
+
+        .small-menu div.cut A {
+            background-image: url(images/cut.png);
+        }
+
+        .small-menu div.copy A {
+            background-image: url(images/page_white_copy.png);
+        }
+
+        .small-menu div.paste A {
+            background-image: url(images/page_white_paste.png);
+        }
+
+        .small-menu div.delete A {
+            background-image: url(images/page_white_delete.png);
+        }
+
+        .small-menu div.quit A {
+            background-image: url(images/door.png);
+        }
+    </style>
+
+
+    <script type="text/javascript">
+        var deptNo = "";
+        var webUser = new WebUser();
+
+        var setting = {
+            view: {
+                dblClickExpand: false, //双击节点时，是否自动展开父节点的标识
+                showLine: true, //是否显示节点之间的连线
+                fontCss: {}, //字体样式函数
+                selectedMulti: false //设置是否允许同时选中多个节点
+            },
+            check: {
+                chkboxType: { "Y": "ps", "N": "ps" },
+                chkboxType: { "Y": "", "N": "" },
+                chkStyle: "checkbox", //复选框类型
+                enable: false //每个节点上是否显示 CheckBox
+            },
+            edit: {
+                enable: true,
+                editNameSelectAll: true,
+                showRemoveBtn: false,
+                showRenameBtn: false,
+                removeTitle: "remove",
+                renameTitle: "rename"
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pid",
+                    rootPId: ""
+                }
+            },
+            callback: {
+
+                onClick: function (event, treeId, treeNode) {
+                    deptNo = treeNode.id;
+                    BindEmps();
+                },
+                onRightClick: OnRightClick
+            } //这里是节点点击事件
+        };
+
+        //右键菜单功能实现
+        (function ($, undefined) {
+            $.fn.popupSmallMenu = function (options) {
+                var $currMenu = $(this),
+                    defaultOptions = {
+                        event: null,
+                        onClickItem: null
+                    },
+                    options = $.extend(defaultOptions, options);
+
+                var _smallMenu = {
+                    popupSmallMenu: function () {
+                        this._bindItemClick();
+                        this._bindMenuEvent();
+                        this._showMenu();
+                        return $currMenu;
+                    },
+                    _bindMenuEvent: function () {
+                        var thiz = this;
+                        $currMenu.hover(function () {
+                        }, function () {
+                            thiz._unBindItemClick();
+                            $currMenu.hide();
+                        });
+
+                        $currMenu.click(function () {
+                            thiz._unBindItemClick();
+                            $currMenu.hide();
+                        });
+                    },
+                    _showMenu: function () {
+                        if (!options.event) {
+                            alert('マウスイベントを渡してください。');
+                        }
+                        var height = options.event.clientY;
+                        var height1 = $(document.body).height();
+                        var DValue = height1 - height;
+                        if (DValue<260) {
+                            height = options.event.clientY - 260;
+                        }
+                        $currMenu.css({
+                            top: height + "px",
+                            left: options.event.clientX + "px",
+                            display: "block"
+                        });
+                    },
+                    _bindItemClick: function () {
+                        $currMenu.find('div').each(function (index, obj) {
+                            var $li = $(obj);
+                            var itemIden = $li.attr('class');
+                            $li.bind('click', function (event) {
+                                event.stopPropagation();
+                                if (options.onClickItem
+                                    && typeof options.onClickItem === 'function') {
+                                    options.onClickItem(itemIden);
+                                }
+                            });
+                        });
+                    }
+                    ,
+                    _unBindItemClick: function () {
+                        $currMenu.find('div').each(function (index, obj) {
+                            $(obj).unbind();
+                        });
+                    }
+                };
+
+                return _smallMenu.popupSmallMenu();
+            }
+        })(jQuery);
+        //右键点击
+        function OnRightClick(event, treeId, treeNode) {
+            zTreeObj.selectNode(treeNode);
+            if (treeNode) {
+                //弹出菜单
+                $("#menu").popupSmallMenu({
+                    event: event,
+                    onClickItem: function (item) {
+                        if (item == "moveUpDept") {
+                            moveUpDept(treeNode, item);
+                        } else if (item == "moveDownDept") {
+                            moveDownDept(treeNode, item);
+                        } else if (item == "edit") {
+                            Edit(treeNode);
+                        } else if (item == "newSameLevel") {
+                            NewSameLevel(treeNode);
+                        } else if (item == "newNextLevel") {
+                            NewNextLevel(treeNode);
+                        }else if (item == "delete") {
+                            Delete(treeNode);
+                        }
+
+                    }
+                });
+
+            }
+        }
+
+        //上移部门
+        function moveUpDept(treeNode, item) {
+            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            var data = dept.DoMethodReturnString("DoUp");
+            //树节点直接更新
+            var before = $("#"+ treeNode.tId).prev();
+            if (before.length == 0 ) {
+                return;
+            }
+            $("#"+ treeNode.tId).insertBefore(before);
+        }
+
+        //下移部门
+        function moveDownDept(treeNode, item) {
+            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            var data = dept.DoMethodReturnString("DoDown");
+            //树节点直接更新
+            var next = $("#"+ treeNode.tId).next();
+            if (next.length == 0 ) {
+                return;
+            }
+            $("#"+ treeNode.tId).insertAfter(next);
+        }
+        //增加同级部门
+        function NewSameLevel(treeNode) {
+
+            var val = prompt("部署名を入力してください。", "");
+            if (val == null || val == '') {
+                return false;
+            }
+
+            var dept = new Entity("BP.GPM.Dept");
+            dept.Name = val;
+            dept.ParentNo = treeNode.pid;
+            dept.Insert();
+            //更新树节点
+            var treeObj = $.fn.zTree.getZTreeObj("regionZTree");
+            var parentNode = treeObj.getNodeByTId(treeNode.parentTId);
+            var newNode = { name: val };
+            //把这个新节点添加到当前选中的节点下，作为它的子节点
+    	    newNode = treeObj.addNodes(parentNode, newNode);
+        }
+
+        //增加下级部门
+        function NewNextLevel(treeNode) {
+            var val = prompt("部署名を入力してください。", "");
+            if (val == null || val == '') {
+                return false;
+            }
+
+            var dept = new Entity("BP.GPM.Dept");
+            dept.Name = val;
+            dept.ParentNo = treeNode.id;
+            dept.Insert();
+            //更新树节点
+            var treeObj = $.fn.zTree.getZTreeObj("regionZTree");
+            var newNode = { name: val };
+            //把这个新节点添加到当前选中的节点下，作为它的子节点
+    	    newNode = treeObj.addNodes(treeNode, newNode);
+        }
+        //编辑部门
+        function Edit(treeNode) {
+            var name = $("#" + treeNode.tId + "_span").text()
+            var val = prompt("部署名を入力してください。", name);
+            if (val == null || val == '') {
+                //alert('必须输入名称.');
+                return false;
+            }
+
+            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            dept.Name = val;
+            dept.Update();
+            //更新树节点
+            $("#" + treeNode.tId + "_span").text(val);
+        }
+         //删除部门
+        function Delete(treeNode) {
+            if (confirm("確かにこの部門を削除しますか？") == false)
+                    return;
+            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            dept.Delete();
+            //树节点删除
+            var my = document.getElementById(treeNode.tId);
+            if (my != null)
+                my.parentNode.removeChild(my);
+        }
+
+        //初始化
+        $(function () {
+
+            $("#pageloading").show();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            var ens = handler.DoMethodReturnJSON("Organization_Init");
+
+            var jsonTree = createJsonToTree(ens);
+            zTreeObj = $.fn.zTree.init($("#regionZTree"), setting, jsonTree);
+            fillter(zTreeObj); //设置展开前三级
+            //绑定帮助信息.
+            var html = "<br><br> <h3 style='padding-left:5px'>組織構造管理</h3>";
+
+            html += "<ul>";
+            html += "<li>この組織構造はあなたのシステムと統合できます。<a href='http://ccbpm.mydoc.io/?v=5404&t=15928' target=_blank >統合方法は統合マニュアルを参照してください。</a></li>";
+            html += "<li>本機能は人員情報Port_Emp、部門情報Port_Dept、一人で複数の部門（私達はアルバイトのPort_DeptEmp）は、1人で複数の部門の複数のポスト（Port_DeptEmpStation）をメンテナンスしています。</li>";
+            html += "<li>保守部門はノード上で右ボタンをクリックし、新規作成、保存、変更ができます。</li>";
+            html += "</ul>";
+
+
+            $("#Emps").html(html);
+            $("#pageloading").hide();
+            //鼠标移开时右键菜单消失
+            $(document).on('mouseleave ', '.dropdown-menu', function () {
+                $(".dropdown-menu").hide();
+                $.learunindex.destroy
+            });
+        });
+
+        //设置展开前三级
+        function fillter(zTreeObj) {
+            //获得树形图对象
+            var nodeList = zTreeObj.getNodes();//最初のルートノードを展開する
+            for (var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+                zTreeObj.expandNode(nodeList[i], true, false, true);
+              
+            }
+        }
+        //转换ztree需要的数据格式
+        var treeJson = [];
+        function createJsonToTree(jsonArray) {
+
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (data.No == "" || data.No == undefined)
+                    continue;
+                treeJson.push({
+                    "id": data.No,
+                    "pid": data.ParentNo,
+                    "name": data.Name,
+                    "idx": data.Idx
+
+                });
+            }
+            return treeJson;
+        }
+
+
+        //绑定人员.
+        function BindEmps() {
+
+            var dept = new Entity("BP.GPM.Dept", deptNo);
+
+            var html = "";
+            html += "<div class='container'>";
+            html += "<div class='fixed-table-header'>";
+            html += "<table class='table table-hover table-striped' style='width:90%;' >";
+            html += "<tr><h5><a href=\"javascript:EditDept('" + dept.No + "')\" >" + dept.Name + " </a> - <a href='javascript:EditEmp()'>新規人員</a> -  <a href='javascript:RefEmps()'>関連するパートタイムの仕事</a>  </h5></tr>";
+            html += "<thead ><tr> ";
+            html += "<th style='background-color:#F2F2F2;'>順序</th>";
+            html += "<th style='background-color:#F2F2F2;'>番号</th>";
+            html += "<th style='background-color:#F2F2F2;'>名前</th>";
+            html += "<th style='background-color:#F2F2F2;'>メイン部門</th>";
+            html += "<th style='background-color:#F2F2F2;'>メール</th>";
+            html += "<th style='background-color:#F2F2F2;'>電話</th>";
+            html += "<th style='background-color:#F2F2F2;'>操作</th>";
+            html += "<th style='background-color:#F2F2F2;'>ポスト</th>";
+            html += "</tr></thead>";
+
+            var emps = new Entities("BP.GPM.Emps");
+            emps.Retrieve("FK_Dept", dept.No, "Idx");
+
+
+
+
+            var empNos = ",";
+            html += "<tbody>";
+            for (var i = 0; i < emps.length; i++) {
+                var emp = emps[i];
+                html += "<tr ondblclick=\"EditEmp('" + emp.No + "')\" >";
+                html += "<td class='Idx' >" + (i + 1) + "</td>";
+                html += "<td>" + emp.No + "</td>";
+                html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
+                html += "<td>" + dept.Name + "</td>";
+                if (emp.Email == null || emp.Email == "")
+                    html += "<td>-</td>";
+                else
+                    html += "<td>" + emp.Email + "</td>";
+                 if (emp.Tel == null || emp.Tel == "")
+                    html += "<td>-</td>";
+                else
+                    html += "<td>" + emp.Tel+ "</td>";
+                html += "<td><a href=\"javascript:Del('" + emp.No + "')\" ><img src='../WF/Img/Btn/Delete.gif'>削除</a></td>";
+                html += "<td><img src='../WF/Img/Btn/Up.GIF' onclick=\"Up('" + emp.No + "')\" alt='上へ移動' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下に移動' /> </td>";
+                html += "</tr>";
+                empNos += emp.No + ',';
+            }
+
+            //取消人员部门岗位管理关系. @不能出现sql.
+            var deptEmps = new Entities("BP.GPM.DeptEmps");
+            deptEmps.DoMethodReturnString("DelteNotInEmp");
+             var deptEmpStas = new Entities("BP.GPM.DeptEmpStations");
+            deptEmpStas.DoMethodReturnString("DelteNotInEmp");
+           
+           
+
+            //查询出来兼职人员.
+            var deptEmps = new Entities("BP.GPM.DeptEmps");
+            deptEmps.Retrieve("FK_Dept", deptNo);
+
+            var num = emps.length;
+
+            for (var i = 0; i < deptEmps.length; i++) {
+
+                var deptEmp = deptEmps[i];
+                if (empNos.indexOf(',' + deptEmp.FK_Emp + ',') != -1)
+                    continue;
+
+                var emp = new Entity("BP.GPM.Emp");
+                emp.No = deptEmp.FK_Emp;
+                emp.SetPKVal(emp.No);
+                if (emp.RetrieveFromDBSources() == 0) {
+                //if (emp.Retrieve() == 0) {
+                    continue;
+                }
+
+                html += "<tr ondblclick=\"EditEmp('" + emp.No + "')\" >";
+                html += "<td class='Idx' >" + num + "</td>";
+                html += "<td>" + emp.No + "</td>";
+                html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
+                html += "<td>パートタイム</td>";
+               if (emp.Email == null || emp.Email == "")
+                    html += "<td>-</td>";
+                else
+                    html += "<td>" + emp.Email + "</td>";
+                 if (emp.Tel == null || emp.Tel == "")
+                    html += "<td>-</td>";
+                else
+                    html += "<td>" + emp.Tel+ "</td>";
+                html += "<td><a href=\"javascript:Remove('" + emp.No + "')\" >削除<img src='../WF/Img/Btn/Delete.gif'></a></td>";
+                html += "<td><img src='../WF/Img/Btn/Up.GIF' onclick=\"Up('" + emp.No + "')\" alt='上へ移動' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下に移動' /> </td>";
+                html += "</tr>";
+                num++;
+
+                empNos += emp.No + ',';
+            }
+
+
+
+            //找一下 Port_DeptEmpStation 里面有的数据，但是在 Port_DeptEmp没有的就，插入进去.
+
+            //var deptEmpStations = new Entities("BP.GPM.DeptEmpStations");
+            //deptEmpStations.Retrieve("FK_Dept", deptNo);
+            //var isHave = false;
+            //for (var i = 0; i < deptEmpStations.length; i++) {
+
+            //    var en = deptEmpStations[i];
+
+            //    if (empNos.indexOf(',' + en.FK_Emp + ',') == -1) {
+            //        /*插入里面去.*/
+
+            //        var deptEmp = new Entity("BP.GPM.DeptEmp");
+            //        deptEmp.SetPKVal(en.FK_Dept + "_" + en.FK_Emp);
+            //        deptEmp.FK_Emp = en.FK_Emp;
+            //        deptEmp.FK_Dept = en.FK_Dept;
+            //        deptEmp.Insert();
+            //        isHave = true;
+            //    }
+            //}
+
+            //if (isHave)
+            //    BindEmps();
+
+            html += "</tbody>";
+            html += "</table>";
+            html += "</div>";
+            html += "</div>";
+            $("#Emps").html(html);
+        }
+
+        function Up(no) {
+            var emp = new Entity("BP.GPM.Emp", no);
+            var data = emp.DoMethodReturnString("DoUp");
+            BindEmps();
+        }
+        function Down(no) {
+
+            var emp = new Entity("BP.GPM.Emp", no);
+            var data = emp.DoMethodReturnString("DoDown");
+            BindEmps();
+        }
+
+        function EditDept(no) {
+            var url = '../WF/Comm/En.htm?EnName=BP.GPM.Dept&No=' + no;
+            OpenBootStrapModal(url, "eudlgframe", "編集", '800', '500', "icon-edit", true, null, null);
+        }
+
+        function EditEmp(no) {
+
+            if (no == undefined) {
+                var url = '../WF/Comm/En.htm?EnName=BP.GPM.Emp&FK_Dept=' + deptNo;
+                OpenBootStrapModal(url, "eudlgframe", "新規追加", '800', '500', "icon-edit", true, null, null);
+                return;
+            }
+
+            var url = '../WF/Comm/En.htm?EnName=BP.GPM.Emp&No=' + no;
+            OpenBootStrapModal(url, "eudlgframe", "編集", '800', '500', "icon-edit", true, null, null);
+        }
+
+        function RefEmps() {
+
+            var url = "../WF/Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.GPM.Dept&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Dept&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&No=" + deptNo + "&PKVal=" + deptNo + "&s=0.13113811473063341";
+            OpenBootStrapModal(url, "eudlgframe", "関係者", '1000', '500', "icon-edit", true, null, null);
+        }
+
+        function Del(no) {
+
+            if (confirm('本当にその人を削除しますか？') == false)
+                return;
+
+            //取消人员部门管理关系
+            var en = new Entity("BP.GPM.DeptEmp");
+            en.SetPKVal(deptNo + "_" + no);
+            en.Delete();
+
+            var en = new Entity("BP.GPM.Emp", no);
+            en.Delete();
+
+            //取消人员部门岗位管理关系
+            var sql = "delete from Port_DeptEmpStation where FK_Emp='" + no + "' and FK_Dept='" + deptNo + "'";
+            DBAccess.RunSQL(sql);
+            //   var en = new Entity("BP.GPM.DeptEmpStation");
+            //  en.Delete("FK_Dept",);
+            // SELECT * FROM Port_DeptEmpStation WHERE FK_Dept+'_'+FK_Emp not in (select MyPK FROM PORT_DEPTEMP)
+
+            BindEmps();
+        }
+
+        function Remove(no) {
+
+            if (confirm('本当にこの部署から削除しますか？') == false)
+                return;
+
+            var en = new Entity("BP.GPM.DeptEmp");
+            en.SetPKVal(deptNo + "_" + no);
+            en.Delete();
+
+            BindEmps();
+        }
+
+    </script>
+    <style type="text/css">
+    </style>
+</head>
+<body class="easyui-layout">
+    <div id="pageloading">
+    </div>
+    <div data-options="region:'west',split:true" style="width: 240px; padding: 1px; overflow: hidden;">
+        <div style="width: 100%; height: 95%; overflow: auto;">
+            <ul id="regionZTree" class="ztree" data-options="animate:false,dnd:false"></ul>
+        </div>
+        <div id="menu" class="small-menu" style="width: 120px;">
+            <div  class="newSameLevel">
+                <img src="../WF/Admin/Portal/Img/ico-flow-pic.png">同級を追加
+            </div>
+            
+            <div class="newNextLevel">
+                <img src="../WF/Admin/Portal/Img/ico-flow-import.png">サブレベルを増やす
+            </div>
+            <div class="edit">
+                <img src="../WF/Admin/Portal/Img/ico-flow-prototype.png">編集
+            </div>
+            
+            <div class="delete">
+                <img src="../WF/Admin/Portal/Img/ico-flow-delete.png">削除
+            </div>
+            <div class="moveUpDept">
+                <img src="../WF/Admin/Portal/Img/ico-flow-up.png">上へ移動
+            </div>
+            
+            <div class="moveDownDept">
+                <img src="../WF/Admin/Portal/Img/ico-flow-down.png">下に移動
+            </div>
+            
+        </div>
+        
+    </div>
+
+
+
+    <div data-options="region:'center',split:true" style="width:90%;">
+        <div id="Emps"></div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>カスケードドロップダウンボックス</title>
+    <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        var mapExt;
+        $(function () {
+
+            $("#Msg").html("読み込み中です。しばらくお待ちください......");
+
+            var fk_MapData = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", fk_MapData);
+            handler.AddPara("KeyOfEn", keyOfEn);
+            var json = handler.DoMethodReturnString("ActiveDDL_Init");
+
+            if (json.indexOf('err@') == 0) {
+                alert(json);
+                return;
+            }
+
+            json = JSON.parse(json);
+
+            mapExt = json['Sys_MapExt'];
+
+            //绑定下拉框.
+            GenerBindDDL("DDL_AttrsOfActive", json['Sys_MapAttr'], "No", "Name", mapExt.AttrsOfActive);
+
+            //绑定数据源.
+            GenerBindDDL("DDL_FK_DBSrc", json['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(mapExt);
+            if (mapExt.DBType != 0)
+                $("#TR_SQL").hide();
+
+            $("#Msg").html("");
+            return;
+
+
+        });
+
+        function changeDoc(obj) {
+            if (obj.value == 0)
+                $("#TR_SQL").show();
+            else
+                $("#TR_SQL").hide();
+
+            if (obj.value != mapExt.DBType)
+                $("#TB_Doc").val("");
+            else
+                $("#TB_Doc").val(mapExt.Doc);
+        }
+
+        //装载模版.
+        function LoadTemplate() {
+
+            //打开方向条件.
+            var url = "../../SettingTemplate.htm?TemplateType=ActiveDDL";
+            WinOpen(url, 'ss');
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <table id="table" style="width: 100%;">
+            <caption>
+                ドロップダウンボックスカスケード
+            </caption>
+            <tr>
+                <td>
+                    連動ドロップダウン
+                </td>
+                <td>
+                    <select name="DDL_AttrsOfActive" id="DDL_AttrsOfActive">
+                    </select>
+                </td>
+                <td>
+                    メニューの連動を実現する
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    データソースタイプ
+                </td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+                        <option value="0">SQLを実行</option>
+                        <option value="1">URLを実行してJSONを返します</option>
+                        <option value="2">SFTable.jsを実行してJSONを返します</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="TR_SQL">
+                <td>
+                    SQLデータソースを実行する
+                </td>
+                <td>
+                    <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc">
+                    </select>
+                </td>
+                <td>
+                    ccform他のデータソースからデータを取ることができます。
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    実行データソース
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width: 100%;">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <input type="button" value="テンプレートを読み込む" onclick="LoadTemplate()" id="Button1" />
+                    <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                    <input type="button" value="削除" onclick="Delete()" id="Btn_Delete" />
+                    <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" />自動カスケードヘルプ:</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>下のテキストボックスにSQLを入力します。番号、ラベルの列を持っています。これをバインドして下から枠を引きます。</li>
+                            <li>例：SELECT No, Name FROM CN_SF WHERE FK_PQ = '@Key' </li>
+                            <li>SELECT No, Name FROM CN_City WHERE FK_SF = '@Key'</li>
+                            <li>説明：@Keyは、ccflowによって合意されたキーワードであり、メインのドロップダウンボックスから渡された値です。</li>
+                            <li>番号付きのメインメニューはスレーブメニュー番号の最初の数桁であるため、コンテンツをリンクする必要はありません。</li>
+                            <li>例：メインのドロップダウンボックスは都道府県、リンケージメニューは市です。</li>
+                        </ul>
+                        <fieldset>
+                            <legend>メインテーブルのフィールドカスケード</legend>
+                            <a href="javascript:WinOpen('ActiveDDL-0.png');">   <img src="ActiveDDL-0.png" /> </a>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>サブテーブルのフィールドカスケード</legend>
+                            <a href="javascript:WinOpen('ActiveDDL.png');">  <img src="ActiveDDL.png" /> </a>
+                        </fieldset>
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="Msg">
+        </div>
+        <script type="text/javascript">
+
+            function Save() {
+
+                $("#Msg").html("保存しています。しばらくお待ちください......");
+                //组织主键.
+                if ($("#DDL_AttrsOfActive").val() == "") {
+                    alert("連動したドロップダウン枠の値を選択してください。");
+                    return;
+                }
+                if ($("#TB_Doc").val() == "") {
+                    alert("実行するデータソースを記入してください。");
+                    return;
+                }
+
+                var mypk = "ActiveDDL_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                var en = new Entity("BP.Sys.MapExt");
+                en.MyPK = mypk;
+                en.RetrieveFromDBSources();
+
+                en.CopyForm(); //复制表单数据.
+
+                en.FK_MapData = GetQueryString("FK_MapData");
+                en.AttrOfOper = GetQueryString("KeyOfEn");
+                en.ExtType = "ActiveDDL";
+                en.MyPK = mypk;
+
+                if (en.Update() == 0)
+                    en.Insert();
+
+                $("#Msg").html("<font color=green>正常に保存</font>");
+                return;
+            }
+
+            function Delete() {
+
+                if (window.confirm('削除してもよろしいですか？') == false)
+                    return false;
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+                handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+                handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+                var data = handler.DoMethodReturnString("ActiveDDL_Delete");
+                alert(data);
+                window.location.href = window.location.href;
+                return;
+            }
+        </script>
+    </form>
+</body>
+</html>

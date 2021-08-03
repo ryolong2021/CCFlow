@@ -1,0 +1,174 @@
+﻿<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>イオンワークフロー</title>
+	<link rel="stylesheet" href="themes/aeon.min.css" />
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="themes/jquery.mobile.structure-1.4.5.min.css" />
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../WF/Comm/JS/validation.js"></script>
+	<!-- 共通定数：app_const -->
+	<script src="js/common/app_const.js"></script>
+	<!-- 共通関数：app_common -->
+	<script src="js/common/app_common.js"></script>
+
+	<script type="text/javascript" language="javascript">
+		document.onkeydown = function (e) {
+			e = e || window.event;
+			if (e.keyCode == 13) {
+
+				Login();
+				return false;
+				//this.forms["Form1"].submit();
+				//return false;
+			}
+		}
+	</script>
+</head>
+<body>
+	<div data-role="page" data-theme="a">
+		<div data-role="header" data-position="inline">
+			<h1>イオンワークフロー</h1>
+		</div>
+		<div data-role="content" data-theme="a">
+			<label>下記の場合、ログイン後にパスワード変更画面が表示されるので、</label><br />
+			<label>パスワード変更をしてください。</label>
+			<ol>
+				<li>パスワードが初期状態（生年月日）の場合</li>
+				<li>パスワード変更後、９０日を超過した場合</li>
+			</ol>
+			<hr>
+			<form id="Form1">
+				<div class="form-group">
+					<input type="text" id="TB_No" name="TB_No" placeholder="ユーザーコードを入力してください" lay-verify="required"  data-theme="a"/>
+				</div>
+				<div class="form-group">
+					<input type="password" id="TB_PW" name="TB_PW" placeholder="パスワードを入力してください" lay-verify="required"  data-theme="a"/>
+				</div>
+				<div id="validate" class="form-group" style="display: none">
+
+					<input type="text" class="form-control" placeholder="確認コード" id="inputCode" style="width:50%;display: inline"  data-theme="a"/>
+					<canvas id="canvas" width="78" height="24"></canvas>
+					<a href="javascript:void(0)" style="margin-left: 10px" onclick="createCode()"  data-theme="a">見ずらい</a>
+				</div>
+				<input type="button" value="ログイン" lay-submit lay-filter="formDemo" data-theme="a" />
+			</form>
+		</div>
+
+	</div>
+	<script src="../WF/Style/skin/layui/layui.js" type="text/javascript"></script>
+	<!-- 引用通用的js文件. -->
+	<script src="../WF/Scripts/QueryString.js"></script>
+	<script type="text/javascript" src="../WF/Scripts/config.js"></script>
+	<script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+	<script type="text/javascript" language="javascript">
+		//页面启动函数.
+
+		layui.use(['form', 'layer'], function () {
+
+			//从后台获取当前登录会话的信息.
+			var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+			var doType = GetQueryString("DoType");
+			if (doType != null && doType != undefined && doType != "")
+				handler.AddPara("LoginType", doType);
+			var data = handler.DoMethodReturnString("Login_Init");
+			if (data.indexOf('err@') == 0) {
+				alert(data);
+				return;
+			}
+			data = JSON.parse(data);
+
+			//调用公共类库的方法:执行批量主表赋值
+			GenerFullAllCtrlsVal(data);
+
+			var userNo = document.getElementById("TB_No").value;
+			if (userNo == "")
+				document.getElementById("TB_PW").value = "";
+
+			var form = layui.form, layer = layui.layer, $ = layui.jquery;
+			form.on('submit(formDemo)', function (data) {
+
+				Login();
+
+			})
+		});
+
+        /*▼グローバル変数定義エリア▼*/
+        var wfCommon = new wfCommon();                       // 共通関連
+		function Login() {
+
+			var userNo = $("#TB_No").val();
+			var userPass = $("#TB_PW").val();
+
+			if (userNo == "" || userPass == "") {
+				layer.msg('ユーザー名とパスワードを入力してください。');
+				return false;
+			}
+			//判断验证码是否正确
+			var node = $("#validate");
+			if (node.is(':visible')) {
+				if (!validateCode()) {
+					return;
+				}
+			}
+
+			//创建handler实体.
+			var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+			//加入参数.
+			handler.AddPara("TB_No", userNo);
+			handler.AddPara("TB_PW", userPass);
+			//调用服务.
+			var data = handler.DoMethodReturnString("Login_Submit");
+			//分析处理返回值.
+			if (data.indexOf('err@') == 0) {
+				alert(data);
+				return;
+			}
+
+
+			if (data.indexOf('err@') == 0) {
+				layer.msg(data, { time: 3000, icon: 2 });
+				$("#validate").show();
+				createCode();
+				return;
+			}
+
+			// ▼APIでEBSから登録者の名前を取得する、sessionStorageに保存する
+            
+            var userName = "";
+            var ht = new HashTblCommon();
+            // 社員番号
+            ht.Add("SHAINBANGO", userNo);
+
+			// 非同期方式
+            wfCommon.getApiInfoAjaxCallBack(GET_USER_NAME_INFO_APINAME, ht, callback);
+
+        }
+
+        function callback(dt) {
+            if (dt.length > 0) {
+				userName = dt[0]["SEI_KANJI"] + "&nbsp;" + dt[0]["MEI_KANJI"] + '<span class="a-nav-item__user-prefix">さん</span>';
+                sessionStorage.setItem("userName", userName);
+            }
+
+            // ▲APIでEBSから登録者の名前を取得する、sessionStorageに保存する
+
+            //var page = "mainmenu.html";
+            var page = "pages/biz/menu/form_personal_info_ageement.html";
+
+            var userNo = $("#TB_No").val();
+
+            if (userNo === "0999999") {
+                page = "pages/biz/condolence/form_arrange_trader_list.html"
+            }
+            if (userNo === "0999998") {
+                page = "pages/biz/condolence/form_glc_maintenance_list.html"
+            }
+            location.href = page;
+        }
+
+	</script>
+</body>
+</html>

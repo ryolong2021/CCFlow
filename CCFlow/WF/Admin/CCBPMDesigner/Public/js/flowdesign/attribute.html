@@ -1,0 +1,542 @@
+﻿<!DOCTYPE HTML>
+<html>
+ <head>
+    
+  <title>WF設計ツール Flowdesign.leipi.org</title>
+  <meta name="keyword" content="WF設計ツール、Web Flowedesign、Flowedesigner、専門WF設計ツール、WEBWF設計ツール">
+  <meta name="description" content="国内で最も使いやすく開発されたフロー設計器は、この基礎の上で任意に修正して機能を無限に強大にすることができます。">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="leipi.org">
+
+ </head>
+<body>
+
+
+	
+
+<ul class="nav nav-tabs" id="attributeTab">
+  <li class="active"><a href="#attrBasic">全般</a></li>
+  <li ><a href="#attrForm">フォーム</a></li>
+  <li><a href="#attrPower">パーミッション</a></li>
+  <li><a href="#attrOperate">操作</a></li>
+  <li  id="tab_attrJudge"><a href="#attrJudge">転出条件</a></li>
+  <li ><a href="#attrStyle">スタイル</a></li>
+</ul>
+
+<form class="form-horizontal" target="hiddeniframe" method="post" id="flow_attribute" name="flow_attribute" action="/index.php?s=/Flowdesign/save_attribute.html">
+<input type="hidden" name="flow_id" value="4"/>
+<input type="hidden" name="process_id" value="61"/>
+  <div class="tab-content">
+    <div class="tab-pane active" id="attrBasic">
+
+          <div class="control-group">
+            <label class="control-label" for="process_name">ステップ名</label>
+            <div class="controls">
+              <input type="text" id="process_name" placeholder="ステップ名" name="process_name" value="新規申請">
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">ステップ種類</label>
+            <div class="controls">
+              <label class="radio inline">
+                <input type="radio" name="process_type" value="is_step" >正常ステップ
+              </label>
+              <label class="radio inline">
+                <input type="radio" name="process_type" value="is_child" >サブフローに移行する
+              </label>
+              <label class="radio inline">
+                <input type="radio" name="process_type" value="is_one" checked="checked">ステップ１に設定する
+              </label>
+
+            </div>
+          </div>
+<hr/>
+
+        <div id="current_flow">
+          <div class="offset1">
+          <!--未按顺序的bug 2012-12-12-->
+            <select multiple="multiple" size="6" name="process_to[]" id="process_multiple" >
+            <option value="62" >承認2</option><option value="63" selected="selected">迅速な承認</option><option value="64" selected="selected">承認1</option><option value="65" >アーカイバ</option>            </select>
+          </div>
+        </div><!-- current_flow end -->
+
+        <div id="child_flow" class="hide">
+           <div class="control-group">
+            <label class="control-label" >サブフロー</label>
+            <div class="controls">
+              <select name="child_id" >
+                <option value="0">--選択してください--</option>
+                <option value="1" >22</option><option value="2" >2222432231111</option><option value="3" >テストフロー</option><option value="4" >休暇フロー</option>              </select>
+            </div>
+          </div>
+
+           <div class="control-group">
+            <label class="control-label" >サブフロー終了後の動作</label>
+            <div class="controls">
+              <label class="radio inline">
+                <input type="radio" name="child_after" value="1" checked="checked">
+                同時に親フローを終了する
+              </label>
+              <label class="radio inline">
+                <input type="radio" name="child_after" value="2"  >
+                親フローに戻る
+              </label>
+            </div>
+          </div>
+
+          <div class="control-group hide" id="child_back_id">
+            <label class="control-label" >戻る</label>
+            <div class="controls">
+              <select name="child_back_process" >
+                <option value="0">--デフォルト--</option>
+                <option value="61" >新規申請</option><option value="62" >承認2</option><option value="63" >迅速な承認</option><option value="64" >承認1</option><option value="65" >アーカイバ</option>                <!--option value="1">ステップ1</option>
+                <option value="2">ステップ2</option>
+                <option value="3">ステップ3</option-->
+              </select>
+              <span class="help-inline">デフォルトは現在のステップの次のステップです</span>
+            </div>
+          </div>
+
+        </div><!-- child_flow end -->
+
+
+
+    </div><!-- attrBasic end -->
+
+    <div class="tab-pane " id="attrForm">
+
+
+
+<table class="table table-condensed table-bordered table-hover" >
+    <tr>
+      <th style="text-align:center">フィールド名</th>
+      <th style="text-align:center">コントロール種類</th>
+      <!--
+        予備機能：
+        1.必須記入するか
+        2.ロック内容は変更できません
+      -->
+      <th style="width:100px;"><label title="本ステップ更新許可フィールド"  class="checkbox"><input type="checkbox" id="write">書き込み可能なフィールド</label></th>
+      <th style="width:100px;"><label title="秘密フィールドは、本ステップの主催者、担当者に対して見えないこと"  class="checkbox"><input type="checkbox" id="secret">機密フィールド</label></th>
+    </tr>
+    <tbody>
+
+<!-- 这里是表单设计器的字段 start -->
+    <tr>
+      <th>テキストボックス</th>
+      <td>テキストボックス</td>
+      <td><label class="checkbox"><input type="checkbox" name="write_fields[]" checked="checked" value="data_1" key="0" id="write_0"></label></td>
+      <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"   value="data_1" key="0" id="secret_0"></label></td>
+    </tr>    <tr>
+      <th>プルダウンメニュー</th>
+      <td>プルダウンメニュー</td>
+      <td><label class="checkbox"><input type="checkbox" name="write_fields[]" checked="checked" value="data_2" key="1" id="write_1"></label></td>
+      <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"   value="data_2" key="1" id="secret_1"></label></td>
+    </tr>    <tr>
+      <th>単一選択</th>
+      <td>ラジオボックス</td>
+      <td><label class="checkbox"><input type="checkbox" name="write_fields[]"  value="data_3" key="2" id="write_2"></label></td>
+      <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"   value="data_3" key="2" id="secret_2"></label></td>
+    </tr><tr>
+      <th>複数選択</th>
+      <td>チェックボックス</td>
+      <td><label class="checkbox"><input type="checkbox" name="write_fields[]"  value="checkboxs_0" key="3" id="write_3"></label></td>
+      <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"  checked="checked" value="checkboxs_0" key="3" id="secret_3"></label></td>
+    </tr>
+
+    <tr>
+      <th>マクロコントロール</th>
+      <td>マクロコントロール</td>
+      <td><label class="checkbox"><input type="checkbox" name="write_fields[]" checked="checked" value="data_7" key="4" id="write_4"></label></td>
+      <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"   value="data_7" key="4" id="secret_4"></label></td>
+    </tr>    <tr>
+      <th>XXXXサイト</th>
+      <td>QRコード</td>
+      <td><label class="checkbox"><input type="checkbox" name="write_fields[]" checked="checked" value="data_8" key="5" id="write_5"></label></td>
+      <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"   value="data_8" key="5" id="secret_5"></label></td>
+    </tr>    <tr>
+      <th>複数行のテキスト</th>
+      <td>複数行のテキスト</td>
+      <td><label class="checkbox"><input type="checkbox" name="write_fields[]" checked="checked" value="data_9" key="6" id="write_6"></label></td>
+      <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"   value="data_9" key="6" id="secret_6"></label></td>
+    </tr>    <tr>
+      <th>プログレスバー</th>
+      <td>プログレスバー</td>
+      <td><label class="checkbox"><input type="checkbox" name="write_fields[]" checked="checked" value="data_10" key="7" id="write_7"></label></td>
+      <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"   value="data_10" key="7" id="secret_7"></label></td>
+    </tr><!--tr>
+  <th>名前</th>
+  <td>テキストボックス</td>
+  <td><label style="display: block;" ><input type="checkbox" name="write[]" checked="true" value="data_2" key="1" id="write_1"></label></td>
+  <td><label style="display: block;"><input type="checkbox" name="secret[]" disabled="true" value="data_2" key="1" id="secret_1"></label></td>
+</tr-->
+<!-- 这里是表单设计器的字段 end -->
+
+
+    </tbody>
+</table>
+
+
+
+    </div><!-- attrForm end -->
+    
+
+    <div class="tab-pane" id="attrPower">
+
+        <div class="control-group">
+            <label class="control-label" >自動人選び</label>
+            <div class="controls">
+              <select name="auto_person" id="auto_person_id">
+                <option value="0">自動に人を選ばない</option>
+                <option value="1" >起票者</option>
+                <option value="2" >起票者の部門主管</option>
+                <option value="3" >処理者の部門主管</option>
+                <option value="5" selected="selected">ロール指定</option>
+                <option value="4" >人を指定</option>
+              </select>
+              <span class="help-inline">事前に人の自動選択を設置すれば、仕事の引継ぎが便利になる</span>
+            </div>
+            <div class="controls " id="auto_unlock_id" >
+              <label class="checkbox">
+                <input type="checkbox" name="auto_unlock" value="1" checked="checked">変更許可
+              </label>
+            </div>
+
+            <div id="auto_person_4" class="hide">
+              <div class="control-group">
+                <label class="control-label">主催者指名</label>
+                <div class="controls">
+                    <input type="hidden" name="auto_sponsor_ids" id="auto_sponsor_ids" value="">
+                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="主催者指名" name="auto_sponsor_text" id="auto_user_text" value=""> <a href="javascript:void(0);" class="btn" onclick="superDialog('/index.php?s=/demo/super_dialog/op/user.html','auto_user_text','auto_sponsor_ids');">選択</a>
+                    
+                </div> 
+              </div>
+              <div class="control-group">
+                <label class="control-label">担当者指定</label>
+                <div class="controls">
+                    <input type="hidden" name="auto_respon_ids" id="auto_respon_ids" value="">
+                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="担当者指定" name="auto_respon_text" id="auto_userop_text" value=""> <a href="javascript:void(0);" class="btn" onclick="superDialog('/index.php?s=/demo/super_dialog/op/user.html','auto_userop_text','auto_respon_ids');">選択</a>
+                </div> 
+              </div>
+            </div>
+            <div id="auto_person_5" >
+              <div class="control-group">
+                <label class="control-label">ロール指定</label>
+                <div class="controls">
+                    <input type="hidden" name="auto_role_ids" id="auto_role_value" value="">
+                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="ロール指定" name="auto_role_text" id="auto_role_text" value="テスト1、テスト2"> <a href="javascript:void(0);" class="btn" onclick="superDialog('/index.php?s=/demo/super_dialog/op/role.html','auto_role_text','auto_role_value');">選択</a>
+                </div> 
+              </div>
+            </div>
+
+          </div>
+<hr/>
+<h4>授権範囲</h4>
+          <div class="control-group">
+            <label class="control-label">授権者</label>
+            <div class="controls">
+                <input type="hidden" name="range_user_ids" id="range_user_ids" value="10">
+                <input class="input-xlarge" readonly="readonly" type="text" placeholder="人を選ぶ" name="range_user_text" id="range_user_text" value="テスト1"> <a href="javascript:void(0);" class="btn" onclick="superDialog('/index.php?s=/demo/super_dialog/op/user.html','range_user_text','range_user_ids');">選択</a>
+            </div> 
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">授権部門</label>
+            <div class="controls">
+                <input type="hidden" name="range_dept_ids" id="range_dept_ids" value="10,11">
+                <input class="input-xlarge" readonly="readonly" type="text" placeholder="部門選択" name="range_dept_text" id="range_dept_text" value="テスト1、テスト2"> <a href="javascript:void(0);" class="btn" onclick="superDialog('/index.php?s=/demo/super_dialog/op/dept.html','range_dept_text','range_dept_ids');">選択</a>
+            </div> 
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">授権ロール</label>
+            <div class="controls">
+                <input type="hidden" name="range_role_ids" id="range_role_ids" value="10,11,12">
+                <input class="input-xlarge" readonly="readonly" type="text" placeholder="ロール選択" name="range_role_text" id="range_role_text" value="テスト1、テスト2、テスト3"> <a href="javascript:void(0);" class="btn" onclick="superDialog('/index.php?s=/demo/super_dialog/op/role.html','range_role_text','range_role_ids');">選択</a>
+            </div> 
+          </div>
+
+
+          <div class="control-group">
+            <div class="controls">
+                <span class="help-block">手動で人を選ぶ必要がある場合、授権範囲は有効となる</span>
+            </div> 
+          </div>
+          
+
+
+    </div><!-- attrPower end -->
+
+
+    <div class="tab-pane" id="attrOperate">
+
+        <div class="control-group">
+          <label class="control-label" >引継ぎ方式</label>
+          <div class="controls">
+            <select name="receive_type" >
+              <option value="0" >主催者を明確に指定する</option>
+              <option value="1" selected="selected">まず主催者として受け取る。</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="is_user_end" value="1" >主催者がフローを終了することを許可する（最終ステップはデフォルトで許可される）
+              </label>
+            <label class="checkbox">
+                <input type="checkbox" name="is_userop_pass" value="1" checked="checked">担当者は次のステップに渡す許可
+              </label>
+          </div>
+        </div>
+<hr/>
+
+        <div class="control-group">
+          <label class="control-label" >副署方式</label>
+          <div class="controls">
+            <select name="is_sing" >
+              <option value="1" selected="selected">副署許可</option>
+              <option value="2" >副署禁止</option>
+              <option value="3" >強制副署</option>
+            </select>
+            <span class="help-inline">強制副署を設定すると、本手順では全員副署後引渡し又はフロー終了可とする</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" >表示可否</label>
+          <div class="controls">
+            <select name="sign_look" >
+              <option value="1" >常に表示</option>
+              <option value="2" >ステップの間の担当者は非表示です。</option>
+              <option value="3" selected="selected">その他ステップはシールドとする</option>
+            </select>
+          </div>
+        </div>
+
+
+<hr/>
+
+        <div class="control-group">
+          <label class="control-label" >リターン方式</label>
+          <div class="controls">
+            <select name="is_back" >
+              <option value="1" >許可しない</option>
+              <option value="2" >前のステップへ戻ることが許可する</option>
+              <option value="3" selected="selected">前のステップへ戻ることが許可する</option>
+            </select>
+          </div>
+        </div>
+
+
+    </div><!-- attrOperate end -->
+
+
+
+    <div class="tab-pane  " id="attrJudge">
+
+       
+    <table class="table" >
+      <thead>
+        <tr>
+          <th style="width:100px;">切り替えステップ</th>
+          <th>切り替え条件を設置</th>
+        </tr>
+      </thead>
+      <tbody>
+
+<!--模板-->
+<tr id="tpl" class="hide">    
+<td style="width: 100px;">@text</td>
+<td>
+    <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td>
+            <select id="field_@a" class="input-medium">
+              <option value="">フィールド選択</option>
+              <!-- 表单字段 start -->
+                                  <option value="data_1">テキストボックス</option>                    <option value="data_2">プルダウンメニュー</option>                    <option value="data_3">単一選択</option><option value="checkboxs_0">複数選択</option>
+                                    <option value="data_7">マクロコントロール</option>                    <option value="data_8">XXXXサイト</option>                    <option value="data_9">複数行のテキスト</option>                    <option value="data_10">プログレスバー</option>              <!-- フォームフィールド end -->  
+            </select>
+            <select id="condition_@a" class="input-small">
+        <option value="=">等しい</option>
+        <option value="&lt;&gt;">等しくない</option>
+        <option value="&gt;">より大きい</option>
+        <option value="&lt;">より小さい</option>
+        <option value="&gt;=">以上</option>
+        <option value="&lt;=">以下</option>
+        <option value="include">含める</option>
+        <option value="exclude">含まない</option>
+            </select>
+            <input type="text" id="item_value_@a" class="input-small">
+            <select id="relation_@a" class="input-small">
+        <option value="AND">かつ</option>
+        <option value="OR">または</option>
+            </select>
+        </td>
+        <td>
+            <div class="btn-group">
+        <button type="button" class="btn btn-small" onclick="fnAddLeftParenthesis('@a')">（</button>
+        <button type="button" class="btn btn-small" onclick="fnAddRightParenthesis('@a')">）</button>
+        <button type="button" onclick="fnAddConditions('@a')" class="btn btn-small">新規追加</button>
+            </div>
+        </td>
+       </tr>
+       <tr>
+        <td>
+            <select id="conList_@a" multiple="" style="width: 100%;height: 80px;"></select>
+        </td>
+        <td>
+            <div class="btn-group">
+        <button type="button" onclick="fnDelCon('@a')" class="btn btn-small">行削除</button>
+        <button type="button" onclick="fnClearCon('@a')" class="btn btn-small">クリア</button>
+            </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+            <input id="process_in_desc_@a" type="text" name="process_in_desc_@a" style="width:98%;">
+            <input name="process_in_set_@a" id="process_in_set_@a" type="hidden">
+        </td>
+        <td>
+            <span class="xc1">条件に合わない場合のヒント</span>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+</td>
+</tr>
+
+
+  </tbody>
+  <tbody id="ctbody">
+
+  </tbody>
+</table>
+<input type="hidden" name="process_condition" id="process_condition">
+
+
+
+
+
+
+    </div><!-- attrJudge end -->
+    <div class="tab-pane  " id="attrStyle">
+
+        <div class="control-group">
+          <label class="control-label" for="process_name">サイズ</label>
+          <div class="controls">
+            <input type="text" class="input-small" name="style_width" id="style_width" placeholder="幅PX" value="121"> X <input type="text" class="input-small" name="style_height" id="style_height" placeholder="高さPX"  value="41">
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="process_name">フォントの色</label>
+          <div class="controls">
+            <input type="text" class="input-small" name="style_color" id="style_color" placeholder="#000000" value="#0e76a8">
+            <div class="colors" org-bind="style_color">
+                <ul>
+                  <li class="Black active" org-data="#000" title="Black">1</li>
+                  <li class="red" org-data="#d54e21" title="Red">2</li>
+                  <li class="green" org-data="#78a300" title="Green">3</li>
+                  <li class="blue" org-data="#0e76a8" title="Blue">4</li>
+                  <li class="aero" org-data="#9cc2cb" title="Aero">5</li>
+                  <li class="grey" org-data="#73716e" title="Grey">6</li>
+                  <li class="orange" org-data="#f70" title="Orange">7</li>
+                  <li class="yellow" org-data="#fc0" title="Yellow">8</li>
+                  <li class="pink" org-data="#ff66b5" title="Pink">9</li>
+                  <li class="purple" org-data="#6a5a8c" title="Purple">10</li>
+                </ul>
+            </div>
+
+          </div>
+        </div>
+
+ 
+
+        <div class="control-group">
+          <label class="control-label" for="process_name"><span class="process-flag badge badge-inverse"><i class="icon-star-empty icon-white" id="style_icon_preview"></i></span> アイコン</label>
+          <div class="controls">
+            <input type="text" class="input-medium" name="style_icon" id="style_icon" placeholder="icon" value="icon-ok">
+            <div class="colors" org-bind="style_icon">
+                <ul>
+                  <li class="Black active" org-data="icon-star-empty" title="Black"><i class="icon-star-empty icon-white"></i></li>
+                  <li class="red" org-data="icon-ok" title="Red"><i class="icon-ok icon-white"></i></li>
+                  <li class="green" org-data="icon-remove" title="Green"><i class="icon-remove icon-white"></i></li>
+                  <li class="blue" org-data="icon-refresh" title="Blue"><i class="icon-refresh icon-white"></i></li>
+                  <li class="aero" org-data="icon-plane" title="Aero"><i class="icon-plane icon-white"></i></li>
+                  <li class="grey" org-data="icon-play" title="Grey"><i class="icon-play icon-white"></i></li>
+                  <li class="orange" org-data="icon-heart" title="Orange"><i class="icon-heart icon-white"></i></li>
+                  <li class="yellow" org-data="icon-random" title="Yellow"><i class="icon-random icon-white"></i></li>
+                  <li class="pink" org-data="icon-home" title="Pink"><i class="icon-home icon-white"></i></li>
+                  <li class="purple" org-data="icon-lock" title="Purple"><i class="icon-lock icon-white"></i></li>
+                </ul>
+                <a href="http://v2.bootcss.com/base-css.html#icons" target="_blank">もっと</a>
+            </div>
+          </div>
+        </div>
+        
+
+        <div class="control-group">
+          <label class="control-label"></label>
+          <div class="controls">
+            <span class="help-inline">もっと多くの設定が欲しがる場合は、自分で追加したり、[XXXXサイト]でフィードバックしてください。</span>
+          </div>
+        </div>
+        
+        <!-- 不太完善，隐藏
+         <div class="control-group">
+          <label class="control-label">CSS3 图形</label>
+          <div class="controls">
+            <select name="style_graph" id="style_graph">
+              <option value="">長方形</option>
+              <option value="circle">円形</option>
+              <option value="oval">楕円形</option>
+              <option value="hexagon">ひし形</option>
+            </select>
+            <span class="help-inline">CSS3ブラウザの一部のみをサポートしています。</span>
+          </div>
+        </div> -->
+
+
+    </div><!-- attrStyle end -->
+  </div>
+
+
+<div>
+  <hr/>
+  <span class="pull-right">
+      <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">キャンセル</a>
+      <button class="btn btn-primary" type="submit" id="attributeOK">保存する</button>
+  </span>
+</div>
+</form>
+<iframe id="hiddeniframe" style="display: none;" name="hiddeniframe"></iframe>
+
+
+
+
+
+    
+<script type="text/javascript">
+  /*var flow_id =  '4';//流程ID
+  var process_id = '61';//步骤ID
+  var get_con_url = "/index.php?s=/Flowdesign/get_con.html";//获取条件
+  */
+  var _out_condition_data = {"63":{"condition":"<option value=\"'data_1' = '1'  AND\">'\u6587\u672c\u6846' = '1'  AND<\/option><option value=\"( 'data_2' = '1' AND 'data_2' = '2' OR 'data_2' = '3' OR 'data_2' = '4' OR 'data_2' = '45')\">( '\u4e0b\u62c9\u83dc\u5355' = '1' AND '\u4e0b\u62c9\u83dc\u5355' = '2' OR '\u4e0b\u62c9\u83dc\u5355' = '3' OR '\u4e0b\u62c9\u83dc\u5355' = '4' OR '\u4e0b\u62c9\u83dc\u5355' = '45')<\/option>","condition_desc":"\u5feb\u6377\u5ba1\u6279\u6761\u4ef6\u4e0d\u6210\u7acb"},"64":{"condition":"<option value=\"'data_2' = '1'  AND\">'\u4e0b\u62c9\u83dc\u5355' = '1'  AND<\/option><option value=\"'data_2' = '2'\">'\u4e0b\u62c9\u83dc\u5355' = '2'<\/option>","condition_desc":"\u597d\u5427"}};
+</script>
+<script type="text/javascript" src="/Public/js/flowdesign/attribute.js"></script>
+
+
+
+
+    
+
+</body>
+</html>

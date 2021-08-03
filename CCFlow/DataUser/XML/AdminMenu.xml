@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 管理员菜单:
+  1, 用于显示在流程设计器功能菜单栏.
+  2, For="admin" 标识只有admin用户可以使用. 
+     比如： For="00000120"  只有这个管理员才可以使用. 
+     For="SecondAdmin" 说明只对二级管理员有效.
+     
+  3, 如果 For="" 标识所有的管理员都可以使用.
+  4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
+  系统维护管理员菜单  
+  -->
+
+  <!-- 所有的人都可以维护组织结构. -->
+  
+  <Group No="System" Name="システム管理" />
+  <Item No="002" GroupNo="System" Name="休日の設定" For="admin" Url="../../Comm/Sys/Holiday.htm"  />
+  <Item No="003" GroupNo="System" Name="テーブル構造"    For="admin" Url="../../Comm/Sys/SystemClass.htm"  />
+  <Item No="004" GroupNo="System" Name="二級管理者" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.AdminEmps"  />
+  <Item No="005" GroupNo="System" Name="ツールボックス" For="admin" Url="../../Comm/MethodLink.htm"  />
+  <Item No="010" GroupNo="System" Name="パスワード変更" For="admin" Url="../../Setting/ChangePassword.htm"  />
+  <Item No="020" GroupNo="System" Name="JavaScriptのインポート" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
+  <Item No="001" GroupNo="System" Name="SQLテンプレートの設定" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates"  />
+  <Item No="601" GroupNo="System" Name="システム列挙" For="admin" Url="../../Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum"  />
+  <Item No="602" GroupNo="System" Name="辞書テーブル" For="admin" Url="../../Admin/FoolFormDesigner/SFList.htm?DoType=AddSFTable"  />
+
+  <Group No="Org" Name="組織構造" /> 
+  
+  <Item No="501" GroupNo="Org" Name="ポジションタイプのメンテナンス" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationTypes"  />
+  <Item No="501" GroupNo="Org" Name="仕事のメンテナンス" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Stations"  />
+  <Item No="502" GroupNo="Org" Name="部門台帳" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Depts"  />
+  <Item No="502" GroupNo="Org" Name="部門ツリー" For="admin" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Depts"  />
+
+  <Item No="503" GroupNo="Org" Name="社員台帳" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Emps"  />
+  <Item No="502" GroupNo="Org" Name="部門員ツリー" For="admin" Url="../../Comm/TreeEns.htm?TreeEnsName=BP.GPM.Depts&amp;EnsName=BP.GPM.Emps&amp;RefPK=FK_Dept"  />
+  <Item No="504" GroupNo="Org" Name="組織構造" For="admin" Url="../../../GPM/Organization.htm"  />
+  <Item No="501" GroupNo="Org" Name="独立組織" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Incs"  />
+  <Item No="504" GroupNo="Org" Name="権限グループ" For="admin" Url="../../Comm/Search.htm?EnsName=BP.En.Groups"  />
+
+  <Group No="GPM" Name="メニューの権限" />
+  <Item No="901" GroupNo="GPM" Name="システムカテゴリ" For="" Url="../../Comm/Ens.htm?EnsName=BP.GPM.AppSorts"  />
+  <Item No="902" GroupNo="GPM" Name="システム台帳" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
+  <Item No="903" GroupNo="GPM" Name="権限グループ" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
+  <Item No="904" GroupNo="GPM" Name="ポジションメニュー" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />
+  <Item No="905" GroupNo="GPM" Name="社員メニュー" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
+  <!--<Item No="906" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus"  />-->
+  <Item No="907" GroupNo="GPM" Name="メニューツリー" For="" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />
+
+  <!--<Group No="Org" Name="组织结构(多级管理员模式)" /> 
+  <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Stations"  />
+  <Item No="502" GroupNo="Org" Name="部门台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Depts"  />
+  <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Emps"  />
+  <Item No="504" GroupNo="Org" Name="组织结构维护" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.AdminEmps"  />-->
+
+
+</NewDataSet>

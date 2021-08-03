@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>トランクパターン</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            InitBar("PopBranchesAndLeaf");
+            var html = "";
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            debugger;
+            if (i == 0) {
+
+                mapExt.H = 500;
+                mapExt.W = 900;
+                mapExt.SetPara("Title", "選択してください");
+
+                mapExt.SetPara("SelectType", 0);
+                mapExt.Doc = "@WebUser.FK_Dept";
+            }
+
+            if (mapExt.W <= 400)
+                mapExt.W = 900;
+
+
+            //批量为复制.
+            GenerFullAllCtrlsVal(mapExt);
+
+            //基本属性.
+            // $("#TB_Title").val(mapExt.GetPara("Title"));
+            //p").val(mapExt.GetPara("SearchTip"));
+            // $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
+
+            //设置按钮是否可以用?
+            if (i == 0) {
+                $("#Btn_Delete").attr("disabled", true);
+                $("#Btn_FullData").attr("disabled", true);
+            } else {
+                $("#Btn_Delete").removeAttr("disabled");
+                $("#Btn_FullData").removeAttr("disabled");
+            }
+        });
+        function Save() {
+
+            //更新节点表单类型.
+            var frmID = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+            en.SetPara("PopModel", "PopBranchesAndLeaf");
+            en.Update();
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            mapExt.CopyURL();  //从url里面copy数据.
+            mapExt.CopyForm(); //从from里面copy数据.
+
+            mapExt.ExtType = "PopBranchesAndLeaf";
+            mapExt.AttrOfOper = GetQueryString("KeyOfEn");
+
+
+            var err = "";
+
+            if (mapExt.GetPara("TBPara_Title") == "")
+                err += '\t\n必須フィールド「タイトル」は空にできません。';
+
+            if (mapExt.Tag1 == "")
+                err += '\t\n必須フィールド「検索データソース」は空にできません。';
+
+            if (mapExt.Tag2 == "")
+                err += '\t\n必須フィールド「左側ツリーリストデータソース」は空にできません。';
+
+            if (mapExt.Tag == "")
+                err += '\t\n必須フィールドの「データ列名と意味の照合」は空にできません。';
+
+            if (mapExt.DBType == "")
+                err += '\t\n必須フィールド「データソースタイプ」は空にできません。';
+
+            var val = mapExt.Save();
+
+            // alert(val);
+            window.location.href = window.location.href;
+        }
+        function Delete() {
+
+            if (confirm('削除してもよろしいですか？') == false)
+                return;
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            mapExt.Delete();
+            window.location.href = window.location.href;
+        }
+
+    </script>
+    <style type="text/css">
+        .style1 {
+            height: 21px;
+        }
+    </style>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <form id="cc">
+        <table id="Table1" style="width: 99%;">
+
+            <tr>
+                <td>
+                    <a href="javascript:ShowHidden('h_title')">タイトル</a>
+                    <div id="h_title" style="color: Gray; display: none">
+                        <ul>
+                            <li>ウィンドウに表示されるテキスト、例えば：</li>
+                            <li>ドキュメント検索</li>
+                            <li>人員を選ぶ</li>
+                            <li>受け入れ人を選んでください</li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    ポップアップウィンドウのプロパティ
+                </td>
+                <td>
+                    高さ：<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
+                    幅：<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="javascript:ShowHidden('HSearch')">検索ヒント</a>
+                    <div id="HSearch" style="color: Gray; display: none">
+                        <ul>
+                            <li>検索テキストボックスに表示される背景文字、例えば、</li>
+                            <li>支払人の名前を入力して検索してください。</li>
+                            <li>人員番号、名前などのキーワードを入力してください。</li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    アドバンスト設定
+                </td>
+                <td>
+                    データソースタイプ
+                    <select id="DDL_DBType" name="DDL_DBType">
+                        <option value="0">SQLを実行</option>
+                        <option value="1">URLを実行してJSONを返します</option>
+                        <option value="2">CCFromRef.jsを実行してJSONを返します</option>
+                    </select>
+                    タイプを選択：
+                    <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
+                    <label for="RBPara_SelectType_0">
+                        単一の選択肢
+                    </label>
+                    <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
+                    <label for="RBPara_SelectType_1">
+                        複数選択
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a href="javascript:ShowHidden('PopValSearchCond')">データソースを検索</a>
+                    <div id="PopValSearchCond" style="color: Gray; display: none">
+                        <ul>
+                            <li>キーワードをクリックして、検索で返されたデータソースを実行します。@ Keyはキーワードであり、検索のキーワードです。</li>
+                            <li>For URL:/DataUser/Handler.ashx?DoType=SearchEmps&Keyword=@Key</li>
+                            <li>
+                                For SQL: SELECT No,Name FROM Port_Emp WHERE No like '%@Key%' OR Name like '%@Key%'
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 23px;">
+</textarea>
+                </td>
+            </tr>
+            <!-- 左侧树列表数据源  -->
+            <tr>
+                <td colspan="2">
+                    <a href="javascript:ShowHidden('tab2')">左側のツリーリストのデータソース</a>
+                    <div id="tab2" style="color: Gray; display: none">
+                        <ul>
+                            <li>jsonを戻るデータソースを設定します。データソースはNo、Name、ParentNoの3つの約束の列があります。</li>
+                            <li>For URL:/DataUser/Handler.ashx?DoType=ReqDepts</li>
+                            <li>For SQL:SELECT No,Name, ParentNo FROM Port_Dept</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 23px;">
+</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    ルートディレクトリツリー番号：<input id="TB_Doc" name="TB_Doc" value="0" style="width: 250px;" type="text" />
+                    <a href="javascript:ShowHidden('h1')">ヘルプ</a>
+                    <div id="h1" style="color: Gray; display: none">
+                        ccbpmをサポートする表現式、例えば:@WebUser.FK_Dept、@FieldName
+                    </div>
+                </td>
+            </tr>
+            <!-- 右上列表信息数据源 ------------------------------------------------ -->
+            <tr>
+                <td colspan="2">
+                    <a href="javascript:ShowHidden('tab4')">右上のリスト情報データソース（左側のツリーのノードをクリックしてデータソースを検索する）</a>
+                    <div id="tab4" style="color: Gray; display: none">
+                        <ul>
+                            <li>右側のツリーから戻ってくる詳細情報リストのデータソースを選択します。@Keyはキーワードで、選択されたツリーノード番号です。</li>
+                            <li>For URL:/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key </li>
+                            <li>For SQL:SELECT No,Name FROM Port_Emp WHERE FK_Dept='@Key' </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea id="TB_Tag3" name="TB_Tag3" style="width: 98%; height: 23px;">
+</textarea>
+                </td>
+            </tr>
+            <!-- 填充其他数据控件的数据源 -->
+            <!--<tr>
+                <th colspan="4">
+                    <a href="javascript:ShowHidden('tabsT')">他のデータコントロールのデータソースを戻り値で埋めます。</a>
+                    <div id="tabsT" style="color: Gray; display: none">
+                        <ul>
+                            <li>データソースは空にすることができます</li>
+                            <li>設定されている場合、システムは、設定されたデータソースによって返された列とフィールド名が同じコントロールとのマッチングに基づいて値を割り当てます。</li>
+                            <li>SQLを使用してデータソースを取得するには@Key変数が必要であり、現在のモードは単一選択である必要もあります。</li>
+                            <li>例：SELECT No AS YuanGongBianHao, Name AS MingCheng, Tel AS DianHua, Email AS YouJian
+                                FROM port_emp WHERE No='@Key'</li>
+                            <li>URLを使用してデータソースを取得するには@Key変数が必要であり、現在のモードは単一選択である必要もあります。</li>
+                            <li>例：/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key @Keyは選択された主キーです。</li>
+                        </ul>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
+                </td>
+            </tr>-->
+            <!-- 数据列名与中文意思对照  &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
+            <tr>
+                <td colspan="2">
+                    <a href="javascript:ShowHidden('tab6')">データ列名のコメント</a>、空にすることができます。
+                    <div id="tab6" style="color: Gray; display: none">
+                        <ul>
+                            <li>このオプションは空にすることができます。右上のリストで検索したり、ツリーのデータソースをクリックしたりして、表示されるリストの列ヘッダーを日本語で表示する必要があります。</li>
+                            <li>例：No=番号、Name=名前、Addr=住所、Tel=電話、Email=メール</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a href="javascript:ShowHidden('backFunction')">確定後実行するJS</a>、空にすることができます。
+                    <div id="backFunction" style="color: Gray; display: none">
+                        <ul>
+                            <li>このオプションは、空であることができます。ポップアップボックスが決定した後に実行されるJSは、直接に方法名または方法を書くことができます。</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="text" id="TB_Tag5" name="TB_Tag5" style="width: 99%;" />
+                </td>
+            </tr>
+        </table>
+        <fieldset>
+            <legend>サンプル</legend>
+            <img alt="" src='1.BranchesAndLeaf.png' onclick="WinOpen('1.BranchesAndLeaf.png')" style="width: 500px;" />
+        </fieldset>
+    </form>
+</body>
+</html>

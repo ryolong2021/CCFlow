@@ -1,0 +1,113 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>申請する</title>
+
+    <!-- CSSエリア 開始 -->
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <link rel="stylesheet" href="../../../css/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="../../../css/common/app.css">
+    <!-- CSSエリア 終了 -->
+    <!-- jquery -->
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+    <!-- validate コンポーネント(項目入力チェック用)：validate, additional-methods, messages_ja -->
+    <script src="../../../js/vendor/jquery.validate.js"></script>
+    <script src="../../../js/vendor/additional-methods.js"></script>
+    <script src="../../../js/vendor/messages_ja.js"></script>
+    <!-- 日付パネルを表示する方法：datetimepicker -->
+    <script src="../../../js/vendor/jquery.datetimepicker.full.js"></script>
+    <!-- 日付フォーマット用 -->
+    <script src="../../../js/vendor/moment-with-locales.js"></script>
+    <!-- 共通定数：app_const -->
+    <script src="../../../js/common/app_const.js"></script>
+    <!-- 共通関数：app_common -->
+    <script src="../../../js/common/app_common.js"></script>
+    <!-- 検索条件表示共通：search_current_filters_common.js -->
+    <script src="../../../js/common/refined_search_common.js"></script>
+    <script src="../../../js/common/search_current_filters_common.js"></script>
+    <!-- カードリスト共通：card_list_common.js -->
+    <script src="../../../js/common/card_list_common.js"></script>
+</head>
+<body>
+    <div class="o-whole o-whole--with-bg o-whole--with-navigation o-whole--global">
+        <div class="o-whole__body-container" id="bodyContainer">
+            <script>GetSubHtmlDataToHtml("bodyContainer", "../../../pages/common/app_dialog_area.html");</script>
+            <!-- ナビエリア定義 -->
+            <div class="o-whole__navigation" data-simplebar="true" id="pageOne">
+                <script>GetSubHtmlDataToHtml("pageOne", "../../common/app_left_menu_area.html");</script>
+            </div>
+            <div class="o-whole__body">
+                <section class="m-section m-section--no-padding" id="page_title_area">
+                    <div class="m-search-bar" id="search-bar-comp">
+                        <div class="m-search-bar__field">
+                            <div class="m-search-bar__search-input">
+                                <div class="a-text-field a-text-field--type-search m-search-bar__input"><span class="a-text-field__icon"><i class="a-icon a-icon--search"></i></span><input type="search" class="a-text-field__input" id="menu-search-input" /></div>
+                            </div><button class="m-search-bar__button-close" id="menu-close-button"><i class="a-icon a-icon--close"></i></button>
+                        </div>
+                        <div class="m-search-bar__button" id="menu-search-button">
+                            <button type="button" class="a-search-button a-search-button--light"><i class="a-icon a-icon--search"></i><span class="a-search-button__label">キーワード検索</span></button>
+                        </div>
+                    </div>
+                    <div class="m-page-heading m-page-heading--with-actions">
+                        <!-- タイトル文言定義 -->
+                        <h1 class="a-heading a-heading--h1 undefined"><span class="a-heading__label">申請する</span></h1>
+                        <!-- 絞り込み検索ボタンの定義(JSから読み込んで、表示すること) -->
+                        <div class="m-page-heading__actions" id="search-button-dispaly">
+                            <div id="search-bar-comp-apply" class="m-search-bar" />
+                        </div>
+                    </div>
+                </section>
+                <section class="m-section m-section--no-padding p-search-filter-holder">
+                    <div class="m-tabs">
+                        <div id="mask-div"></div>
+                        <ul class="m-tabs__tab-list">
+                            <li id="tab1" class="m-tabs__tab m-tabs__tab--active display"><button type="button" class="a-tab-nav-item a-tab-nav-item--active">メニュー</button></li>
+                            <li id="tab2" class="m-tabs__tab nodisplayUncomplete"><button type="button" class="a-tab-nav-item">下書き</button></li>
+                            <li id="tab3" class="m-tabs__tab nodisplayComplete"><button type="button" class="a-tab-nav-item">履歴から作成</button></li>
+                        </ul>
+                        <div class="m-tabs__indicator"></div>
+                        <div class="m-tabs__contents">
+                            <div class="m-tabs__content m-tabs__content--active">
+                                <section class="m-section m-section--fill-white">
+                                    <div class="m-nav-list m-nav-list--menu" id="applyMenu">
+                                    </div>
+                                    <div class="m-nav-list m-nav-list--menu" id="menu-search-result" hidden></div>
+                                </section>
+                            </div>
+                            <!-- 下書き -->
+                            <div class="m-tabs__content">
+                                <section class="m-section m-section--no-padding">
+                                    <div id="in-progress-card-list" class="m-request-info-list" />
+                                </section>
+                            </div>
+                            <!-- 履歴から作成 -->
+                            <div class="m-tabs__content">
+                                <section class="m-section m-section--no-padding">
+                                    <div id="complete-card-list" class="m-request-info-list" />
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <!-- 4dのコンポーネント -->
+    <script src="../../../js/components.js"></script>
+
+    <!-- CCFLOW相関 -->
+    <script language="JavaScript" src="../../../../WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <!-- 業務JS：page_left_menu.js -->
+    <script src="../../../js/biz/menu/comm/page_left_menu.js"></script>
+    <!-- 下書きと履歴から作成 -->
+    <script src="../../../js/biz/menu/page_apply.js"></script>
+</body>
+</html>

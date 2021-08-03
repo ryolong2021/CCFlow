@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>ccfow</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script src="../Admin.js"></script>
+
+    <script language="javascript" type="text/javascript">
+        var basePath = basePath()
+        //页面启动函数.
+        $(function () {
+
+
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;読み込み中です。しばらくお待ちください......");
+            var flowNo = GetQueryString("FK_Flow");
+            $("#TB_Caption").html("<a href='API.htm?FK_Flow=" + flowNo + "' > URL呼び出しインターフェース</a> |  <a href='APICode.aspx?FK_Flow=" + flowNo + "'>開発用API</a> |  <a href='APICodeFEE.htm?FK_Flow=" + flowNo + "' >FEE開発API</a> ");
+            $("#TB_FQ").html(basePath + "/App/Simple/Start.aspx");
+            $("#TB_DB").html(basePath + "/App/Simple/ToDoList.aspx");
+            $("#TB_ZT").html(basePath + "/App/Simple/Runing.aspx");
+            $("#TB_CX").html(basePath + "/App/Simple/Search.htm");
+            $("#Msg").html("");
+        });
+        function basePath() {
+            var curWwwPath = window.document.location.href;
+            var pathName = window.document.location.pathname;
+            var pos = curWwwPath.indexOf(pathName);
+            var localhostPaht = curWwwPath.substring(0, pos);
+            var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+            return localhostPaht + projectName;
+        }
+
+    </script>
+</head>
+<body>
+
+    <h3><img style="vertical-align:middle" src='../../Img/Event.png' />開発用API</h3>
+
+    <fieldset>
+        <legend>
+            ログインとポータルAPI
+        </legend>
+        <ol>
+            <li>まず、コード統合と組織統合を行います</li>
+            <li>次に自分のログインに成功したら、ccbpmのフレーム登録を行います。</li>
+            <li>登録とはccbpmの登録インターフェースを呼び出して、左のコードで示します。</li>
+        </ol>
+        <br />
+        <font color=green>
+            // システム承認パスワードとユーザー名を記述するコードの下に、次のコードを書き込む必要があります。
+        </font>
+        <br />
+
+
+        <font color=blue> string</font>  userNo = <font color=red>"zhangsan"; </font>
+        <br />
+        BP.WF.<font color=blue>Dev2Interface</font>.Port_Login(userNo);
+
+    </fieldset>
+
+
+    <fieldset>
+        <legend>メニュー</legend>
+        <ol>
+            <li>新規：一人のユーザが開始できる仕事</li>
+            <li>処理待ち：処理待ちの仕事。</li>
+            <li>途中：参加中だが、該当フローはまだ終わっていません。</li>
+            <li>CC：私が処理する必要はないですが、知る必要がある仕事です。</li>
+        </ol>
+
+        <legend>新規:</legend>
+        <br />
+        //指定された人が開始できるフローのリストを取得し、このインターフェイスを呼び出してデータテーブルを返します。デモを参照して、開始されたリストの出力を実現できます。
+        <br />
+
+        <br />
+        <b>
+            System.Data.<font color=green>DataTable</font> dtStart = BP.WF.<font color=green>Dev2Interface</font>.DB_GenerCanStartFlowsOfDataTable(<font color=red>"zhangsan"</font>);
+            <br />
+        </b>
+        <!-- <br>实现列表输出代码，请参考:  <br>
+        <font color=gree><b id="TB_FQ"></b></font>
+        <br />
+        実行Demo: <a href="./../../App/Simple/Start.htm" target="_blank">フローを新規</a>-->
+
+        <legend>処理待ち:</legend>
+        <br />
+        //指定された人の処理待ちを取得し、このインターフェイスを呼び出してあるデータテーブルを返します。デモを参照して、開始されたリストの出力を実現できます。
+        <br />
+        <font color=green><b>  <font color=green>DataTable</font> dtTodolist = BP.WF.<font color=green>Dev2Interface</font>.DB_GenerEmpWorksOfDataTable();</b></font>
+        <!--<br>实现列表输出代码，请参考:  <br>
+        <font color=gree><b id = "TB_DB"></b></font>
+        <br />
+        実行Demo: <a href="./../../App/Simple/ToDoList.aspx" target="_blank">処理待ち</a>-->
+
+        <legend>途中:</legend>
+        <br />
+        //指定された人の実行中を取得し、このインターフェイスを呼び出してあるデータテーブルを返します、コード参照：
+        <br />
+        <font color=green>DataTable</font> dtRuning = BP.WF.<font color=green>Dev2Interface</font>.DB_GenerRuning();</b>
+        <!--  <br>实现列表输出代码，请参考:  <br>
+        <font color=gree><b id="TB_ZT"></b></font>
+        <br />
+        実行Demo: <a href="./../../App/Simple/Runing.aspx" target="_blank">途中処理</a>-->
+
+        <legend>検索:</legend>
+        <br />
+        //ccbpmはリンクを提供します。このリンクを呼び出すか、自分で実装することができます。
+        <br />
+        <br />リスト出力コードを実現するには、下記を参照してください：<br />
+        <font color=gree><b id="TB_CX"></b></font>
+        <br />
+        実行Demo: <a href="./../../App/Simple/Search.htm" target="_blank">検索</a>
+
+    </fieldset>
+
+
+
+
+    <fieldset>
+        <legend>WorkID作成</legend>
+        <ol>
+            <li>ジョブIDの作成はフロー開始の始まりです。</li>
+            <li>ccbpmの作業IDはInt 64ビットの整数であり、常にシーケンス番号＋1で生成される。</li></li>
+            <li>ワードはグローバルで唯一、重複性がなく、Sys_Serialに記録されています。WorkIDの生成は100から開始する。</li>
+            <li>ワードはグローバルで唯一、重複性がなく、Sys_Serialに記録されています。WorkIDの生成は100から開始する。</li>
+
+        </ol>
+        //フロー番号を渡し、呼び出してジョブIDを作成します。
+        <br />
+        <font color=blue>Int64</font> workid = BP.WF. <font color=blue>Dev2Interface</font>.Node_CreateBlankWork(<font color=red>"001"</font>);
+    </fieldset>
+
+    <fieldset>
+        <legend>送信―簡単送信</legend>
+        <ol>
+            <li>ジョブの送信は、ノードを下に移動させることです</li>
+            <li>インターフェースを呼び出して送信を実行すると、フローエンジン実行中の変数である実行結果のオブジェクトが返されます。</li>
+            <li>この変数を解析して、フローが完了したか、どのノードまで実行したか、次のノードは誰が処理できるかを確認できます。</li>
+            <li>その流れはフローの設計規則に基づいて実行される。</li>
+            <li>その受取人は受け入れ人の規則によって決められます。</li>
+        </ol>
+        <font color=green>//フロー番号が渡され、WorkIDの送信を実行します。</font><br />
+        BP.WF.<font color=blue>SendReturnObjs</font> objs= BP.WF.<font color=blue>Dev2Interface</font>.Node_SendWork(<font color=red>"001"</font>,workid);<br />
+        <br />
+
+        <font color=green> // フローは終了したかをチェックします。 </font><br />
+        <font color=blue>bool</font> isFlowOver = objs.IsStopFlow;<br />
+        <br />
+
+        <font color=green> // どのノードに送信されましたか？ </font><br />
+        <font color=blue>int</font> toNodeID = objs.VarToNodeID;<br />
+        <font color=blue>string</font>  toNodeName = objs.VarToNodeName;<br />
+        <br />
+
+        <font color=green>// 誰に送ったの？注：複数の受信者がいる場合は、コンマで区切ります。 </font><br />
+        <font color=blue>string</font> toEmpID   = objs.VarAcceptersID;<br />
+        <font color=blue>string</font> toEmpName = objs.VarAcceptersName;<br />
+        <br />
+
+        <font color=green>// メッセージ情報を出力します。この情報はユーザにヒントを出すことができます。 </font><br />
+        <font color=blue>string</font> infoMsg = objs.ToMsgOfHtml(); <br />
+        <br />
+    </fieldset>
+
+    <fieldset>
+        <legend>送信-誰に送るか、どのノードに送信するかを指定しますか。（万能送信ポート）</legend>
+        <ol>
+            <li>プログラマが次のステップを誰に送るか、どのノードに送信するかを知っている場合、このインターフェースを呼び出すことができます。</li>
+            <li>このインターフェースは、フローエンジン設計の方向条件ルールと受信者ルールを取り除きます。</li>
+        </ol>
+        <font color=green> //次のステップで到達するノード、次のステップの受信者が決定された（または自分で計算された）場合、次の形式で呼び出すことができます。</font><br />
+        BP.WF.SendReturnObjs objs = null;
+        objs = BP.WF.<font color=blue>Dev2Interface</font>.Node_SendWork(<font color=red>"001"</font>, workid, 103,  <font color=red>"zhangsan"</font> );
+        <br />
+        <font color=green>//1人に送信します。複数の人に送信する場合は、カンマで区切ります。例：zhangsan,lisi,wangwu </font>
+        <br />
+        <br />
+
+        <font color=green>//次の呼び出し方法は、どのノードに送信するかを知ることですが、誰に送信するかは知らず、現在のノードによって定義された受信者ルールに決定させます。</font><br />
+        objs = BP.WF.<font color=blue>Dev2Interface</font>.Node_SendWork(<font color=red>"001"</font>, workid, 103, null);
+        <br />
+        <br />
+
+
+        <font color=green> //次の呼び出し方法は、誰に送信するかを知ることですが、どのノードに送信するかは知りません。現在のノードに、定義する方向条件を決定させます。</font><br />
+        objs = BP.WF.<font color=blue>Dev2Interface</font>.Node_SendWork(<font color=red>"001"</font>, workid, 103,<font color=red>"zhangsan"</font>);
+        <br />
+        <br />
+
+        <font color=green> // メッセージ情報を出力します。この情報はユーザにヒントを出すことができます。</font><br />
+        <font color=blue>string</font> infoMsg = objs.ToMsgOfHtml(); </font>
+        <br />
+    </fieldset>
+
+    <fieldset>
+        <legend>キャンセル</legend>
+        <ol>
+            <li>キャンセルは送信の逆方向操作です。</li>
+            <li>ccbpmで提供された取消しウィンドウを呼び出すことができます。これは最も簡単な方法です。</li>
+            <li>アドレスは：/WF/WorkOpt/UnSend.htmパラメータは：FK_Flow、FK_Node、WorkID、FIDで、現在のフローの4大パラメータです。</li>
+            <li>他の設備で作業する必要がある場合、または自分でインターフェースを書く必要がある場合は、参考してください。</li>
+            <li>取り消されるかどうかは、現在のアクティブノードの取消しルールによって決定される。</li>
+            <li>キャンセル機能は転送中のフローリストに表示され、転送中の作業のみをキャンセルできます。</li>
+            <li>途中は、名前の通り、私が参加してまだ完成していない仕事です。</li>
+            <li>ロールバックフローは、フローが終了したら、再度指定されたノードで、指定された人員を新たに下に向かわせる必要があります。</li>
+        </ol>
+        <font color="green">
+            /*<br />
+            *キャンセルを実行し、キャンセルが成功したかどうかの情報を返します。異常が発生したらキャンセルは失敗します。<br/>
+            *キャンセル失敗の理由はたくさんありますが、最も可能性の高い理由は、現在アクティブなノードがキャンセルルールを許可していないことです。 <br />
+            */<br />
+            <br />
+            <font color=blue>string</font> msg= BP.WF.<font color=blue>Dev2Interface</font>.Flow_DoUnSend(<font color=red>"001"</font>, workID);
+
+        </font>
+        <br />
+    </fieldset>
+
+    <fieldset>
+        <legend>ロールバック</legend>
+        <ol>
+            <li>ロールバックはキャンセルと違い、ロールバックはフロー完了後の操作であり、ロールバックは管理者によって操作されます。</li>
+            <li>ロールバックフローは、フローが終了したら、再度指定されたノードで、指定された人員を新たに下に向かわせる必要があります。</li>
+        </ol>
+        <font color="green">//ロールバックを実行し、ロールバック実行情報を返します。ロールバックが失敗した場合、例外がスローされます。</font>
+        <br />
+        <font color=blue>string</font> msg= BP.WF.<font color=blue>Dev2Interface</font>.Flow_DoRebackWorkFlow(<font color=red>"001"</font>, workID, 103, <font color=red>"承認エラーのため、ロールバックが必要となり、ノード103から再承認が開始される。"</font>);
+    </fieldset>
+
+
+    <fieldset>
+        <legend>払い戻し</legend>
+        <ol>
+            <li>戻すのはccbpmで提供された返却窓口を呼び出すことができます。これは一番簡単な方法です。</li>
+            <li>URL：/WF/WorkOpt/ReturnWork.htm　パラメータは：FK_Flow、FK_Node、WorkID、FIDで、現在のフローの4大パラメータです。</li>
+            <li>他の設備で作業する必要がある場合、あるいは、返却画面を自分で書く必要がある場合、ご参考ください：</li>
+        </ol>
+        <font color="green">
+            /*
+            <br />
+            * 1、現在のノードが戻すことができるノードが得られ、このインターフェースはdatableを返す。
+            <br />
+            * 2、ノードがどのノードに戻すことができるのは、現在のノードの返却規則によって決められている。
+            <br />
+            * 3、キャンセルするには3つのパラメータが必要です。ノード番号、動作ID、フローIDです。線形フローについてはフローIDは常に0です。
+            <br />
+            */
+        </font>
+        <br />
+        System.Data.<font color=blue>DataTable</font> dtCanReturnNodes = BP.WF.<font color=blue>Dev2Interface</font>.DB_GenerWillReturnNodes(103, workid, 0);
+        <br />
+        <font color=green> // 返されるのは、返される可能性のあるノードです。</font>
+
+        <br />
+        <br />
+        <font color=green> //リターンを実行します。現在のノードは103、返されるノードは105です、</font>
+        <br />
+        <font color=blue>string</font> msg = BP.WF.<font color=blue>Dev2Interface</font>.Node_ReturnWork("001", workid, 0, 103, 105, <font color=red>"あなたの申請情報は不完全です。修正して再送信してください。"</font>, <font color=blue>false</font>);
+        <br />
+    </fieldset>
+
+    <fieldset>
+        <legend>引渡し</legend>
+        <ol>
+            <li>引渡しもccbpmで提供された引渡し窓口を呼び出すことができます。これは最も簡単な方法です。</li>
+            <li>URL：/WF/WorkOpt/Forward.htmパラメータは：FK_Flow、FK_Node、WorkID、FIDで、現在のフローの4大パラメータです。</li>
+            <li>引渡しとは自分の仕事を他の人に任せて処理することです。</li>
+            <li>他の設備で作業する必要がある場合、または自分でインターフェースを書く必要がある場合は、参考してください。</li>
+        </ol>
+        <font color="green">
+            <br />
+            /* <br />
+            * 移行インターフェースを起動し、必要なパラメータを入力して移行を実行します。<br />
+            * FID リニアフローでは常に0です。<br />
+            */<br />
+        </font>
+        <br />
+        BP.WF.<font color=blue>Dev2Interface</font>.Node_Shift(<font color=red>"001"</font>, 103, workid, 0, <font color=red>"zhangsan", "出張が必要なので、仕事をお渡しします。"</font>);
+        <br />
+
+        <font color="green">
+            <br />
+            /*<br />
+            * 引渡しを取り消す<br />
+            * 引渡し後、引渡しが不要であることがわかったら、取消インターフェースを呼び出して引渡しを取り消します。<br />
+            */ <br />
+        </font>
+        BP.WF.<font color=blue>Dev2Interface</font>.Node_ShiftUn(<font color=red>"001"</font>, workid);
+
+    </fieldset>
+
+    <fieldset>
+        <legend>裏書き</legend>
+        <ol>
+            <li>裏書きはccbpmで提供された裏書きの窓口を呼び出すことで実行できます。これは一番簡単な方法です。</li>
+            <li>URL：/WF/WorkOpt/Forward.htmパラメータは：FK_Flow、FK_Node、WorkID、FIDで、現在のフローの4大パラメータです。</li>
+            <li>裏書きとは、自分の仕事を他の人の意見を参考にしたり、他の人に処理させたりすることです。</li>
+            <li>裏書きは2つのパターンがあります。1、署名した後、署名者で次のノードに送ります。2、署名した後、現在の人に副署者を送信して、現在の人から次のノードに送ります。</li>
+            <li>他の設備で働く必要がある場合、または自分で裏書き画面を作成する必要がある場合は、参考してください。</li>
+        </ol>
+        <font color=green>
+            <br />
+            /*<br />
+            * 署名インターフェースを呼び出して、必要なパラメータを入力して実行します。<br />
+            * FID リニアフローでは常に0です。<br />
+            */<br />
+        </font>
+        <br />
+
+        <font color=green>//技術者zhangsanがジョブを受け入れた後、[送信]をクリックすると、現在のスタッフに送信され、現在のスタッフが次のノードに送信します。</font><br />
+        <font color=blue>string</font> info1= BP.WF.<font color=blue>Dev2Interface</font>.Node_Askfor(workid, BP.WF.AskforHelpSta.AfterDealSendByWorker, <font color=red>"zhangsan"</font>, <font color=red>"ここでは技術鑑定の意見を提出する必要があります。"</font>);
+        <br />
+        <br />
+
+        <font color=green>//技術者が入力すると、次のノードが直接送信されます。</font><br />
+        <font color=blue>string</font> info2 = BP.WF.<font color=blue>Dev2Interface</font>.Node_Askfor(workid, BP.WF.AskforHelpSta.AfterDealSend, <font color=red>"zhangsan"</font>, <font color=red>"ここでは技術鑑定の意見を提出する必要があります。"</font>);
+        <br />
+        <br />
+        <font color=green>//技術者は承認に返信します。承認は、現在の人によって次のノードに送信されます。</font><br />
+        <font color=blue>string</font> infoReply = BP.WF.<font color=blue>Dev2Interface</font>.Node_AskforReply(<font color=red>"001"</font>, 103, workid,0,  <font color=red>"技術鑑定の意見を出しましたので、参考にしてください。"</font>);
+    </fieldset>
+
+
+    <fieldset>
+        <legend>フローを終了する</legend>
+        <ol>
+            <li>フローを終了するには3つの方法があります</li>
+            <li>最初の種類は最後のノードまで正常に終了します。</li>
+            <li>第二の種類は、特定のノードにおいて、ユーザは、フローの下方向の動きを終了する必要がある（削除フローとは異なる）。</li>
+            <li>第三の種類は、特定のノードにおいて、ユーザは、フローを削除する必要がある。</li>
+        </ol>
+        <font color="green">
+            <br />
+            /*
+            * 手動でフローを終了する方式はログに記録を残ります。<br />
+            */<br />
+        </font>
+
+        <font color="blue">string</font>  overInfo = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoFlowOver(<font color="red">"001" </font>, workID, <font color="red">"サプライヤーが見つかりません、このフローを終了します。"</font>);
+
+
+        <br />
+        /*
+        * フローを削除<br />
+        * 削除フローには様々な方法があります。ユーザーは自分のニーズに応じて、異なる方式を呼び出すことができます。<br />
+        * 最後のパラメータはサブフローを削除するかどうかです。<br />
+        */<br />
+        <br />
+
+        <font color="green">//マークに従ってフローを削除します。</font><br />
+        <font color="blue">string</font> delInfo0 = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoDeleteFlowByFlag(<font color="red">"001"</font>, workID, <font color="red">"休暇はいらないです。"</font>, <font color="blue">true</font>);<br /><br />
+
+        <font color="green">//完全にフローを削除し、ログレコードなし。</font><br />
+        <font color="blue">string</font> delInfo1 = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoDeleteFlowByReal(<font color="red">"001"</font>, workID, <font color="red">"休暇はいらないです。"</font>, <font color="blue">true</font>);<br />
+
+
+        <br />
+        <font color="green">//完全にフローを削除し、ログレコードあり。</font><br />
+        <font color="blue">string</font> delInfo2 = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoDeleteFlowByWriteLog(<font color="red">"001"</font>, workID, <font color="red">"休暇はいらないです。"</font>, <font color="blue">true</font>); <br />
+    </fieldset>
+
+</body>
+</html>

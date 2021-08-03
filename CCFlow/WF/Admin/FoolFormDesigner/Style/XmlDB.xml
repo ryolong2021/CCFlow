@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DS>
+    <MapMenu No="ExpImp" CH="インポート/エクスポート" JS="javascript:ExpImp(@MyPK,@FK_Flow);" Img="./Img/MapExt/ExpImp.png"
+           Note="インポート/エクスポートテーブルテンプレート。" />
+    
+  <MapMenu No="NewF" CH="新規フィールド"   JS="javascript:AddF(@MyPK);"  Img="./Img/Btn/New.gif" 
+           Note="テーブルに項目を新規作成します。" />
+    
+  <MapMenu No="HidAttr" CH="フィールドを隠す" JS="javascript:HidAttr(@MyPK);" Img="./Img/MapExt/HiddenField.png"
+            Note="主に計算と配向条件の設定に使用されます。" />
+
+    <MapMenu No="FGroup" CH="新規フィールドグループ" JS="javascript:GroupFieldNew(@MyPK);" Img="./Img/MapExt/GroupBar.png"
+             Note="同様のフィールドを分離して、表示をより整理します。" />
+    
+  <!--<MapMenu No="CopyF" CH="复制字段"  JS="javascript:CopyFieldFromNode(@MyPK);"  Img="./Img/Btn/Copy.gif"
+           Note="从其它表单中复制字段" />--> 
+    
+  <MapMenu No="DTable" CH="新規サブテーブル" JS="javascript:MapDtl(@MyPK);" Img="./Img/MapExt/Dtl.png"
+           Note="サブテーブルとも言い、例:償還費用のリスト."  /> 
+           
+  <MapMenu No="DM" CH="1対多を増やす"   JS="javascript:MapM2M(@MyPK);" Img="./Img/Btn/ChoseCol.gif" 
+           Note="例:プロジェクト担当者、コース選択." />
+
+    <MapMenu No="DMM" CH="1対多から多に増やす"   JS="javascript:MapM2MM(@MyPK);" Img="./Img/Btn/ChoseCol.gif"
+           Note="例 コレクション内の全員の位置を設定します" />
+    
+  <MapMenu No="Ath" CH="新規付属構成部品"     JS="javascript:Ath(@MyPK);" Img="./Img/MapExt/Attachment.png" 
+           Note="単一の添付ファイルと複数の添付ファイルタイプのデータをアップロードおよび参照する。"/>
+    
+  <MapMenu No="Frm" CH="フレームを設定する"    JS="javascript:MapFrame(@MyPK);" Img="./Img/Frame.gif" 
+           Note="フレーム埋め込みカスタムURL"/>
+
+  <MapMenu No="FrmEvent" CH="フォームイベント"    JS="javascript:FrmEvent(@MyPK);" Img="./Img/MapExt/Event.png"
+             Note="フォームイベント."/>
+
+    <MapMenu11 No="MapExt" CH="拡張設定"    JS="javascript:MapExt(@MyPK);" Img="./Img/MapExt/DTS.gif"
+            Note="特別なアプリケーション要件を達成するためのフォームのビジネスロジック。"/>
+
+  <MapMenu111 No="Sln" CH="アクセス制御方式"    JS="javascript:Sln(@MyPK);" Img="./Img/MapExt/DTS.gif"
+          Note="さまざまなフィールドへのさまざまなノードのアクセス許可アクセスを実現できます."/>
+
+  <MapMenu No="MapExt" CH="フォームの属性"    JS="javascript:MapDataEdit(@MyPK);" Img="./Img/MapExt/DTS.gif"
+            Note="フォームの基本情報、マップされた物理テーブル、表示形式を変更します...　"/>
+
+  <MapMenu No="BatchEdit" CH="一括修正"    JS="javascript:BatchEdit(@MyPK);" Img="./Img/MapExt/DTS.gif"
+            Note="フィールドプロパティを一括で変更します..."/>
+
+    <!--<MapMenu111 No="Ext" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="./Img/Btn/DTS.gif" />-->
+
+  <FExt No="Auto" CH="自動入力" DFor="TB,DDL,Checkbox" />
+  <FExt No="Auto" CH="自動入力" DFor="TB,DDL,Checkbox" />
+  <FExt No="Auto" CH="自動入力" DFor="TB,DDL,Checkbox" />
+  <FExt No="Auto" CH="自動入力" DFor="TB,DDL,Checkbox" />
+  <FExt No="Auto" CH="自動入力" DFor="TB,DDL,Checkbox" />
+
+  <InputCheck No="01" CH="テキストボックスに入力できるのは数値コードのみです（小数点は入力できません）"    JS="this.value=this.value.replace(/\D/g,'')" />
+  <InputCheck No="02" CH="数字のみ入力可能、小数点以下入力可能"    JS="this.value=this.value.replace(/\D/g,'')" />
+
+    <FieldGroup No="IsPass" CH="サブテーブル監査グループ化" CHDesc="合格かどうか、監査担当者、監査日を問わず、3つの監査グループフィールドを一括で追加します。" />
+    <FieldGroup No="Eval"   CH="品質評価" CHDesc="一括で、評価者ID、評価者名、評価スコア、評価内容の4つの監査グループフィールドを追加します。" />
+
+    <!-- 表单事件 -->
+    <FrmEvent No="FrmLoadBefore" CH="ロード前" CHDesc="" />
+    <FrmEvent No="FrmLoadAfter" CH="ロード後"  CHDesc="" />
+    <FrmEvent No="SaveBefore" CH="保存前"    CHDesc="" />
+    <FrmEvent No="SaveAfter" CH="保存後"     CHDesc="" />
+    <FrmEvent No="DtlSaveEnd" CH="サブテーブル保存後"     CHDesc="" />
+</DS>

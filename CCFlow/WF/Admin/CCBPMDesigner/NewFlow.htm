@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>新規フロー</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+
+    <!-- 引用通用的js文件. -->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var model = 0; //运行模式 0专业版 1简洁版
+        var flowSort = "";
+        $(function () {
+
+            //让其落到第一个文本框上，焦点.
+            var flowName = document.getElementById("TB_FlowName");
+            flowName.focus();
+
+            if (window.location.href.indexOf("Simple.htm") > 0)
+                model = 1; //轻量版.
+            
+
+            //流程类型.
+            flowSort = GetQueryString("sort");   
+            flowSort = flowSort.replace("F", "");
+
+            model = GetQueryString("RunModel");
+            if (model == "1") {
+                //简洁版.
+                $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+内蔵フォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.FoolFrm + " selected=true >&nbsp;&nbsp;簡易フォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.DeveloperFrm + " >&nbsp;&nbsp;開発者フォーム</option>");
+
+                $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+カスタムフォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.SelfFrm + " >&nbsp;&nbsp;埋め込みフォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.SDKFrm + " >&nbsp;&nbsp;SDKフォーム（私がカスタマイズしたフォーム）</option>");
+                $(".IsHidden").show();
+
+            } else {
+                $(".IsHidden").hide();
+                $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+内蔵フォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.FoolForm + ">&nbsp;&nbsp;内蔵の簡易フォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.FreeForm + ">&nbsp;&nbsp;内蔵のフリーフォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.FoolTruck + " >&nbsp;&nbsp;内蔵の累積モードフォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公式文書フォーム（2018バージョンはサポートされていません）</option>");
+
+                $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+カスタムフォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.SelfForm + " >&nbsp;&nbsp;埋め込みフォーム</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.SDKForm + " >&nbsp;&nbsp;SDKフォーム（私がカスタマイズしたフォーム）</option>");
+            }
+        });
+        //要返回的json.
+        function getNewFlowInfo() {
+            return {
+                FlowName: $('#TB_FlowName').val(),
+                TreeFlowSort: GetQueryString('sort'),
+                FlowSort: flowSort,
+                DataStoreModel: 1,
+                PTable: $('#TB_PTable').val(),
+                FlowMark: $('#TB_FlowMark').val(),
+                FlowFrmType: $('#DDL_FlowFrmType').val(),
+                FrmUrl: $('#TB_URL').val(),
+                RunModel: model,
+                FlowVersion: 1
+            };
+        }
+
+        ///打开帮助.
+        function OpenFrmHelp() {
+            var url = "http://ccbpm.mydoc.io";
+        }
+        //下拉框变化的时候.
+        function FrmTypeChange() {
+
+            //var model = GetQueryString("RunModel");
+            var model = $("#DDL_FlowFrmType").val();
+            if (model == "0" || model == "1" || model == "2" || model == "7" || model=="10") {
+                $("#TB_URL").attr("disabled", "disabled");
+                $("#TB_URL").attr("value", " 現在は使用できません");
+            }
+            else {
+                $("#TB_URL").attr("disabled", false);
+                $("#TB_URL").attr("value", "");
+            }
+        }
+    </script>
+    <base target=_blank />
+</head>
+<body>
+    <form id="from1" action="">
+        <table class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+            <caption><a href="http://ccflow.ke.qq.com/"><img src='../../Img/FileType/rmvb.gif' />小さなフローを教えてあげます。</a></caption>
+            <tr>
+                <td><font color=red><b>*</b></font>フロー名:</td>
+                <td>
+                    <input id="TB_FlowName" style="width: 200px" />
+                </td>
+                <td> 空ではいけません。例、休暇のフローです。</td>
+            </tr>
+            <!--<tr>
+                <td nowarp="true"><font color="red"><b>*</b></font>データストレージモード</td>
+                <td>
+                    <select id="DDL_DataStoreModel" class="easyui-combobox" style="width:200px;" >
+                        <option value="1"  selected="true">データ統合モード</option>
+                        <option value="0">データトラックモード</option>
+                    </select>
+                </td>
+                <td> <font  color="gray">各ノードのデータを保持する必要があれば、1種目のモードを選択してください。</font></td>
+            </tr>-->
+            <tr>
+                <td>フローデータテーブル:</td>
+                <td>
+                    <input id="TB_PTable" style="width: 200px" />
+                </td>
+                <td> <font color="gray"><a href="http://ccbpm.mydoc.io/?v=5404&t=17897" target=_blank> <img src='../../Img/Help.png' /></a></font></td>
+            </tr>
+
+            <tr class="IsHidden">
+                <td>デフォルトのフォームモード</td>
+                <td>
+                    <select id="DDL_FlowFrmType" onchange="FrmTypeChange()"></select>
+                </td>
+                <td>
+                    <!--<a href="javascript:OpenFrmHelp()"><img src='../../Img/Help.png' />帮助</a>-->
+                </td>
+            </tr>
+
+            <tr class="IsHidden" id="trfrm">
+                <td>フォームのURL</td>
+                <td>
+                    <input disabled="disabled" value="&nbsp&nbsp&nbsp現在は使用できません" id="TB_URL" style="width:200px" />
+                </td>
+                <td>  </td>
+            </tr>
+
+            <tr>
+                <td nowarp="true" style="width:20%;">
+                    フローマーク:
+                </td>
+                <td>
+                    <input id="TB_FlowMark" style="width: 200px" />
+                </td>
+                <td> <a href="http://ccbpm.mydoc.io/?v=5404&t=16847"><img src='../../Img/Help.png' /></a></td>
+            </tr>
+        </table>
+
+    </form>
+</body>
+</html>

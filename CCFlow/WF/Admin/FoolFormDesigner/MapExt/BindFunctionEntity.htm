@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>メッセージ通知</title>
+
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+
+    <base target="_self" />
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.ExtType = "BindFunction";
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.Tag = GetQueryString("FK_Event");
+            en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
+            var i = en.RetrieveFromDBSources();
+
+            $("#Btn_Save").attr("value", "保存：" + GetQueryString("FK_Event") + "イベント");
+
+            GenerFullAllCtrlsVal(en);
+
+            //设置按钮是否可以用?
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+
+            $("#table1").attr("title", en.Tag + " - イベント");
+
+        });
+
+        function Delete() {
+
+            if (window.confirm('削除してもよろしいですか？') == false)
+                return;
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.ExtType = "BindFunction";
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.Tag = GetQueryString("FK_Event");
+            en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
+            en.Delete();
+
+            alert("削除しました");
+            window.location.href = window.location.href;
+        }
+
+        function Save() {
+            var en = new Entity("BP.Sys.MapExt");
+            en.CopyURL();
+            en.CopyForm();
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.ExtType = "BindFunction";
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.Tag = GetQueryString("FK_Event");
+            if (en.Tag1 == "") {
+                alert("関数名は空ではいけません。");
+                return;
+            }
+
+            en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
+            var i = en.Save();
+
+            alert("正常に保存しました...");
+            BackTo();
+            //window.location.href = window.location.href;
+        }
+
+        function BackTo() {
+            var FK_MapData = GetQueryString("FK_MapData");
+            var AttrOfOper = GetQueryString("KeyOfEn");
+            window.location.href = "BindFunction.htm?FK_MapData=" + FK_MapData + "&KeyOfEn=" + AttrOfOper;
+        }
+    </script>
+
+</head>
+<body style="font-size: smaller">
+    <form method="post" id="form1">
+        <table id="table1" name="table1" style=" width:98%; ">
+            <caption> イベント</caption>
+
+            <tr>
+                <td>関数名</td>
+                <td>
+                    <input type="text" id="TB_Doc" name="TB_Doc" style="width:99%" />
+                </td>
+                <td>例：MyFunc() </td>
+            </tr>
+
+
+            <tr>
+                <td>コメント</td>
+                <td>
+                    <input type="text" id="TB_Tag1" name="TB_Tag1" style="width:99%" />
+                </td>
+                <td>この関数の説明</td>
+            </tr>
+        </table>
+
+        <input type="button" value="Save" id="Btn_Save" onclick="Save();" />
+        <input type="button" value="削除" id="Btn_Delete" name="Btn_Delete" onclick="Delete();" />
+        <input type="button" value="戻る" id="Back" name="Back" onclick="BackTo();" />
+
+        <fieldset>
+            <legend> ヘルプ</legend>
+            <ul>
+                <li>1.関数をカスタマイズして、テキストボックスに関数名を設定します。</li>
+                <li>2. この関数は\DataUser\JSLibData\FrmID_Self.jsに書き込むことができます。</li>
+                <li>3. この関数が汎用の関数であれば、CCFormRef.jsに書き込むことができます。</li>
+            </ul>
+        </fieldset>
+    </form>
+
+    <fieldset>
+        <legend>関数メソッドキャリア</legend>
+        <ul>
+            <li>共通メソッドの場合は、\DataUser\JSLabData\CCFormRef.jsに書き込んでください。</li>
+            <li>パーソナライズ方法の場合は、次のファイルに書き込んでください。\DataUser\JSLabData\<b><font color=red>@FrmID</font></b>_Self.js， @FrmIDは現在のフォームのIDです。</li>
+            <li><b>二つ以上のjsファイルはシステムで自動的にフォームにロードされます。</b></li>
+            <li>この方法では、JQueryの文法を使って、他のフィールドを操作できます。</li>
+            <li>例：休暇開始日と終了日で休暇日数を計算します。以下を参照してください：<font color="red">\DataUser\JSLabData\DemoGenerFunctions.js</font>内部メソッド。</li>
+            <li>スクリプトを作成する場合、$("#TB_QingJiaRiQiCong")を使用して、テキストボックスのテキストボックスオブジェクトを取得できます。</li>
+            <li>プルダウンリストの場合は$("#DDL_QingJiaLeiXing").val() でオブジェクトを取得します</li>
+            <li>Boolean型のデータは$("#CB_HunFou")によってオブジェクトを獲得します。</li>
+            <li>ラジオボタン型のデータは$("#RB_QingJiaLeiXing") によってオブジェクトを取得されます。</li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

@@ -1,0 +1,322 @@
+<form id="setmailform">
+    
+    <div class="o-modal o-modal--fullscreen o-modal--has-footer" id="setmailarea">
+        <!--<div class="p-wrapper">-->
+        <div class="o-modal__window">
+            <main class="o-modal__body">
+                <a class="a-modal-back-button o-modal__back-button back-to-list-page">
+                    <i class="a-icon a-icon--back"></i>
+                    一覧へ
+                </a>
+                <section class="m-section p-setting-input-form__heading">
+                    <h1 class="a-heading a-heading--h1 undefined"><span class="a-heading__label">自動送信メール設定</span></h1>
+                </section>
+                <section class="m-section m-section--fill-white p-setting-input-form__wrapper">
+                    <section class="m-section p-setting-input-form__body">
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">管理用タイトル</span></h3>
+                        <p class="a-text a-text--align-left">管理者がどの目的で作成したメールかを理解するための項目です。メール受信者には表示されません。</p>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">
+                                管理用タイトル
+                                <span class="m-form-field__label-addons kakunin-btn">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="a-text-field a-text-field--type-text"><input type="text" name="management_title" id="management_title" class="a-text-field__input" maxlength="100" /></div>
+                                    <input type="hidden" id="mode_kbn" />
+                                    <input type="hidden" id="management_id" />
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">送信タイミング</span></h3>
+                        <p class="a-text a-text--align-left">送信タイミングを設定してください。</p>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">
+                                ワークフロー
+                                <span class="m-form-field__label-addons kakunin-btn">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <!--<div class="a-pulldown">-->
+                                    <div class="a-pulldown" id="workflow_p_div">
+                                        <select name="workflow" id="workflow" class="a-pulldown__select">
+                                        </select>
+                                        <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">
+                                申請者区分
+                                <span class="m-form-field__label-addons kakunin-btn">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="a-pulldown" id="seisinsyakbn_p_div">
+                                        <select name="seisinsyakbn" id="seisinsyakbn" class="a-pulldown__select">
+                                        </select>
+                                        <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">
+                                ステータス
+                                <span class="m-form-field__label-addons kakunin-btn">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="a-pulldown" id="sendtimingkbn_p_div">
+                                        <select name="sendtimingkbn" id="sendtimingkbn" class="a-pulldown__select">
+                                        </select>
+                                        <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                    </div>
+                                    <p class="a-text a-text--align-left p-input-form__label">になった時</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">送信先</span></h3>
+                        <p class="a-text a-text--align-left">
+                            送信先を選択してください。（複数選択可）<br />
+                            送信先は、メーリングリスト設定より登録できます。<br />
+                            その他の送信先がある場合は、メールアドレスでも指定ができます。
+                        </p>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <p class="a-text">
+                                <span class="a-approval-status-item__title">
+                                    ※送信先Toとその他の送信先を少なくとも1つを設定してください。
+                                    <span class="m-form-field__label-addons kakunin-btn">
+                                        <span class="a-tag">必須</span>
+                                    </span>
+                                </span>
+                            </p>
+                            <label class="m-form-field__label">TO:
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6" id="email_to">
+                                    <label class="a-checkbox a-checkbox--button" id="email_to_label">
+                                        <input type="checkbox" class="a-checkbox__input" name="email_to_checkbox[]" />
+                                        <div class="a-checkbox__body">
+                                            <span class="a-checkbox__indicator"><i class="a-icon a-icon--check-purple"></i></span>
+                                            <div class="a-checkbox__label"></div>
+                                        </div>
+                                        <input type="hidden" name="hidden_email_to" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">その他の送信先</label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="m-recipient-input">
+                                        <template class="m-recipient-input__template">
+                                            <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                        </template>
+                                        <ul class="m-recipient-input__list" id="email_to_other">
+                                            <li class="m-recipient-input__item">
+                                                <div class="m-recipient-input__input">
+                                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                                </div>
+                                                <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                            </li>
+                                            <li class="m-recipient-input__item">
+                                                <div class="m-recipient-input__input">
+                                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                                </div>
+                                                <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                            </li>
+                                        </ul>
+                                        <div class="m-recipient-input__add-button"><button type="button" class="a-add-item-button"><i class="a-icon a-icon--add-item"></i>メールアドレスを追加</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">CC:</label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6" id="email_cc">
+                                    <label class="a-checkbox a-checkbox--button" id="email_cc_label">
+                                        <input type="checkbox" class="a-checkbox__input" name="email_to_checkbox[]" />
+                                        <div class="a-checkbox__body">
+                                            <span class="a-checkbox__indicator"><i class="a-icon a-icon--check-purple"></i></span>
+                                            <div class="a-checkbox__label"></div>
+                                        </div>
+                                        <input type="hidden" name="hidden_email_cc" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label m-form-field__label--normal">その他の送信先</label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="m-recipient-input">
+                                        <template class="m-recipient-input__template">
+                                            <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                        </template>
+                                        <ul class="m-recipient-input__list" id="email_cc_other">
+                                            <li class="m-recipient-input__item">
+                                                <div class="m-recipient-input__input">
+                                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                                </div>
+                                                <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                            </li>
+                                            <li class="m-recipient-input__item">
+                                                <div class="m-recipient-input__input">
+                                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                                </div>
+                                                <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                            </li>
+                                        </ul>
+                                        <div class="m-recipient-input__add-button"><button type="button" class="a-add-item-button"><i class="a-icon a-icon--add-item"></i>メールアドレスを追加</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">BCC:</label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6" id="email_bcc">
+                                    <label class="a-checkbox a-checkbox--button" id="email_bcc_label">
+                                        <input type="checkbox" class="a-checkbox__input" name="email_to_checkbox[]" />
+                                        <div class="a-checkbox__body">
+                                            <span class="a-checkbox__indicator"><i class="a-icon a-icon--check-purple"></i></span>
+                                            <div class="a-checkbox__label"></div>
+                                        </div>
+                                        <input type="hidden" name="hidden_email_bcc" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label m-form-field__label--normal">その他の送信先</label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="m-recipient-input">
+                                        <template class="m-recipient-input__template">
+                                            <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                        </template>
+                                        <ul class="m-recipient-input__list" id="email_bcc_other">
+                                            <li class="m-recipient-input__item">
+                                                <div class="m-recipient-input__input">
+                                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                                </div>
+                                                <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                            </li>
+                                            <li class="m-recipient-input__item">
+                                                <div class="m-recipient-input__input">
+                                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                                </div>
+                                                <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                            </li>
+                                        </ul>
+                                        <div class="m-recipient-input__add-button"><button type="button" class="a-add-item-button"><i class="a-icon a-icon--add-item"></i>メールアドレスを追加</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">内容</span></h3>
+                        <p class="a-text a-text--align-left">申請者や承認者の名前、申請内容の詳細などをメール文面に記載したい場合は、埋め込みコマンドをご利用ください。</p>
+                        <a class="a-modal-opener undefined" href="./setting-option.html" target="_Blank">
+                            埋め込みコマンド
+                            <i class="a-icon a-icon--link-new-window"></i>
+                        </a>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">
+                                件名
+                                <span class="m-form-field__label-addons kakunin-btn test-email-btn_2">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="a-text-field a-text-field--type-text"><input type="text" name="email_temp_name" id="email_temp_name" class="a-text-field__input" maxlength="100" /></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label">
+                                テキスト
+                                <span class="m-form-field__label-addons kakunin-btn test-email-btn_2">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="a-email-template-editor" id="email_template_editor">
+                                        <div class="a-email-template-editor__body"></div>
+                                        <input type="hidden" name="hidden_temp_text" id="hidden_temp_text" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="m-section m-section--card-border p-setting-input-form__test-transmission">
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">テスト送信</span></h3>
+                        <p class="a-text a-text--align-left">実際に稼働を開始する前に、件名やテキストに誤りがないか、テスト送信をして確認しましょう。<br />問題なければ確認へ進んでください。</p>
+                        <div class="m-form-field p-setting-input-form__form-field">
+                            <label class="m-form-field__label m-form-field__label--normal">
+                                その他の送信先
+                                <span class="m-form-field__label-addons test-email-btn_1">
+                                    <span class="a-tag">必須</span>
+                                </span>
+                            </label>
+                            <div class="m-form-field__content">
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                    <div class="m-recipient-input">
+                                        <template class="m-recipient-input__template">
+                                            <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                        </template>
+                                        <ul class="m-recipient-input__list" id="test_email_div">
+                                            <li class="m-recipient-input__item">
+                                                <div class="m-recipient-input__input">
+                                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input input-group-email" name="test_email_input1" id="test_email_input1" /></div>
+                                                </div>
+                                                <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                            </li>
+                                            <li class="m-recipient-input__item">
+                                                <div class="m-recipient-input__input">
+                                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input input-group-email" name="test_email_input2" id="test_email_input2" /></div>
+                                                </div>
+                                                <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                            </li>
+                                        </ul>
+                                        <div class="m-recipient-input__add-button"><button type="button" class="a-add-item-button" id="add_test_email"><i class="a-icon a-icon--add-item"></i>送信アドレスを追加</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="a-button a-button--secondary" id="test_send_btn" type="button">
+                            <div class="a-button__label">テスト送信</div>
+                        </button>
+                    </section>
+                </section>
+                <section class="m-section p-footer-action">
+                    <p class="a-text a-text--align-left">内容を確認して次へ進んでください。</p>
+                    <div class="m-button-container m-button-container--veritcal">
+                        <button class="a-button a-button--third a-button--huge cancel-confirm-button back-to-list-page" type="button">
+                            <div class="a-button__label">保存せずに終了</div>
+                        </button>
+                        <button class="a-button a-button--primary a-button--huge" id="input-form-check-button" type="button">
+                            <div class="a-button__label">確認</div>
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </div>
+        <!--</div>-->
+
+    </div>
+
+</form>

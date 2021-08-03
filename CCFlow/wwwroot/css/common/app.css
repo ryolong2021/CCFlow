@@ -1,0 +1,172 @@
+﻿/* チェックエラー枠 */
+input.error, textarea.error, div.error-other {
+    border-color: #eb4141 !important
+}
+
+/* チェックエラーメッセージ */
+div.error {
+    margin-top: 12px;
+    line-height: 19px;
+    color: #eb4141
+}
+
+/**
+ * Add the correct display in IE 10-.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* スクロールバーの設定 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: none;
+    background: linear-gradient(90deg,#e369c6,#b60081);
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 10px;
+    background: transparent;
+}
+
+/* ▼▼▼一覧中のトロプダウンリストの定義▼▼▼ */
+
+/* 手配業者依頼一覧表示用 */
+.cp_ipselect_arrange_trader {
+    width: 151px;
+}
+
+/* GLCメンテナンス依頼一覧表示用 */
+.cp_ipselect_glc {
+    width: 90px;
+}
+
+.cp_ipselect {
+    overflow: hidden;
+    /*width: 151px;*/
+    margin: 1em auto;
+    text-align: center;
+}
+
+.cp_ipselect select {
+    width: 100%;
+    padding-right: 1em;
+    cursor: pointer;
+    text-indent: 0.01px;
+    text-overflow: ellipsis;
+    border: none;
+    outline: none;
+    background: transparent;
+    background-image: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.cp_ipselect select::-ms-expand {
+    display: none;
+}
+
+.cp_ipselect.cp_sl01 {
+    position: relative;
+    /*border: 1px solid #e369c6;*/
+    border: 1px solid #bbbbbb;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.cp_ipselect.cp_sl01::before {
+    position: absolute;
+    top: 0.8em;
+    right: 0.9em;
+    width: 0;
+    height: 0;
+    padding: 0;
+    content: '';
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #666666;
+    pointer-events: none;
+}
+
+.cp_ipselect.cp_sl01 select {
+    padding: 8px 38px 8px 8px;
+    color: #666666;
+}
+/* ▲▲▲一覧中のトロプダウンリストの定義▲▲▲ */
+
+/* ▼▼▼datetimepickerの定義▼▼▼ */
+.xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_today {
+    color: #b60081;
+}
+
+.xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_default, .xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_current, .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box > div > div.xdsoft_current {
+    background: linear-gradient(90deg,#e369c6,#b60081);
+    box-shadow: #b60081 0 1px 3px 0 inset;
+    color: #fff;
+}
+
+.xdsoft_datetimepicker .xdsoft_calendar td:hover,
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box > div > div:hover {
+    color: #b60081 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+.xdsoft_datetimepicker .xdsoft_label > .xdsoft_select > div > .xdsoft_option:hover {
+    color: #fff;
+    background: #b60081;
+}
+
+.xdsoft_datetimepicker .xdsoft_datepicker {
+    width: 350px;
+}
+
+.xdsoft_datetimepicker .xdsoft_calendar td, .xdsoft_datetimepicker .xdsoft_calendar th {
+    border: 0px solid #ddd;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 5px;
+    height: 40px;
+}
+
+.xdsoft_datetimepicker {
+    border-radius: 12px;
+}
+
+.xdsoft_datetimepicker .xdsoft_year {
+    width: 60px;
+}
+
+.xdsoft_datetimepicker .xdsoft_label > .xdsoft_select > div > .xdsoft_option.xdsoft_current {
+    background: #b60081;
+}
+/* ▲▲▲datetimepickerの定義▲▲▲ */
+
+/* ▼▼▼一覧ソート機能のクラスの定義▼▼▼ */
+.sort-up {
+    position: relative;
+    left: 5px;
+    bottom: 7px;
+    width: 10px;
+    height: 10px;
+}
+
+.sort-down {
+    position: relative;
+    right: 5px;
+    top: 7px;
+    width: 10px;
+    height: 10px;
+}
+
+.sort-cursor {
+    cursor: pointer;
+}
+/* ▲▲▲一覧ソート機能のクラスの定義▲▲▲ */

@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>フローは、日付計算ルールを完了する必要があります</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .input {
+            width: 95%;
+            height: 20px;
+        }
+    </style>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <!-- ccbpm -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <base target="_self" />
+    <script src="../Admin.js"></script>
+    <script type="text/javascript">
+        ////全局变量
+        //var FK_Flow; 	//流程id
+
+
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;読み込み中です。しばらくお待ちください......");
+
+            InitPage();
+
+            $("#Msg").html("");
+
+        });
+
+        function InitPage() {
+
+            var fk_flow = GetQueryString("FK_Flow");
+
+            var data = new Entity("BP.WF.Flow", fk_flow);
+            fk_flow = fk_flow.replace(/^0+/, "");
+            var FK_MapData = "ND" + fk_flow + "Rpt";
+
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", FK_MapData);
+
+            //按照时间点的考核方式
+            var SDTOfFlowRole = data.SDTOfFlowRole;
+            if (SDTOfFlowRole == null || SDTOfFlowRole == undefined || SDTOfFlowRole == '') {
+                $("input[name='RB_SDTOfFlowRole'][value='0']").attr("checked", true);
+
+            } else {
+                $("input[name='RB_SDTOfFlowRole'][value=" + SDTOfFlowRole + "]").attr("checked", true);
+
+            }
+            //查询日期字段下拉框所有值
+            var options = "";
+            for (var i = 0; i < mapAttrs.length; i++) {
+                if (mapAttrs[i].MyDataType != 6 && mapAttrs[i].MyDataType != 7)
+                    continue;
+                if (mapAttrs[i].KeyOfEn == "RDT" || mapAttrs[i].KeyOfEn == "CDT" || mapAttrs[i].KeyOfEn == "FlowEnderRDT" || mapAttrs[i].KeyOfEn == "FlowStartRDT")
+                    continue;
+                options += "<option value=" + mapAttrs[i].KeyOfEn + ">" + mapAttrs[i].Name + "</option>";
+            }
+            //日期字段下拉框赋值
+            $("#DDL_StartFields").append(options);
+            $("#DDL_Fields").append(options);
+            //计划开始时间
+            var SDTOfFlowRole_StartDateField = data.GetPara("SDTOfFlowRole_StartDateField");
+            if (SDTOfFlowRole_StartDateField == null || SDTOfFlowRole_StartDateField == undefined || SDTOfFlowRole_StartDateField == '') {
+                $("#DDL_StartFields").val(0);
+            } else {
+                $("#DDL_StartFields").val(SDTOfFlowRole_StartDateField);
+            }
+            //流程计划完成时间
+            var SDTOfFlowRole_DateField = data.GetPara("SDTOfFlowRole_DateField");
+            if (SDTOfFlowRole_DateField == null || SDTOfFlowRole_DateField == undefined || SDTOfFlowRole_DateField == '') {
+                $("#DDL_Fields").val(0);
+            } else {
+                $("#DDL_Fields").val(SDTOfFlowRole_DateField);
+            }
+
+            //sql语句赋值
+
+            $("#TB_SQL").val(data.SDTOfFlowRoleSQL);
+            //天数赋值
+            var SDTOfFlowRole_Days = data.GetPara("SDTOfFlowRole_Days");
+            $("#TB_Days").val(SDTOfFlowRole_Days);
+            $("#Msg").html("");
+
+        }
+
+        function Save() {
+
+
+            //流程应完成日期计算规则保存.
+            var flow = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
+            var SDTOfFlowRole = $('input:radio[name="RB_SDTOfFlowRole"]:checked').val();
+            flow.SDTOfFlowRole = SDTOfFlowRole
+
+            var SDTOfFlowRole_DateField = $("#DDL_Fields").val();
+            flow.SetPara("SDTOfFlowRole_DateField", SDTOfFlowRole_DateField); //按表单字段的字段
+
+            var SDTOfFlowRole_StartDateField = $("#DDL_StartFields").val();
+            flow.SetPara("SDTOfFlowRole_StartDateField", SDTOfFlowRole_StartDateField);
+
+            var SDTOfFlowRole_Days = $("#TB_Days").val();
+            flow.SetPara("SDTOfFlowRole_Days", SDTOfFlowRole_Days); //按规定的天数
+
+
+            flow.SDTOfFlowRoleSQL = $("#TB_SQL").val();//按sql
+
+            flow.Update();
+            window.location.href = window.location.href;
+        }
+
+        function Help() {
+            var url = "http://ccbpm.mydoc.io";
+            window.open(url);
+        }
+    </script>
+</head>
+<body>
+    <div id="bar" class="cs-tr cs-bar">
+        <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+    </div>
+    <fieldset>
+        <legend>
+            <input type="radio" name="RB_SDTOfFlowRole" id="RB_None" value="0">
+            <!-- checked="checked"> -->
+            <label for="RB_None">
+                不使用(デフォルト)
+            </label>
+        </legend>
+        <ul style="color: Gray">
+            <li>不使用ルール</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <input type="radio" name="RB_SDTOfFlowRole" id="RB_BySpecDateField" value="1">
+            <label for="RB_BySpecDateField">
+                ノードフォームの日付フィールドより計算する
+            </label>
+            <br />
+            <br />
+        </legend>
+        計画開始日のフィールドを選択してください。
+        <select id="DDL_StartFields">
+            <option value="0">--選択してください--</option>
+        </select>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        計画完了日のフィールドを選択してください。
+        <select id="DDL_Fields">
+            <option value="0">--選択してください--</option>
+        </select>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <input type="radio" name="RB_SDTOfFlowRole" id="RB_BySQL" value="2">
+            <label for="RB_BySQL">
+                sqlで計算する
+            </label>
+            <br />
+            <br />
+        </legend>
+        <input type="text" value="" id="TB_SQL" name="TB_SQL" style="width: 90%;" />
+        <br />
+        例：SELECT myfield FROM xxxx WHERE OID=@WorkID戻り値は、次のような文字列型データです：2019-09-09
+    </fieldset>
+    <fieldset>
+        <legend>
+
+            <input type="radio" name="RB_SDTOfFlowRole" id="RB_ByAllNodes" value="3">
+            <label for="RB_ByAllNodes">すべてのノードに設定した時間の合計によって計算します。</label>
+        </legend>
+        <ul>
+            <li>一つのフローには複数のノードがあり、各ノードには完了すべき日数が設定されている。</li>
+            <li>一つのフローが完了するべき日数は、すべてのノードの効率評価のデータの合計である。</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>
+
+            <input type="radio" name="RB_SDTOfFlowRole" id="RB_ByDays" value="4">
+            <label for="RB_ByDays">所定の日数で計算する。</label>
+        </legend>
+        <ul>
+            <li>フローが完了する必要がある日数を入力してください。<input type="text" value="" id="TB_Days" name="TB_Days" /></li>
+            <li>設定された日数によって、該当フローの完成すべき日付を計算します。</li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>ヘルプ</legend>
+        <ul>
+            <li>フローインスタンス表WF_GenerWorkFlowのSDTOfFlowのフィールドは、フローを識別するためのインスタンスがいつ完了するべきかを示すために使用されます。</li>
+            <li>この機能は、フローの完了日を設定します。WF_GenerWorkFlowのSDTOfFlowのフィールドに設定します。</li>
+            <li>全体のフローの完成すべき日は計画完了日とも言える。</li>
+            <li>
+                プランの完了日を変更する場合は、次のイベントを呼び出すことができます：UPDATE WF_GenerWorkFlow SET SDTOfFlow=(SELECT MYFILE FROM XXX
+                WHERE OID=@WorkID ) WHERE WorkID=@WorkID
+            </li>
+        </ul>
+    </fieldset>
+
+
+    
+
+    <div id="Msg">
+    </div>
+
+</body>
+</html>

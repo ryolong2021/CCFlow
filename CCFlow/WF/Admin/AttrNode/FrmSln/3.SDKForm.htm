@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var nodeID = 0;
+        $(function () {
+            InitBar(FormSlnType.SDKForm);
+            //获取节点属性
+            nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            if (node.FormType == FormSlnType.SDKForm) {
+                document.getElementById("TB_FormURL").value = node.FormUrl;
+            }
+
+        });
+        //节点表单组件属性.
+        function ShowFWCAttr() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=" + nodeID;
+            OpenEasyUiDialogExt(url, 'ノードフォームコンポーネント', 1000, 600, false);
+        }
+        function Save() {
+
+            //更新节点表单类型.
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.FormType = FormSlnType.SDKForm;
+            node.FormUrl = document.getElementById("TB_FormURL").value;
+
+            if (node.FormUrl == "") {
+                alert('urlを入力しなければなりません');
+                return;
+            }
+            node.Update();
+
+            //更新表单类型.
+            //var frmID = "ND" + nodeID;
+            //var mapData = new Entity("BP.Sys.MapData", frmID);
+            //mapData.FrmType = FormSlnType.SDKForm;
+            //mapData.Update();
+
+            alert("正常に保存しました。");
+        }
+
+        
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>バインディングurl設定 - <a href="javascript:ShowHidden('DivHelp1')">例を記入してください</a> - <a href="javascript:ShowFWCAttr()">コンポーネントのプロパティ</a> </legend>
+        <br />
+        <table style="width:100%; border-color:antiquewhite">
+            <tr>
+                <td>URLを入力してください:</td>
+                <td style="width:70%;">
+                    <input type="text" placeholder="SDKフォームのURLを入力してください" value="" id="TB_FormURL" name="TB_FormURL"
+                           style="width:90%;" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="DivHelp1" class="help" style="color: blue; display: none">
+                        <ul>
+                            <li>例 /XXX/Abc.htmを入力したら、システムは自動的にシステム変数に取り込みます。</li>
+                            <li>url: /XXX/Abc.htm?WorkID=1223&FK_Node=105&FK_Flow=001&UserNo=zhangsan&SID=xcwwxccsdsdsd</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+        <br />
+
+    </fieldset>
+     
+    <fieldset>
+        <legend id="help">開発の説明</legend>
+        <ul>
+            <li>SDKフォームはccbpmで、インタフェースの展示を開発者に任せています。開発者はフォームを設計するだけで、送信ボタンを追加して、ccbpmの送信APIを呼び出して完成できます。</li>
+            <li>絶対パスを使用すれば、ccbpmのグローバル変数@SDKFromServHost を使用することができます。例えば、@SDKFromServHost/MyFile.htm </li>
+            <li>例：/SDKFlowDemo/QingJia/S1_TianxieShenqingDan.jsp , /SDKFlowDemo/QingJia/S1_TianxieShenqingDan.htm</li>
+            <li>ccbpmチームはあなたのためにdemoフロー\フローツリー\SDKフロー\このカタログには多くのSDKモードの流れがあります。ご参考ください。</li>
+            <li>実行効果図</li>
+            <li><img class="HelpImg" src="SDKFrm.png" /></li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

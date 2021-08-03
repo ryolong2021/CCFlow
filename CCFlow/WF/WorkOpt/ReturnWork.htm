@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>戻る</title>
+    <!--
+    1, インターフェイスを戻す。
+    2FK_が必要ですFlow，FK_Node、WorkID、FID.
+    3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
+    4. ボタンを確定したら、メインウィンドウを閉じます。
+    5.親のフローとして返却した場合、サブフローが起動している場合は返却機能を実行できません。
+    6.サブフローの返却時に、フラットサブフローが起動されている場合、リターン機能は実行されません。
+    7.指定されたノードに返却し、返却されたノードの間にサブフローまたはフラットサブフローが起動されているノードがあれば、処理しないで正常に返却します。
+    -->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <script src="../Scripts/commonYangYH.js"></script>
+    <!-- 导入配置文件. -->
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script src="../InitMapAttr.js"></script>
+    <style type="text/css">
+        body {
+            background: transparent;
+        }
+
+            body div {
+                text-align: left;
+                margin: 20px auto;
+            }
+
+        #Message {
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript">
+        var pageData = {};
+        $(function () {
+
+            //初始化页面退回信息.
+            pageData = {
+                FK_Node: GetQueryString('FK_Node'),
+                WorkID: GetQueryString('WorkID'),
+                FID: GetQueryString('FID'),
+                Message: GetQueryString('Info'),
+                FK_Flow: GetQueryString("FK_Flow")
+            };
+
+            //如果有退回信息字段，就让其绑定到，退回原因的文本框里.
+            if (pageData.Message != undefined && pageData.Message != '') {
+                $('#TB_Doc').val(pageData.Message);
+            }
+
+            //调用接口，传入url的参数。
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData(); //FK_Flow, FK_Node,WorkID,Info info=情報フィールドに戻る。
+
+            //初始化数据.
+            var data = handler.DoMethodReturnString("Return_Init");
+            if (data.indexOf('info@') == 0) {
+
+                //这种情况下，有可能是自动退回，自动退回就提示退回消息.
+
+                //设置弹出框的大小
+                $(".modal-content", parent.document).css("width", "");
+                $(".modal-content", parent.document).css("height", "300px");
+
+                $("#iframeReturnWorkForm", parent.document).css("height", "300px");
+
+                data = data.replace('info@', '');
+                data = data.replace(/null/g, '');
+                data = "<font>" + data + "</font>";
+                $("#Msg").html("");
+                $("#DIV_Nodes").html(data);
+                $("#DIV_Doc").html("");
+                $("#btnReturn").css("display", "none");
+                $("#btnIsBackTracking").css("display", "none");
+                $("#btnClose").attr("onclick", "Close(1)");
+                return;
+            }
+
+            //对与非法的调用，系统会提示，比如：不应该退回而退回，已经发送到下一个节点还要执行退回等等.
+            if (data.indexOf('err@') == 0) {
+
+                //console.error("退回窗口错误信息" + data);
+
+                data = data.replace('err@', '');
+                data = "<font color=red>" + data + "</font>";
+                $("#Msg").html(data);
+                //  alert(data);
+                return;
+            }
+
+            //启用了退回扩展字段,  退回的考核信息，就是扩充了其他的字段，这里不翻译了.
+            var node = new Entity("BP.WF.Node", pageData.FK_Node);
+            if (node.ReturnCHEnable == 1) {
+                var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                mapAttrs.Retrieve("FK_MapData", "BP.WF.ReturnWorks", "Idx");
+                var idx = 0;
+                if (mapAttrs.length != 0) {
+                    $("#ReturnCH").show();
+                    var html = " ルール情報審査に戻る：";
+                    html += "<table style='width:100%;'>";
+                    for (var i = 0; i < mapAttrs.length; i++) {
+                        if (mapAttrs[i].AtPara.indexOf("FK_Flow=" + pageData.FK_Flow) != -1) {
+                            idx++;
+                            if ((idx + 1) % 2 == 0)
+                                html += "<tr>";
+                            html += "<td>" + mapAttrs[i].Name + "</td>";
+                            html += "<td  style='text-align:left'>";
+                            html += InitAthMapAttrOfCtrlFool(null, mapAttrs[i], null);
+                            html += "</td>";
+                            if (idx % 2 == 0)
+                                html += "</tr>";
+                        }
+
+                    }
+                    html += "</table>";
+                    if (idx != 0) {
+                        $("#ReturnCH").html(html);
+                    }
+                }
+            }
+
+            //获得可以退回的节点集合。
+            var returnNodeArr = JSON.parse(data);
+            var nodeListHtml = '';
+
+            $.each(returnNodeArr, function (i, returnNode) {
+
+                if (returnNode.AtPara && returnNode.AtPara.indexOf('IsHuiQian=1') >= 0) {
+                    return true; //退回这个字段里包含 IsHuiQian=1的字符，就排除掉.
+                }
+
+                nodeListHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
+            });
+
+            //绑定退回到节点的数据.
+            $('#DDL_Nodes').html(nodeListHtml);
+
+            //获取当前节点属性,是否可以执行退回并原路返回的按钮？
+            var node = new Entity("BP.WF.Node", pageData.FK_Node)
+            if (node.IsBackTracking == "0")
+                $('#btnIsBackTracking').css('display', 'none');
+
+            $("section").show();
+            $(".wait").hide();
+
+            Common.MaxLengthError();
+        });
+        //确定 退回 执行退回操作 
+        // isBack=0 是退回按钮调用， =1是退回并原路返回按钮调用.
+        function ReturnWork(isBack) {
+
+            //获得选择退回的节点.
+            var selectedNodeID = $('#DDL_Nodes').val();
+            if (selectedNodeID == null || selectedNodeID == undefined || selectedNodeID == "") {
+                alert('戻るノードを選択してください。');
+                return;
+            }
+
+            //获得退回原因.
+            var val = escape($('#TB_Doc').val());
+            if (val == null || val == "" || val == undefined) {
+                alert("戻る理由を入力してください。");
+                return;
+            }
+
+
+            $('.foot input').attr('disabled', 'disabled');
+            $('.foot input').css('background', 'gray');
+            var doc = "";
+            if (plant == 'CCFlow') {
+                doc = escape($('#TB_Doc').val());
+            } else {
+                doc = $('#TB_Doc').val();
+            }
+
+            //调动退回接口.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("FK_Flow", pageData.FK_Flow);
+            handler.AddPara("WorkID", pageData.WorkID);
+            handler.AddPara("FID", pageData.FID);
+            handler.AddPara("FK_Node", pageData.FK_Node);
+            handler.AddPara("ReturnToNode", selectedNodeID);
+            handler.AddPara("ReturnInfo", doc);
+            handler.AddPara("IsBack", isBack);
+
+            //增加字段属性, 这部分，vue可以不翻译.
+            var parasData = $("form").serialize();
+            handler.AddPara("PageData", parasData);
+
+            //调用退回方法.
+            var data = handler.DoMethodReturnString("DoReturnWork"); //执行方法.
+
+            //提示退回消息， 并关闭窗口，刷新父父窗口.
+            data = data.replace(/null/g, '');
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose(data);
+            } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                window.opener.returnWorkWindowClose(data);
+            } else {
+                $('body').append($('<div>' + data + '</div>'));
+                $('#btnOk').attr('disabled', true);
+            }
+
+            $(".foot").hide();
+        }
+
+        //取消退回
+        function Close(flag) {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("キャンセル");
+                if (flag == 1)
+                    window.parent.close();
+            }
+            else {
+                $('body').append($('<div>' + "キャンセルしました" + '</div>'));
+                window.close();
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+
+    <div class="wait" style="text-align: center;" id="Msg">ページデータを読み込み中です。少々お待ちください。</div>
+    <div style=" margin:20px 30px;" id="DIV_Nodes">
+        戻るノードを選択してください。
+        <select id="DDL_Nodes" name="DDL_Nodes" style="width: 78%;"></select>
+    </div>
+    <!--启用了退回考核规则的设置-->
+    <form id="cc">
+        <div id="ReturnCH" style="display:none;margin:30px;">
+        </div>
+    </form>
+
+    <div style=" margin:30px;" id="DIV_Doc">
+        戻る理由：
+        <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 98%; height:150px;" maxlength="500"></textarea>
+    </div>
+
+    <!--<div> 上传附件：</div>
+        <div style="height:100px;">アップロード添付ファイルの予約：この機能は建設中です。</div>
+    -->
+    <div style="position: fixed;right: 10px;bottom: 40px;" class="foot">
+        <input type="button" value="確実に戻る" onclick="ReturnWork(0);" id="btnReturn" />
+        <input type="button" value="戻った後私に発送する" onclick="ReturnWork(1);" id="btnIsBackTracking" />
+        <input type="button" value="閉じる" onclick="Close();" id="btnClose" />
+    </div>
+
+</body>
+</html>

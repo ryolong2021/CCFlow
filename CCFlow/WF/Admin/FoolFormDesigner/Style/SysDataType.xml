@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DS>
+  <Item No="String" Name="文字型" Desc="" />
+  <Item No="Int" Name="整数型" Desc="" />
+  <Item No="Money" Name="値段型" Desc="" />
+  <Item No="Float" Name="float型" Desc="" />
+  <Item No="Date" Name="日付型" Desc="" />
+  <Item No="DateTime" Name="日時型" Desc="" />
+  <Item No="Bool" Name="Boole型(はい/いいえ)" Desc="" />
+  <Item No="Enum" Name="列挙型" Desc="" />
+  <Item No="FK" Name="外部キー型" Desc="" />
+
+  <MapMenu No="FK" Name="外部キー型" Desc="" />
+  <MapMenu No="FK" Name="外部キー型" Desc="" />
+
+</DS>

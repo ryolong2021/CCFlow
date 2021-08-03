@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript" src="../../Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/Table0.css" rel="stylesheet" />
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //页面启动函数.
+        var initData = {};
+        var pageData = {};
+
+        $(function () {
+
+            //var en = new Entity("");
+
+            window.location.href = '../../Comm/En.htm?EnName=BP.WF.Rpt.RptDfine&No=' + GetQueryString("FK_Flow");
+            return;
+        });
+
+    </script>
+</head>
+<body>
+    <table style="width: 95%;">
+        <tr>
+            <td style="width: 30%;">
+                <fieldset>
+                    <legend>フローレポートの定義説明</legend>
+                    <ul>
+                        <li>一つのフローには三つのレポートフォームがあります。それぞれは、私が開始したフロー、当部門が開始したフロー、詳細検索です。</li>
+                        <li>各レポートは対応しています。検索コンポーネント、分析コンポーネント、詳細検索コンポーネント、対比分析コンポーネント、クロスレポートコンポーネントです。</li>
+                        <li>各レポートには、自分のコントロール権限、照会条件、表示内容のカスタマイズがあります。</li>
+                        <li>左をクリックして、レポートごとに権限を定義します。</li>
+                    </ul>
+                </fieldset>
+            </td>
+            <td valign="top">
+                <fieldset>
+                    <legend>私が始めたフロー</legend>
+                    <ul>
+                        <li>このレポートフォームは私の開始のフローだけを表示します。</li>
+                        <li>レポート定義ツールで検索方式、表示内容を定義できます。</li>
+                        <li>
+                            <div id="MyStartFlows">
+                            </div>
+                        </li>
+                        <li>デフォルトではすべての人に権限があります。</li>
+                    </ul>
+                </fieldset>
+                <fieldset>
+                    <legend>私が参加したフロー</legend>
+                    <ul>
+                        <li>このレポートフォームは私の開始のフローだけを表示します。</li>
+                        <li>レポート定義ツールで検索方式、表示内容を定義できます。</li>
+                        <li>
+                            <div id="Div1">
+                            </div>
+                        </li>
+                        <li>デフォルトではすべての人に権限があります。</li>
+                    </ul>
+                </fieldset>
+                <fieldset>
+                    <legend>うちの部署からのフロー</legend>
+                    <ul>
+                        <li>このレポートには、当部門によって開始されたフローのみが表示されます。</li>
+                        <li>レポート定義ツールで検索方式、表示内容を定義できます。</li>
+                        <li>
+                            <div id="MyDeptFlows">
+                            </div>
+                        </li>
+                        <li>権限を定義</li>
+                    </ul>
+                </fieldset>
+                <fieldset>
+                    <legend>すべての部門から開始された</legend>
+                    <ul>
+                        <li>すべての部門が開始するフローを調べることができます。</li>
+                        <li>レポート定義ツールで検索方式、表示内容を定義できます。</li>
+                        <li>
+                            <div id="Div2">
+                            </div>
+                        </li>
+                        <li>権限を定義</li>
+                    </ul>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
+    <!--
+    <div id="html" ></div>
+
+
+         <div id="Fields">
+            <table style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>レポート番号</th>
+                        <th>レポート名</th>
+                        <th>コメント</th>
+                        <th>PTable</th>
+                        <th>フロー番号</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div><input  value="新規レポート" type="button" onclick="NewOrEditRpt('')"/></div>
+        </div>-->
+</body>
+</html>

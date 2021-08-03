@@ -1,0 +1,25 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 流程管理  -->
+  <Item No="Start" CH="発行" B5="发起" EN="Start" JP="発行" RU="Запускаемых" Url="Start.aspx" Img="./Img/Start.gif" Enable="1" Title="新しいフロー申請を発行する" />
+  <Item No="EmpWorks" CH="対応待ち" B5="待办" EN="Warting"  JP="対応待ち" RU="Чтобы Bыполнитe" Url="EmpWorks.aspx" Img="./Img/MyWork.gif" Enable="1" Title="私の対応待ち" />
+  <Item No="OnTheWay" CH="途中" B5="在途" EN="On The Way Work"  JP="途中" RU="В транзите" Url="Runing.aspx" Img="./Img/Runing.gif" Enable="1" Title="私が参加した仕事は完成していません" />
+  <Item No="FS" CH="公文検索"  B5="查询"  EN="Rpt"  JP="公文検索" RU="Заявления" Url="FlowSearch.aspx" Img="./Img/Search.gif" Enable="0" Title="フロー検索" />
+  <Item No="Reg" CH="受取公文登録"  B5="查询"  EN="Rpt"  JP="受取公文登録" RU="Заявления" Url="FlowSearch.aspx" Img="./Img/Search.gif" Enable="0" Title="フロー検索" />
+
+  <Item1 No="Tools" CH="ツールバー"  B5="工具栏"  EN="Rpt"  JP="ツールバー" RU="Заявления" Url="Tools.aspx" Img="./Img/Tools.gif" Enable="0" Title="ツールバー" />
+  <Item1 No="Login" CH="切替"  B5="切换"  EN="Rpt"  JP="切替" RU="Заявления" Url="Login.aspx" Img="./Img/Login.gif" Enable="0" Title="フロー検索" />
+  <Item1 No="WF" CH="レポート" EN="Rpt"  JP="レポート" RU="Заявления" Url="SelfWFRpt.aspx" Img="./Img/Runing.gif" Enable="0" Title="カスタムレポート" />
+  <Item1 No="Warning" CH="警告" EN="Waring"  JP="警告" RU="Предупреждение" Url="Warning.aspx" Img="./Img/Warning.gif" Enable="1" Title="ウォーニング状態になっている私の仕事" />
+  <Item1 No="Home" CH="文書" EN="Book"  JP="文書" RU="Инструменты" Url="../Book/Home.aspx" Img="./Img/Book.gif" Enable="1" Title="文書" />
+  <Item1 No="Help" CH="ヘルプ" EN="Help" JP="ヘルプ" RU="Помощь" Url="./Help/Default.aspx" Img="./Img/Help.gif" Enable="1" />
+  <Item1 No="CS" CH="システム切替" EN="Cheange"  JP="システム切替" RU="Включение системы" Url="../../Comm/Port/ChangeSystem.aspx" Img="./Img/ChangeSys.gif" Enable="1" />
+
+  <FlowBar No="MyFlow.aspx?DoType=Sheet" CH="基本情報"  JP="基本情報" />
+  
+  <FlowBar1 No="MyFlowDoc.aspx?DoType=" CH="公式文書本文"  JP="公式文書本文" />
+  
+  <FlowBar No="MyFlow.aspx?DoType=Process" CH="フロープロセス"  JP="フロープロセス" />
+  <FlowBar No="MyFlow.aspx?DoType=FlowImg" CH="フロー図"  JP="フロー図" />
+  
+</NewDataSet>

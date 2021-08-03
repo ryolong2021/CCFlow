@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+
+   
+  <Item Key="UIRowStyleGlo" Name="テーブルデータ行スタイル（グローバルに適用）"
+  CH="@0=スタイルなし@1=交替スタイル@2=マウス移動@3=交替およびマウス移動"
+  EN="" JP="@0=スタイルなし@1=交替スタイル@2=マウス移動@3=交替およびマウス移動" RU=""  />
+
+  <Item Key="SearchUrlOpenType" Name="行をダブルクリックして内容を開きます。"
+CH="@0=En.htm@1=EnOnly.htm@2=カスタムurl"
+EN="" JP="@0=En.htm@1=EnOnly.htm@2=カスタムurl" RU=""  />
+
+
+
+  <Item Key="MoveToShowWay" Name="移動先"
+  CH="@0=表示しない@1=プルダウンリスト0@2=並べて表示"
+  EN="" JP="@0=表示しない@1=プルダウンリスト0@2=並べて表示" RU=""  />
+
+
+
+  <Item Key="EditerType" Name="エディタのタイプ"
+  CH="@0=エディターなし@1=Sinaエディター@2=FKEditer@3=KindEditor@4=バイドゥのUEditor"
+  EN="" JP="@0=エディタなし@1=SinaEditer0@2=FKEditer@3=KindEditor@4=バイドゥのUEditor" RU=""  />
+
+  <Item Key="UploadFileCheck" Name="複数の添付ファイルのアップロード制御"
+  CH="@0=制御しない@1=アップロードするファイル件数は0ではいけない@2=各カテゴリの下の件数は0ではいけない"
+  EN="" JP="@0=制御しない@1=アップロードするファイル件数は0ではいけない@2=各カテゴリの下の件数は0ではいけない" RU=""  />
+
+  <Item Key="CodeStruct" Name="テーブルデータソースの種類"
+  CH="@0=一般的な番号テーブル（No、Nameを持つ）@1=ツリー構造（No、Name、PartentNoを持つ）@2=行政機構番号テーブル（2桁の番号でツリー構造を表す）"
+  EN="@0=一般的な番号テーブル（No、Nameを持つ）@1=ツリー構造（No、Name、PartentNoを持つ）@2=行政機構番号テーブル（2桁の番号でツリー構造を表す）"
+  JP="@0=一般的な番号テーブル（No、Nameを持つ）@1=ツリー構造（No、Name、PartentNoを持つ）@2=行政機構番号テーブル（2桁の番号でツリー構造を表す）"
+  RU=""
+ />
+
+
+
+  <Item Key="TabType" Name="テーブルデータソースの種類"
+ CH="@0=ローカルテーブルまたはビュー@1=SQLで決定された外部データソース@2=WebServicesで得られた一つのデータソース"
+ EN=""
+ JP="@0=ローカルテーブルまたはビュー@1=SQLで決定された外部データソース@2=WebServicesで得られた一つのデータソース"
+ RU="" />
+
+  <Item Key="DtlAddRecModel"
+CH="@0=設定した数で空白行を初期化する@1=ボタンで空白行を増やす"
+EN=""
+JP="@0=設定した数で空白行を初期化する@1=ボタンで空白行を増やす"
+RU="" />
+
+  <Item Key="DtlSaveModel"
+  CH="@0=自動的に保存（フォーカスが失われると自動的に保存）@1=手動で保存（保存ボタンで保存します）"
+  EN=""
+  JP="@0=自動的に保存（フォーカスが失われると自動的に保存）@1=手動で保存（保存ボタンで保存します）"
+  RU=""    />
+
+  <Item Key="MyDataType"
+ CH="@1=ストリングString@2=整数型Int@3=浮動小数点型AppFloat@4=ブール型Boolean@5=倍精度型Double@6=日付型Date@7=日時型Datetime@8=料金型AppMoney"
+ EN="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney"
+ JP="@1=ストリングString@2=整数型Int@3=浮動小数点型AppFloat@4=ブール型Boolean@5=倍精度型Double@6=日付型Date@7=日時型Datetime@8=料金型AppMoney"
+ RU="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney"
+/>
+
+  <Item Key="EditModel"
+    CH="@0=テーブル@1=カード(自由モード)@2=カード(ばかモード)"
+    EN=""
+    JP="@0=テーブル@1=カード(自由モード)@2=カード(ばかモード)"
+    RU=""    />
+
+  <Item Key="PopValFormat"
+    CH="@0=No(番号だけ)@1=Name(名前だけ)@2=No,Name(番号と名前)"
+    EN=""
+    JP="@0=No(番号だけ)@1=Name(名前だけ)@2=No,Name(番号と名前)"
+    RU=""    />
+
+  <Item Key="DTSearchWay"
+  CH="@0=有効しない@1=日付より@2=日時より"
+  EN="@0=有効しない@1=日付より@2=日時より"
+  JP="@0=有効しない@1=日付より@2=日時より"
+  RU="@0=有効しない@1=日付より@2=日時より" />
+
+  <Item Key="CtrlWay"
+    CH="@0=役職別@1=部門別@2=担当者別@3=SQL別"
+    EN="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file"
+    JP="@0=役職別@1=部門別@2=担当者別@3=SQL別"
+    RU="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" />
+
+  <Item Key="FrmUrlShowWay"
+  CH="@0=非表示@1=自動サイズ@2=指定サイズ@3=新しいウィンドウ"
+  EN="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file"
+  JP="@0=非表示@1=自動サイズ@2=指定サイズ@3=新しいウィンドウ"
+  RU="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" />
+
+  <Item Key="TBModel"
+     CH="@0=1行のテキスト@1=複数行のテキスト@2=リッチテキスト@3=メガテキスト"
+     EN="@0=1行のテキスト@1=複数行のテキスト@2=リッチテキスト@3=メガテキスト"
+     JP="@0=1行のテキスト@1=複数行のテキスト@2=リッチテキスト@3=メガテキスト"
+     RU="@0=1行のテキスト@1=複数行のテキスト@2=リッチテキスト@3=メガテキスト" />
+
+  <Item Key="FrmType" Name="フォームの種類"
+     CH="@0=簡易フォーム@1=フリーフォーム@11=累積フォーム@3=埋め込みフォーム@4=Wordフォーム@5=オンライン編集モードExcelフォーム@6=VTOモードExcelフォーム@7=エンティティコンポーネント"
+     EN="@0=簡易フォーム@1=フリーフォーム@11=累積フォーム@3=埋め込みフォーム@4=Wordフォーム@5=オンライン編集モードExcelフォーム@6=VTOモードExcelフォーム@7=エンティティコンポーネント"
+     JP="@0=簡易フォーム@1=フリーフォーム@11=累積フォーム@3=埋め込みフォーム@4=Wordフォーム@5=オンライン編集モードExcelフォーム@6=VTOモードExcelフォーム@7=エンティティコンポーネント"
+     RU="@0=簡易フォーム@1=フリーフォーム@11=累積フォーム@3=埋め込みフォーム@4=Wordフォーム@5=オンライン編集モードExcelフォーム@6=VTOモードExcelフォーム@7=エンティティコンポーネント" />
+</NewDataSet>

@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>メーリングリスト設定</title>
+    <!-- CSSエリア 開始 -->
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <link rel="stylesheet" href="../../../css/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="../../../css/common/app.css">
+    <link rel="stylesheet" href="../../../css/biz/mailset/mailset.css">
+    <!-- CSSエリア 終了 -->
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+
+    <!-- validate コンポーネント(項目入力チェック用)：validate, additional-methods, messages_ja -->
+    <script src="../../../js/vendor/jquery.validate.js"></script>
+    <script src="../../../js/vendor/additional-methods.js"></script>
+    <script src="../../../js/vendor/messages_ja.js"></script>
+    <!-- 日付パネルを表示する方法：datetimepicker -->
+    <script src="../../../js/vendor/jquery.datetimepicker.full.js"></script>
+    <!-- 日付フォーマット用 -->
+    <script src="../../../js/vendor/moment-with-locales.js"></script>
+    <!-- 共通定数：app_const -->
+    <script src="../../../js/common/app_const.js"></script>
+    <!-- 共通関数：app_common -->
+    <script src="../../../js/common/app_common.js"></script>
+    <!-- 共通関数：msg_comm -->
+    <script src="../../../js/common/msg_comm.js"></script>
+</head>
+<body>
+    <div class="o-whole o-whole--with-navigation o-whole--settings">
+        <div class="o-whole__body-container">
+            <div class="o-whole__navigation">
+                <div class="m-setting-header">
+                    <button type="button" class="a-setting-back-button" id="goto_home"><i class="a-icon a-icon--back-white"></i><span class="a-setting-back-button__label">ホームへ</span></button>
+                    <div class="m-setting-header__title">設定</div>
+                </div>
+            </div>
+            <div class="o-whole__body">
+                <!--<div class="p-wrapper">-->
+                <div class="m-setting-menu p-setting-menu" data-active-index="0">
+                    <ul class="m-setting-menu__list">
+                        <li class="m-setting-menu__item m-setting-menu__item--active">
+                            <div class="a-nav-item a-nav-item--menu-item a-nav-item--has-subnav a-nav-item--remote-subnav" id="nav-1" data-remote-subnav="#subnav-1">  
+                                <a class="a-nav-item__link">
+                                    <span class="a-nav-item__label">メール送信</span>
+                                    <span class="a-nav-item__arrow">
+                                        <i class="a-icon a-icon--arrow-down"></i>
+                                        <i class="a-icon a-icon--arrow-up"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="m-setting-menu__item">
+                            <div class="a-nav-item a-nav-item--menu-item a-nav-item--hover-open" id="nav-2">
+                                <a href="#" class="a-nav-item__link">
+                                    <span class="a-nav-item__label">慶弔基準作成</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="m-setting-menu__subnav a-nav-item__remote-subnav" id="subnav-1">
+                        <div class="a-nav-item a-nav-item--subnav"><a href="../mailset/form_setting_list.html" class="a-nav-item__link"><span class="a-nav-item__label">送信設定</span></a></div>
+                        <div class="a-nav-item a-nav-item--subnav"><a href="../mailset/form_setting_mailing_list.html" class="a-nav-item__link"><span class="a-nav-item__label">メーリングリスト設定</span></a></div>
+                    </div>
+                </div>
+                <div class="m-page-heading m-page-heading--with-actions">
+                    <h1 class="a-heading a-heading--h1 undefined"><span class="a-heading__label">メーリングリスト設定</span></h1>
+                    <div class="m-page-heading__actions">
+                        <div class="a-create-button" id="creat_new"><i class="a-icon a-icon--edit"></i><span class="a-search-button__label">新規作成</span></div>
+                        <button type="button" class="a-search-button a-search-button--dark a-search-button--inline">
+                            <i class="a-icon a-icon--search-white"></i><span class="a-search-button__label">絞り込み</span>
+                        </button>
+                    </div>
+                </div>
+                <section class="m-section m-section--no-padding" id="search_condition">
+                    <div class="m-search-current-filters">
+                        <div class="m-search-current-filters__tags">
+                        </div>
+                        <div class="m-search-current-filters__wrap">
+                            <span class="m-search-current-filters__date"></span>
+                            <button type="button"
+                                    class="a-button a-button--text m-search-current-filters__clear-button">
+                                <div class="a-button__label">条件クリア</div>
+                            </button>
+                        </div>
+                    </div>
+                    <br />
+                </section>
+                <section class="m-section m-section--no-padding p-data-table-holder">
+                    <!-- 検索一覧結果表示エリア -->
+                    <div id="table" />
+                </section>
+                <!--</div>-->
+                <div class="o-modal o-modal--medium o-modal--has-footer" id="setting-search-modal">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close"></i></button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header undefined">
+                                <p>絞り込み検索</p>
+                            </header>
+                            <div class="m-form-field">
+                                <label class="m-form-field__label">グループ名</label>
+                                <div class="m-form-field__content">
+                                    <div class="a-text-field a-text-field--type-text"><input type="text" name="group_name_search" id="group_name_search" class="a-text-field__input" /></div>
+                                </div>
+                            </div>
+                            <div class="m-form-field">
+                                <label class="m-form-field__label">ワークフロー</label>
+                                <div class="m-form-field__content">
+                                    <div class="a-pulldown" id="workflow_search_p_div">
+                                        <select class="a-pulldown__select" name="workflow_search" id="workflow_search">
+                                        </select>
+                                        <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-form-field company_search-div">
+                                <label class="m-form-field__label">会社</label>
+                                <div class="m-form-field__content">
+                                    <div class="a-pulldown" id="company_search_p_div">
+                                        <select class="a-pulldown__select" name="company_search" id="company_search">
+                                        </select>
+                                        <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-form-field">
+                                <label class="m-form-field__label">送信先タイプ</label>
+                                <div class="m-form-field__content">
+                                    <div class="a-pulldown" id="sousinsaki_type_search_p_div">
+                                        <select class="a-pulldown__select" name="sousinsaki_type_search" id="sousinsaki_type_search">
+                                        </select>
+                                        <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-form-field">
+                                <label class="m-form-field__label">送信先アドレス</label>
+                                <div class="m-form-field__content">
+                                    <div class="a-text-field">
+                                        <textarea id="email_content"
+                                                  name="email_content"
+                                                  placeholder="dummy@aeon.co.jp"
+                                                  class="a-text-field__input"
+                                                  rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+                        <footer class="o-modal__footer">
+                            <button type="button" class="a-button a-button--third a-button--huge">
+                                <div class="a-button__label">クリア</div>
+                            </button><button type="button" class="a-button a-button--primary a-button--huge">
+                                <div class="a-button__label">検索</div>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <div id="pageTwo">
+                    <script>GetSubHtmlDataToHtml("pageTwo", "./setting_mailing_list_form.html");</script>
+                </div>
+                <div id="dialogBox">
+                    <script>GetSubHtmlDataToHtml("dialogBox", "../../../pages/common/app_dialog_area.html");</script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 4dのコンポーネント -->
+    <script src="../../../js/components.js"></script>
+
+    <!-- CCFLOW相関 -->
+    <script language="JavaScript" src="../../../../WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../js/common/table_list_common.js"></script>
+    <script src="../../../js/biz/mailset/page_mailing.js"></script>
+</body>
+</html>

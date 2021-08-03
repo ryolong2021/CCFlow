@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ネイティブのデータテーブルを作成する</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript"> </script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="SFTable.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("読み込み中です。しばらくお待ちください......");
+
+            var mytb = document.getElementById("TB_Name");
+            mytb.focus();
+            $('#TB_Name').blur(function () //文本失去焦点时触发的事件
+            {
+                var tb = document.getElementById("TB_Name").value;
+                var val = $('input:radio[name="RB_QPJP"]:checked').val();
+                if (tb == "") {
+                    document.getElementById("TB_No").value = "";
+                    return;
+                }
+
+                var isQuanPin = false;
+                if (val == "ziduanquanpin")
+                    isQuanPin = true;
+
+                ParseStringToPinYin(tb, isQuanPin, "Tab");
+
+            });
+
+            //点击全拼
+            $('input[id=RB_QP]').change(function () {
+                var tb = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(tb, true, "Tab");
+            });
+
+            //点击简拼
+            $('input[id=RB_JP]').change(function () {
+                var tb = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(tb, false, "Tab");
+            });
+
+
+            $("#Msg").html("");
+        });
+
+        //装载  模版.
+        function Save() {
+
+            var en = new Entity("BP.Sys.SFTable");
+            en.CopyForm();
+
+            if (en.IsExits() == true) {
+                alert("番号はすでに存在します[" + en.No + "]");
+                return;
+            }
+
+            en.SrcType = 1; //自定义数据表.
+            en.Insert();
+
+            alert("システムには[" + en.No + "]のテーブルまたはビューは既に存在しています。手動で保守するか、ccformが提供するフォームツールを使用してください。");
+
+            window.location.href = "Default.htm";
+            window.location.href = "../SFTableEditData.htm?FK_SFTable="+en.No;
+
+        }
+    </script>
+</head>
+<body>
+    <table style="width: 95%; margin: 5px; padding: 5px;">
+        <caption>
+            <a href="./Default.htm">戻る</a> - ネイティブデータテーブル
+        </caption>
+        <tr>
+            <th>説明</th>
+            <th>  入力</th>
+            <th>  コメント</th>
+        </tr>
+        <tr>
+            <td>
+                日本語名
+            </td>
+            <td>
+                <input type="text" id="TB_Name" name="TB_Name" />
+            </td>
+            <td>
+                .
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 30%;">
+                英字名
+            </td>
+            <td>
+                <input type="text" id="TB_No" name="TB_No" />
+            </td>
+            <td>
+                <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" />
+                <label for="RB_QP">
+                    アルファベット名（全称）</label>
+                <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />
+                <label for="RB_JP">
+                    略称</label>
+            </td>
+        </tr>
+        <!--
+<tr>
+<td> データソース</td>
+<td > <select id="DDL_FK_DBSrc" /> </td>
+<td> そのデータソースからデータを検索します。</td>
+</tr>
+-->
+        <tr>
+            <td>
+                データフォーマット
+            </td>
+            <td>
+                <select id="DDL_CodeStruct">
+                    <option value="0">コードテーブルのフォーマットはNo、Nameの2つの列を持っています。</option>
+                    <option value="1">ツリー形式は、No、Name、ParentNoの3つの列を持っています。</option>
+                </select>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="Save()" value="Save" />
+            </td>
+        </tr>
+    </table>
+    <font color="gray">
+        <fieldset>
+            <legend>ヘルプ</legend>
+            <ul>
+                <li>システムは英字名に基づいて自動的に現在のデータベースでデータテーブルを作成します。</li>
+                <li>英字名はテーブルを作るルールに従わなければなりません。</li>
+                <li>特殊な文字を含んではいけません。下線または英字で始めます。</li>
+                <li>通常の構造は、データテーブルに番号No、名称Nameカラムがあります。</li>
+                <li>ツリー構造は、No、Name、ParentNoの3つのカラムがあります。</li>
+            </ul>
+        </fieldset>
+    </font>
+</body>
+</html>

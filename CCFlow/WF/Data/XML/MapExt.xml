@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 扩展  -->
+  <FieldExt111 No="Back"     CH="戻る" JP="戻る"  DFor="TB,DDL,Checkbox" URL="Do.aspx?DoType=DobackToF" />
+    <FieldExt No="PageLoadFull"  CH="ロード書き込み"  JP="ロード書き込み"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=34" />
+  <FieldExt11 No="AutoFull"      CH="データの取得" JP="データの取得"   DFor="TB,DDL,Checkbox" URL="AutoFull.aspx?s=3" />
+  <FieldExt11 No="ActiveDDL"     CH="カスケードドロップダウンボックス" JP="カスケードドロップダウンボックス" DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+    <FieldExt11 No="InputCheck"    CH="スクリプトの検証" JP="スクリプトの検証"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+    <FieldExt No="TBFullCtrl"    CH="テキストボックスの自動入力完成" JP="テキストボックスの自動入力完成"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+  <FieldExt11 No="DDLFullCtrl"   CH="ドロップダウンボックスの自動入力完成" JP="ドロップダウンボックスの自動入力完成"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+
+  <!-- 为精英修改移动到字段属性里.  -->
+    <FieldExt11 No="AutoFullDLL"   CH="下付きフレームを動的に塗りつぶす" JP="下付きフレームを動的に塗りつぶす"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+    <FieldExt11 No="Link"   CH="フィールドのハイパーリンク" JP="フィールドのハイパーリンク"  DFor="TB" URL="MapExt.aspx?s=3" />
+    <FieldExt11 No="PopVal"        CH="ポップ戻り値" JP="ポップ戻り値" DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+    <FieldExt No="AotuGenerNo"   CH="番号を自動的に生成する" JP="番号を自動的に生成する" DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+  <FieldExt11 No="RegularExpression"   CH="正規表現/イベント" JP="正規表現/イベント" DFor="TB" URL="MapExt.aspx?s=3" />
+
+  <FieldExt No="Func"          CH="機能の実行" JP="機能の実行"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+
+  <FieldExt No="WordFrm"          CH="Wordフォーム属性" JP="Wordフォーム属性"  URL="MapExt.aspx?s=3" />
+  <FieldExt No="ExcelFrm"          CH="Excelフォーム属性" JP="Excelフォーム属性"  URL="MapExt.aspx?s=3" />
+
+
+  <ExpFunc No="Word"        CH="Wordテンプレートをエクスポート" JP="Wordテンプレートをエクスポート"  />
+  <ExpFunc No="PDF"         CH="PDFテンプレートをエクスポート" JP="PDFテンプレートをエクスポート"  />
+  <ExpFunc No="Excel"       CH="Excelテンプレートをエクスポート" JP="Excelテンプレートをエクスポート"  />
+  <ExpFunc No="Aspx"        CH="aspxテンプレートをエクスポート" JP="aspxテンプレートをエクスポート"  />
+  <ExpFunc No="php"         CH="phpテンプレートをエクスポート" JP="phpテンプレートをエクスポート"  />
+  <ExpFunc No="jsp"         CH="jspテンプレートをエクスポート" JP="jspテンプレートをエクスポート"  />
+    
+  <TBEvent No="kepress"     CH="ポップ戻り値" JP="ポップ戻り値"  />
+  <TBEvent No="PopVal"      CH="ポップ戻り値" JP="ポップ戻り値"  />
+
+  
+  <!--<InputCheck No="100" DFor="String" CH="文本框只能输入数字代码(小数点也不能输入)"
+              AlertCH="您必须输入只能输入数字代码" />
+  <TBEvent DFor="100" No="kepress"  CH="" />-->
+
+ <![CDATA[
+ &lt; < 小于号 
+&gt; > 大于号 
+&amp; & 和 
+&apos; ' 单引号 
+&quot; " 双引号
+单引号是&apos;  ，双引号是&quot; 其实还有：&是&amp;，>是&gt; ， <是&lt; ，空格是&nbsp; 等。
+ ]]>
+
+  <InputCheck No="103" DFor="String" CH="E-mail" JP="E-mail"  />
+  <TBEvent DFor="103" EventName="onblur" Func="isEmail(this.value);" />
+
+  <InputCheck No="104" DFor="String" CH="携帯番号フォーマットのチェック" JP="携帯番号フォーマットのチェック"  />
+  <TBEvent DFor="104" EventName="onblur" Func="checkMobilePhone(this.value);" />
+
+  <InputCheck No="105" DFor="String" CH="電話番号フォーマットのチェック" JP="電話番号フォーマットのチェック"  />
+  <TBEvent DFor="105" EventName="onblur" Func="checkTelephone(this.value);" />
+
+  <InputCheck No="106" DFor="String" CH="マイナンバーフォーマットのチェック" JP="マイナンバーフォーマットのチェック"  />
+  <TBEvent DFor="106" EventName="onblur" Func="checkCard(this.value);" />
+  
+  <!--<InputCheck No="101" DFor="String" CH="座机号码" />
+  <InputCheck No="102" DFor="String" CH="手机号码"  />
+  <InputCheck No="103" DFor="String" CH="E-mail"  />
+  <InputCheck No="104" DFor="String" CH="URL"  />
+  <InputCheck No="105" DFor="String" CH="手机号码"  />
+  <InputCheck No="106" DFor="String" CH="身份证号"  />
+  <InputCheck No="107" DFor="String" CH="必须是汉字"  />
+  <InputCheck No="108" DFor="String" CH="必须是英文"  />
+  <InputCheck No="109" DFor="String" CH="必须是数字"  />
+  <InputCheck No="110" DFor="String" CH="是否是英文数字下划线格式(例如:用户名)"  />
+  <InputCheck No="200" DFor="Int" CH="取值范围"
+                JS="this.value=this.value.replace(/\D/g,'')" />
+
+  <InputCheck No="300" DFor="Data" CH="日期输入不能为空"
+              JS="this.value=this.value.replace(/\D/g,'')" />-->
+  
+</NewDataSet>

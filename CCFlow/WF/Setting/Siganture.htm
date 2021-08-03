@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>電子署名の設定</title>
+     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+	 <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+	 <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+	 <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+	 <script type="text/javascript" src="../Scripts/jquery/jquery.min.js"></script>
+     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+
+      <!-- 引入新版本的类库. -->
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+            var doMethod = "Siganture_Init";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
+            //初始化
+            $.ajax({
+
+                url: url,
+                dataType: "json",
+                success: function (data) {
+                    var img = document.getElementById("sigimg");
+                    var url = '../../DataUser/Siganture/' + data.No + '.jpg';
+                    img.src = url;
+                }
+            });
+
+
+        });
+
+        function Upload() {
+            if (File_Upload.files.length == 0) {
+                alert('アップロードするファイルを選択してください。');
+                return;
+            }
+
+            var fileName = File_Upload.files[0].name;
+
+            //判断文件类型.
+            var fileExt = "bpm,jpg,jpeg,png,gif";
+            //获取文件的后缀名
+            var ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+            if (fileExt.indexOf(ext.toLowerCase()) == -1) {
+                alert("アップロードされたファイルは必ず画像形式:" + fileExt + "  タイプ、今のタイプは：" + ext);
+                return;
+            }
+            var doMethod = "Siganture_Save";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName;
+
+            //提交数据
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: url,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                },
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.location.href = window.location.href;
+                }
+            });
+
+            /*   var url = Handler + "?DoType=Siganture_Save";
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', url, true);
+            var formData = new FormData();
+            formData.append('file', File_Upload.files[0]);
+            xhr.send(formData);
+
+            //上传结束回掉函数
+            xhr.onload = function () {
+
+            if (this.responseText.indexOf('err@') == 0) {
+            alert(responseText);
+            return;
+            }
+
+            alert(this.responseText);
+            location.reload();
+            } */
+        }
+	</script>
+</head>
+<body  class="gray-bg">
+<form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+<div class="wrapper wrapper-content animated fadeInRight">
+					<div class="ibox float-e-margins">
+					
+						<div class="ibox-content">
+	<div class="usercenter">電子署名の設定</div>
+			<div class="row">
+				<div class="col-sm-2">
+					<img id="sigimg"  width="120" height="30"   border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+				</div>
+				<div class="col-sm-3">
+					<input type="file" name="File_Upload" id="File_Upload" />
+				</div>
+					<div class="col-sm-7">
+				<input id="btn"   class="btn btn-info"  type="button" value="確認" onclick="Upload()" />
+				<a class="btn btn-white"  href="Default.htm">戻る</a>
+				</div>
+			
+				<div class="col-sm-12">
+					<b>スキャナの設定手順:</b>
+        <ul class="lh24">
+            <li>白い紙にサインを書きます。</li>
+            <li>スキャナに取り込んでスキャンし、jpgファイルを得る。</li>
+            <li>画像処理ツールを使って彼らの処理を90*30ピクセルのサイズに縮小します。</li>
+        </ul>
+        <b>手書きの設定:</b>
+      <ul class="lh24">
+            <li>パネルプログラムを起動してサインを書きます。</li>
+            <li>jpgファイルとして保存し、設定ファイルは90*30ピクセルサイズです。</li>
+        </ul>
+        <!--<B>让系统自动为您创建（请选择字体）:</B><ul><li><a href='Siganture.htm?RefNo=Siganture&DoType=ST'>宋体</a></li> -->
+        <!--<li><a href='Siganture.htm?RefNo=Siganture&DoType=LS'>隶书</a></li> 	-->
+				</div>
+			</div>
+        
+	</div>
+					
+		</div>
+</div>
+</form>
+	
+</body>
+</html>

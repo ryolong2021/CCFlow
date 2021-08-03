@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>wordフォーム</title>
+</head>
+<body>
+
+  <br />
+        <br />
+        <fieldset>
+            <legend>フォームを処理します。</legend>
+            <ul>
+                <li><a href="<%=url %>">VTOバージョンエクセルモードのフォームを開きます。</a></li>
+                <li><a href="<%=urlOfFree %>">自由フォームを開く</a></li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>プラグインのインストール説明</legend>
+            <ul>
+                <li>このプラグインはccflowが開発したexcelプラグインで、ユーザーはexcelフォームを開いたり、処理したりするためのプラグインです。</li>
+                <li>ダウンロードしてインストールする必要があります。</li>
+                <li><a href="http://<%= this.Request.Url.Authority %>/DataUser/FrmOfficeTemplate/Excelフォームプラグインinstaller.zip ">
+                    ここをクリックしてVTOフォームプラグインをダウンロードします</a></li>
+            </ul>
+        </fieldset>
+
+</body>
+</html>

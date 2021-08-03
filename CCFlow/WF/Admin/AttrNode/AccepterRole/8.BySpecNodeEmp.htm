@@ -1,0 +1,120 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <fieldset>
+            <div id="NodeSelect" style="margin-top:10px;margin-bottom:10px">
+                <table style='width:90%;'>
+                    <caption>ノードを指定します。現在のノードの処理人は彼です。</caption>
+                    <tr>
+                        <th>#</th>
+                        <th>名前</th>
+                        <th>ノードID</th>
+                        <th>ステップ</th>
+                    </tr>
+                    <tr v-for="(node,index) in nodes">
+                        <td class=Idx>{{index}}</td>
+                        <td v-if="selectNodes.indexOf(node.NodeID)!=-1"><input type='checkbox' name='RB_NodeNo' :value='node.NodeID' checked='checked' /><label>名前：{{node.Name}}</label></td>
+                        <td v-else=v-else><input type='checkbox' name='RB_NodeNo' :value="node.NodeID" /><label>名前：{{node.Name}}</label></td>
+                        <td>{{node.NodeID}}</td>
+                        <td>{{node.Step}}</td>
+                    </tr>
+
+                </table>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend id="help">説明</legend>
+            <ul>
+                <li>現在のノードの処理者は、指定されたノードの処理者と同じである。</li>
+                <li>指定されたノードは、一般的には現在のノードの前のノードであり、分岐の原因によって履歴をもたらすノードが複数ある。</li>
+                <li>複数がある場合、システムはノードの発生時間順に第1のノードで計算される。</li>
+            </ul>
+        </fieldset>
+
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                nodes: [],
+                selectNodes: "",
+                deliverWay: DeliveryWay.BySpecNodeEmp
+            },
+            methods: {
+                OpenStation: function () {
+                    var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+                    OpenEasyUiDialogExtCloseFunc(url, '職位の設置', 800, 500, function () {
+                        Baseinfo.stas = getStas();
+                    });
+
+                },
+                OpenNew: function () {
+                    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+                    OpenEasyUiDialogExtCloseFunc(url, '部門を関連付けします', 800, 600, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                },
+
+            },
+
+            created() {
+                InitBar(this.deliverWay);
+                var nd = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
+                var ens = new Entities("BP.WF.Nodes");
+                ens.Retrieve("FK_Flow", nd.FK_Flow);
+                var paras = nd.DeliveryParas;
+                //该流程的所有节点
+                this.nodes = $.grep(ens, function (obj, i) {
+                    return obj.NodeID != undefined && obj.NodeID!=nd.NodeID ;
+                });
+                this.selectNodes = paras == null ? "" : paras; //选中的节点
+            }
+        });
+
+
+
+        //保存
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay =Baseinfo.deliverWay;
+            var object = document.getElementsByName("RB_NodeNo");
+            var DeliveryParas = "";
+            for (var i = 0; i < object.length; i++) {
+                if (object[i].checked) {
+                    DeliveryParas += object[i].value;
+                    if (i < object.length - 1) DeliveryParas += ',';
+                }
+            }
+            node.DeliveryParas = DeliveryParas;
+            node.Update();
+        }
+    </script>
+
+
+
+
+</body>
+</html>

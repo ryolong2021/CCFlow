@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+       <script type="text/javascript" language="javascript" >
+           function Load() {
+               var url = window.location.href;
+               var div = document.getElementById("url");
+               div.innerHTML = url;
+
+               var workid = GetQueryString('WorkID');
+               var flowNo = GetQueryString('FK_Flow');
+               var nodeID = GetQueryString('FK_Node');
+           }
+
+           function Save() {
+               alert('Saveメソッドがアクティブになりました。');
+           }
+    </script>
+</head>
+<body onload="Load()"  >
+
+<div> このノードのためにurlが定義されていません。</div>
+
+<ul>
+<li> このページは書き換え可能なページです。</li>
+<li>ユーザーがノードフォームを埋め込みモードフォームに設定し、Urlを設定しない場合、該当ページに遷移されます。</li>
+<li> 位置は、/DataUser/DefaultSelfFormUrl.htm、完全なUrlは以下の通りです。</li>
+<li>  <div id="url" /> </li>
+
+<li> 開発者はページを書き換えて自分の機能ページに転じることができます。</li>
+</ul>
+    <p>
+        <a href="../WF/Scripts/QueryString.js">QueryString.js</a></p>
+</body>
+</html>

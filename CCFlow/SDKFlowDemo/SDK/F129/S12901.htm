@@ -1,0 +1,116 @@
+<html >
+<head>
+    <title>埋め込みフォーム</title>
+</head>
+<body>
+    <form id="form1" >
+   <script type="text/javascript">
+       /*
+       *  保存方法デモ:
+       *  1, この方法の方法名はcflow&jFlowと約束しています。保存が成功すればtrueに戻り、ユーザーが送信を実行できます。
+       *  2, 失敗したらfalseエンジンに戻り、送信動作を終了します。
+       */
+       function Save() {
+           try {
+
+               var ts = document.getElementById('TB_QingJiaTianShu').value;
+               if (ts == 0) {
+                   alert('休暇申請の日数はゼロではいけません。');
+                   return false;
+               }
+
+               document.getElementById('Btn_Save').click(); //调用btn_save事件.
+               // alert('save ok');
+               return true; //保存成功，用户可以发送.
+           } catch (e) {
+               alert(e.name + " :  " + e.message);
+               return false; // 保存失败不能发送.
+           }
+       }
+    </script>
+
+<!-- 保存按钮让其隐藏 ............................ -->
+  <div style="display:none ">
+    <asp:Button ID="Btn_Save" runat="server" Text="Save" onclick="Btn_Save_Click" />
+    </div>
+  
+
+<!-- 嵌入式表单部分........................... -->
+<table style="width:100%; text-align:left; background-color:White">
+<caption style=" text-align:left;">埋め込みフォームのデモ-休暇の基本情報</caption>
+<tr>
+<td>
+<table border="1" width="90%">
+<tr>
+<td>休暇者のアカウント:</td>
+<td> <input  id="TB_No" name="TB_No" id="TB_No" value="zhangsan" />
+    </td>
+<td>ログインユーザのアカウント</td>
+</tr>
+
+<tr>
+<td>休暇者名：</td>
+<td>
+<input   name="TB_Name"  id="TB_Name" value="張三" />
+    </td>
+<td>ログインユーザ名</td>
+</tr>
+
+
+<tr>
+<td>休暇者部門番号：</td>
+<td>
+<input   name="TB_DeptNo"  id="TB_DeptNo" value="0001" />
+    
+    </td>
+<td>現在登録者部門番号</td>
+</tr>
+
+<tr>
+<td>休暇者部門名：</td>
+<td>
+<input name="TB_DeptName"  id="TB_DeptName" value="開発部" />
+    </td>
+<td>現在登録者部門名</td>
+</tr>
+
+
+<tr>
+<td>休暇の日数:</td>
+<td>
+<input name="TB_QingJiaTianShu"  id="TB_QingJiaTianShu" value="0" />
+    </td>
+<td>数字を入力してください。</td>
+</tr>
+
+<tr>
+<td>休暇の理由：</td>
+<td>
+<input name="TB_QingJiaYuanYin"  id="TB_QingJiaYuanYin" value="休暇の理由を入力してください。" />
+     
+    </td>
+<td></td>
+</tr>
+</table>
+<!-- end 嵌入式表单部分........................... -->
+
+ </td>
+</tr>
+
+
+</table>
+
+
+<fieldset>
+<legend> 開発説明：</legend>
+<ul>
+<li>表示されるデモフォームは次の場所にあります：\SDKFlowDemo\\SDK\F129\\S12901.htm</li>
+<li>このファイルを開けて、文書の説明をよく見てください。</li>
+<li>このファイルにはSaveというjavascriptメソッドがあります。これはccbpm内設定している保存処理をであります。ユーザが送信または保存をクリックすると、このメソッドが起動されます。</li>
+<li>このメソッドは保存が成功すればtrueに戻ります。そうでなければfaseに戻ります。ユーザが送信ボタンをクリックした時にfalseを戻ると保存エラー発生と識別し、送信できません。</li>
+</ul>
+</fieldset>
+     
+    </form>
+</body>
+</html>

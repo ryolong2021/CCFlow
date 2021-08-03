@@ -1,0 +1,123 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <form>
+            <fieldset>
+                <legend>設定</legend>
+                <ul>
+
+                    <li>
+                        <label> <input type="checkbox" id="CB_IsAutoLoadEmps" name="CB_IsAutoLoadEmps" v-model="isAutoLoadEmps" /> 前回選択した人を自動的にロードしますか？</label>
+                    </li>
+                    <li>
+                        <label> <input type="checkbox" id="CB_IsSimpleSelector" name="CB_IsSimpleSelector" v-model="isSimpleSelector" @click="IsChange(this)" /> 単一選択（選択できるのは1人だけです）？</label>
+                    </li>
+
+                    <li>
+                        <label> <input type="checkbox" id="CB_IsEnableDeptRange" name="CB_IsEnableDeptRange" v-model="isEnableDeptRange" /> 部署の検索範囲限定を有効にするか（一般人事セレクター有効）？</label>
+                    </li>
+
+                    <li>
+                        <label> <input type="checkbox" id="CB_IsEnableStaRange" name="CB_IsEnableStaRange" v-model="isEnableStaRange" />ジョブ検索範囲の制限を有効にしますか（一般人事セレクタの使用に有効）？</label>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0)" @click="OpenDialog2019()">処理者が選択できる範囲を設定します。</a>
+                    </li>
+                </ul>
+            </fieldset>
+
+            <fieldset>
+                <legend id="help">説明</legend>
+                <ul>
+                    <li>特別な説明：<font color=red> 現在のノードが開始ノードの場合、すべての担当者が開始できます。</font></li>
+                    <li>AノードはBノードに送信し、Bノードの受信者規則がAによって選択された場合、このような行為はメールモードと類似しています。つまり、誰を選んだら誰に送信します。</li>
+                    <li>このモードは、自動的に計算するのではなく、前のノードの送信者が判断をするものである。</li>
+                    <li>人員選択には二つの種類があります：全検索と限定範囲検索</li>
+                    <li>全選択:誰でも選択できます。下の図のようにテキストボックスで検索できます。</li>
+                    <li>限定範囲の選択：SQL、部門、人員設定は副局長、副部長だけを選ぶ。</li>
+                </ul>
+                <h5>共通の人員選択</h5>
+                <img src="4.BySelected-ch.png" style="width:50%" class="Help" />
+                <h5>限定範囲者選択</h5>
+                <img src="4.BySelected-1-ch.png" style="width:50%" class="Help" />
+            </fieldset>
+        </form>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                deliverWay: DeliveryWay.BySelected,
+                nodeId: GetQueryString("FK_Node"),
+                isAutoLoadEmps: false,
+                isSimpleSelector: false,
+                isEnableDeptRange: false,
+                isEnableStaRange: false,
+                nodeExt:null
+
+            },
+            methods: {
+                 OpenDialog2019: function () {
+                    var url = "../Selector/Default.htm";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '?NodeID=' + nodeID;
+                    OpenEasyUiDialogExt(url, 'セレクタ', 950, 600, true);
+                },
+                IsChange: function () {
+                     if ($("#CB_IsSimpleSelector").attr("checked") != "checked") {
+                        if (nodeExt.HuiQianRole == 4 && nodeExt.HuiQianLeaderRole == 0) {
+                            this.isSimpleSelector = true;
+                            alert("このノードの副署名モードはグループリーダーモードであり、個別にのみ選択できます。");
+                        }
+                     }
+                },
+            },
+            created() {
+                InitBar(this.deliverWay);
+                var node = new Entity("BP.WF.Template.Selector", this.nodeId);
+                if (node.IsAutoLoadEmps == 1)
+                    this.isAutoLoadEmps = true;
+                if (node.IsSimpleSelector == 1)
+                     this.isSimpleSelector = true;
+                if (node.IsEnableDeptRange == 1)
+                     this.isEnableDeptRange = true;
+                if (node.IsEnableStaRange == 1)
+                     this.isEnableStaRange = true;
+                this.nodeExt = new Entity("BP.WF.Template.NodeExt", this.nodeId);
+                if (nodeExt.HuiQianRole == 4 && nodeExt.HuiQianLeaderRole == 0) //组长模式
+                     this.isSimpleSelector = false;
+                }
+        });
+        function Save() {
+            var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
+            node.DeliveryWay = Baseinfo.deliverWay;
+           
+            node.Update();
+             var node = new Entity("BP.WF.Template.Selector", Baseinfo.nodeId);
+            node.CopyForm();  //按照规则把数据放入到entity.
+            node.Update();
+        }
+    </script>
+</body>
+</html>

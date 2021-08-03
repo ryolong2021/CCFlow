@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>サブテーブルにJSモードを導入する</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "PopSimpleModel_" + GetQueryString("FK_MapData")+"_"+GetQueryString("KeyOfEn");
+            var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            //基本属性.
+            $("#TB_Title").val(mapExt.GetPara("Title"));
+            $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
+
+            $("#TB_W").val(mapExt.W); //宽度
+            $("#TB_H").val(mapExt.H); //高度.
+
+            //主题数据源.
+            $("#TB_Doc").val(mapExt.Doc);
+            $("#TB_Tag").val(mapExt.Tag); //查询数据源.
+
+            //设置按钮是否可以用?
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+
+        });
+
+
+        function Delete() {
+
+            if (confirm('削除してもよろしいですか？') == false)
+                return;
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            mapExt.Delete();
+            window.location.href = window.location.href;
+        }
+
+        function Save() {
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            mapExt.FK_MapData = GetQueryString("FK_MapData");
+
+            mapExt.SetPara("Title", $("#TB_Title").val());
+            mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
+
+            mapExt.W = $("#TB_W").val(); //宽度
+            mapExt.H = $("#TB_H").val(); //高度
+
+            //主题数据源.
+            mapExt.Doc = $("#TB_Doc").val();
+            mapExt.Tag = $("#TB_Tag").val(); //查询关键。
+
+            mapExt.ExtType = "DtlImpByJSON";
+            var i = mapExt.Save();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body  >
+
+<form id="cc">
+
+<table id="Table1" style="width:99%;">
+<caption> サブテーブルのインポート設定</caption>
+<tr>
+<td>タイトル</td>
+<td><input type="text" id="TB_Title" style="width:99%;" /> 
+<br />
+<font color=gray>
+ウィンドウに表示されるテキスト、例えば、関連する支払い履歴。
+</font>
+</td>
+</tr>
+
+<tr>
+<td>ポップアップウィンドウのプロパティ</td>
+<td >高さ：<input type="text"  id="TB_H" style="width:80px; text-align:right"  /> 幅：<input type="text"  id="TB_W" style="width:80px; text-align:right"  /> </td>
+</tr>
+
+
+<tr>
+<td>検索ヒント</td>
+<td><input type="text" id="TB_SearchTip" style="width:90%;" /> 
+<br><font color=gray >検索テキストボックスに表示される背景文字、例えば、支払人の名前を入力して検索してください。</font></td>
+</tr>
+
+<tr>
+<th colspan=2>JSONを検索</th>
+</tr>
+
+<tr>
+<td colspan=2>
+
+<textarea id="TB_Tag" name="TB_Tag" style="width:99%; height: 37px;">
+</textarea>
+</td>
+
+<tr>
+<td colspan=2>
+<font color=gray >キーワードをクリックして検索を実行し、次のようなデータソースを返します。例えば、http://xxxxx/ssss?xx=*sss@ColName=FKR,支払人;XFLX,消費タイプ;SYRQ,使用日付;Addr,場所;LSJE,支払い履歴金額;
+</font>
+ </td>
+</tr>
+
+
+<tr>
+<th colspan=2>リストデータソース</th>
+</tr>
+
+<tr>
+<td colspan=2>
+<textarea id="TB_Doc" name="TB_Doc" style="width:99%; height: 99px;">
+</textarea>
+</td>
+</tr>
+
+<tr>
+<td colspan=2>
+ 
+<a href="javascript:ShowHidden('help')">設定ヘルプ:</a>
+<div id="help"   >
+説明：
+$@Lab=ラベル@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=
+例：<br/>
+$@Lab=全部@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,支払人;XFLX,消費タイプ;SYRQ,使用日付;Addr,場所;LSJE,売上高;<br>
+$@Lab=携程商旅@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,支払人;XFLX,消費タイプ;SYRQ,使用日付;Addr,場所;LSJE,支払い履歴金額;<br>
+$@Lab=ディディチューシン@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,支払人;XFLX,消費タイプ;SYRQ,使用日付;Addr,場所;LSJE,支払い履歴金額;<br>
+$@Lab=XX会社@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,支払人;XFLX,消費タイプ;SYRQ,使用日付;Addr,場所;LSJE,支払い履歴金額;<br>
+</div>
+
+</td>
+</tr>
+
+
+<tr>
+<td colspan=2><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Save()" />
+<input type="button" value="削除"  id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
+</td>
+</tr>
+
+
+</table>
+
+ 
+
+</form>
+
+</body>
+</html>

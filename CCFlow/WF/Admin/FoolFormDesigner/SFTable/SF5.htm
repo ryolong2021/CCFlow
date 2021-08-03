@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ネイティブのデータテーブルを作成する</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <style type="text/css">
+        .style1
+        {
+            width: 184px;
+        }
+    </style>
+    <script type="text/javascript" language="javascript">
+
+        var CONST_STRUCTS = [{ No: '0', Name: '通常のコーディングテーブル（No、Nameがあります）' }, { No: '1', Name: 'ツリー構造（No、Name、ParentNoがあります）'}];
+
+        /**
+        * データフォーマットの切り替え
+        */
+        function loadStructSet(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                $("#rootTr").hide();
+            } else {
+                $("#rootTr").show();
+                // 根节点值
+                $("#TB_RootValue").val("0");
+            }
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("読み込み中です。しばらくお待ちください......");
+
+            $("#Msg").html("");
+        });
+
+        // 保存
+        function Save() {
+            $("#Msg").html("読み込み中です。しばらくお待ちください......");
+
+            var no = $("#TB_No").val() || "";
+            var name = $("#TB_Name").val() || "";
+            if (no == "" || name == "") {
+                alert('番号を入力してください。');
+                return;
+            }
+
+            if ($("#DDL_CodeStruct").val() == CONST_STRUCTS[1].No) {
+
+                var rootValue = $("#TB_RootValue").val() || "";
+                if (rootValue == "") {
+                    alert("ルートポイントは必ず記入してください！");
+                    return;
+                }
+            }
+
+            if (!$("#TB_SelectStatement").val() || $("#TB_SelectStatement").val().length == 0) {
+                alert("SQLステートメントは必ず記入してください！");
+                $("#TB_SelectStatement").focus();
+                return;
+            }
+
+            //            var frmData = $("#cc").serialize();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable");
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("SF5_Save");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            document.location.href = 'Default.htm?FK_MapData=' + GetQueryString("FK_MapData"); ;
+
+            $("#Msg").html("");
+        }
+    </script>
+</head>
+<body>
+    <form action="" id="cc">
+    <table style="width: 95%; margin: 5px; padding: 5px;">
+        <caption>
+            <a href="./Default.htm">戻る</a> - マイクロサービスHandlerの外部データソース（\DataUser\SFTableHandler.ashx
+            ファイルを書き換える必要があります）。
+        </caption>
+        <tr>
+            <th>
+                アイテム
+            </th>
+            <th class="style1">
+                値
+            </th>
+            <th>
+                コメント
+            </th>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                辞書番号
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_No" name="TB_No" />
+            </td>
+            <td>
+                辞書表の英字名を作成します。数字で始まるのではなく、表の作成にエラーが発生します。
+            </td>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                辞書名
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_Name" name="TB_Name" />
+            </td>
+            <td>
+                辞書表の日本語名を作成します。
+            </td>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                データソース
+            </td>
+            <td class="style1">
+                <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" />
+            </td>
+            <td>
+                辞書表が属するデータソースを選択します。
+            </td>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                データフォーマット
+            </td>
+            <td class="style1">
+                <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)">
+                </select>
+            </td>
+            <td>
+                特定のフィールドがある書式を選択します。
+            </td>
+        </tr>
+        <tr id="rootTr" style="display: none;">
+            <td class="GroupTitle">
+                ルートノード値
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_RootValue" name="TB_RootValue" />
+            </td>
+            <td>
+                このツリーのルートポイントを記入してください。
+            </td>
+        </tr>
+        <tr>
+            <td class="GroupTitle">
+                SQL文
+            </td>
+            <td class="style1" colspan="2">
+                <input type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;" />
+                <br />
+                検索用SQL文を入力してください。SELECT文の結果にはNo、Nameを含める必要があり、ツリー構造の場合は、PartentNoフィールドも必要です。パラメータ表現式をサポートします。例えば、@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+                    onclick="Save()">保存</a>
+            </td>
+        </tr>
+    </table>
+    </form>
+</body>
+</html>

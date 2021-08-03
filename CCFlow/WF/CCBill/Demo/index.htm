@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>デモのヘルプ</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+
+    <fieldset>
+        <legend> 前後に呼び出したAPI</legend>
+        <ul>
+            <li>フロントで呼び出したAPI /WF/CCBill/CCBill.js</li>
+            <li>バックグラウンドで起動されるAPI /WF/CCBill/CCBillAdmin.js</li>
+            <li>説明は全部jsファイルにあります。</li>
+        </ul>
+
+        <legend>どのように配置しますか？</legend>
+        <ul>
+            <li>ccformは独立配置とコード統合モード展開の二つの種類に分けて、</li>
+            <li>独立配置：ccformを独立してサイトに置いて、他のサイトのアプリケーションにサービスを提供します。urlコールのモードを使ってもいいし、ws、マイクロサービスなどを使ってアクセスできます。</li>
+            <li>コード統合部署：ccformのコードをあなたのフレームのコードと一緒に置いて作業します。このモードはccformを中間部品としてあなたの開発アーキテクチャに埋め込みます。モジュールとして独立して使用します。</li>
+            <li>どのモードでも、まず組織構造を統一し、権限を統一する必要があります。ccc formの組織構造集成をどうやって実現しますか？参照してください。<a href=''>ccform組織構造の統合</a> </li>
+        </ul>
+
+        <legend> 独立配置モード</legend>
+        <ul>
+            <li>このようなモードは簡潔で、爽やかで、二つのシステムは互いに干渉しない。</li>
+            <li>二つのサイトの共同作業は、データアクセスの安全を考慮する必要がある。</li>
+            <li>私たちはインターフェースをUrlインターフェースとAPIインターフェースの二つの部分に分けます。</li>
+            <li>Urlパラメータは以下の通りです</li>
+            <li>レシートリストを呼び出します：http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=Start&UserNo=zhangsan&SID=xxxxx </li>
+            <li>指定されたレシートのリストを呼び出します：http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=SearchBill&FrmID=myFrmID&UserNo=zhangsan&SID=xxxxx </li>
+            <li>レシートを新規：http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=NewBill&FrmID=myFrmID&UserNo=zhangsan&SID=xxxxx </li>
+            <li>レシートを開く: http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=NewBill&FrmID=myFrmID&OID=123&UserNo=zhangsan&SID=xxxxx </li>
+        </ul>
+
+        <legend> コード統合部署</legend>
+        <ul>
+            <li>このモードはccformの前後のコードをあなたの前後のコードと一緒に置いて作業する必要があります。このモードでは二つのフレームが一緒に働いているので、以下のことを注意してください。</li>
+            <li>1. システム登録ページはあなたのフレームで完成します。</li>
+            <li>2. パスワードの登録検証が完了したら、ccformの登録インターフェースを呼び出す必要があります。このようにccformもログインしました。同様にログアウトする時も、ccformのログアウトインターフェースを呼び出して、登録情報の安全を確保します。</li>
+            <li>3. Port.htmを経ってccformにアクセスする必要はありません。</li>
+            <li>4. ccformのjsファイルを参照してapiインターフェースを呼び出すことができます。</li>
+
+            <li>私たちはインターフェースをUrlインターフェースとAPIインターフェースの二つの部分に分けます。</li>
+            <li>Urlパラメータは以下の通りです</li>
+            <li>レシートリストを呼び出します：http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=Start&UserNo=zhangsan&SID=xxxxx </li>
+            <li>指定されたレシートのリストを呼び出します： http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=SearchBill&FrmID=myFrmID&UserNo=zhangsan&SID=xxxxx </li>
+            <li>レシートを新規：http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=NewBill&FrmID=myFrmID&UserNo=zhangsan&SID=xxxxx </li>
+            <li>レシートを開く: http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=NewBill&FrmID=myFrmID&OID=123&UserNo=zhangsan&SID=xxxxx </li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

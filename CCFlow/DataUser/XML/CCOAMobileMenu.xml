@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  
+  <!-- 移动OA的右边菜单. -->
+  <MobileMenu No="News" CH="ニュース" JP="ニュース" Url="/App/News/NewsListMobile.aspx" Img="/WF/App/Classic/Img/Menu/Start.png" Enable="1" Title="新しいフロー申請を発行する" />
+  <MobileMenu No="Notice" CH="発表" JP="発表" Url="/App/Notice/NoticeListMobile.aspx" Img="/WF/App/Classic/Img/Menu/EmpWorks.png" Enable="1" Title="私の対応待ち" />
+  <MobileMenu No="BBS" CH="グループフォーラム" JP="グループフォーラム" Url="/App/BBS/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/EmpWorks.png" Enable="1" Title="私の対応待ち" />
+  <MobileMenu No="AddressList" CH="通信録" JP="通信録"  Url="/App/AddressList/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="私の仕事をコピーします" />
+  
+  <MobileMenu No="Meeting" CH="会議室" JP="会議室"  Url="/App/Meeting/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="私の仕事をコピーします" />
+  <MobileMenu No="Car" CH="車両" JP="車両"  Url="/App/Car/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="私の仕事をコピーします" />
+  <MobileMenu No="DailySupplies" CH="事務用品" JP="事務用品"  Url="/App/DailySupplies/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="私の仕事をコピーします" />
+
+  <MobileMenu No="HRInfo" CH="給与明細" JP="給与明細"  Url="/App/HR/SalaryBillMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="私の仕事をコピーします" />
+
+</NewDataSet>

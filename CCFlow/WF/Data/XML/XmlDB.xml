@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DS>
+  <!-- 系统内置字段-与工作流相关的内置字段. -->
+  <InitField No="SAIDs" CH="次の受信者"  GroupName="ノードフォームフィールド" Note="次のステップの受信者を収集するために使用します。テキストボックスをダブルクリックして、ポップアップウィンドウで受信者をポップアップします。ノードアクセスルールを参照してください。"  />
+  <InitField No="SysCCEmps" CH="CCへ"  GroupName="ノードフォームフィールド" Note="次の手順でCCを収集するために使用します。テキストボックスをダブルクリックして、ポップアップウィンドウを使用してCCをポップアップします。ノードのCCルールを参照してください。"  />
+  <InitField No="PrjNo" CH="プロジェクト番号、プロジェクト名"  GroupName="ノードフォームフィールド" Note="プロジェクトPrjNoとPrjNameの2つのフィールドを直接追加します。これらは、プロジェクトフローで合意された2つのフィールドです。"  />
+  <InitField No="SysIsReadReceipts" CH="開封確認を起用するかどうか"  GroupName="ノードフォームフィールド" Note="開封確認のルールを参照してください"  />
+  <InitField No="IsSendEmail" CH="メールを送る"  GroupName="ノードフォームフィールド" Note="このフィールドは、ノードイベントのメッセージプッシュと組み合わせて実装されます"   />
+  <InitField No="IsSendSMS"   CH="SMSリマインダーしますか"  GroupName="ノードフォームフィールド"   Note="このフィールドは、ノードイベントのメッセージプッシュと組み合わせて実装されます"  />
+  
+  <!--./Img/MapExt/ExpImp.png-->
+    <MapMenu No="ExpImp" CH="インポート/エクスポート" JS="javascript:ExpImp(@MyPK,@FK_Flow);" Img="icon-copy"
+           Note="インポート/エクスポートテーブルテンプレート。" />
+    <!--./../Img/Btn/New.gif-->
+  <MapMenu No="NewF" CH="新規フィールド"   JS="javascript:AddF(@MyPK);"  Img="icon-new" 
+           Note="テーブルに項目を新規作成します。" />
+  
+  <!--./Img/MapExt/HiddenField.png-->
+  <MapMenu No="HidAttr" CH="フィールドを隠す" JS="javascript:HidAttr(@MyPK);" Img="icon-hidden"
+            Note="主に計算と配向条件の設定に使用されます。" />
+  <!--./Img/MapExt/GroupBar.png-->
+  <MapMenu No="FGroup" CH="新規フィールドグループ" JS="javascript:GroupFieldNew(@MyPK);" Img="icon-groupbar"
+             Note="同様のフィールドを分離して、表示をより整理します。" />
+    
+  <!--<MapMenu No="CopyF" CH="复制字段"  JS="javascript:CopyFieldFromNode(@MyPK);"  Img="/WF/Img/Btn/Copy.gif"
+           Note="从其它表单中复制字段" />-->
+  <!--./Img/MapExt/Dtl.png-->
+  <MapMenu No="DTable" CH="新規サブテーブル" JS="javascript:MapDtl(@MyPK);" Img="icon-dtl"
+           Note="サブテーブルとも言い、例:償還費用のリスト."  />
+  <!--./../Img/Btn/ChoseCol.gif-->
+  <MapMenu11 No="DM" CH="1対多を増やす"   JS="javascript:MapM2M(@MyPK);" Img="icon-closecol" 
+           Note="例:プロジェクト担当者、コース選択." />
+  
+  <!--./../Img/Btn/ChoseCol.gif-->
+    <MapMenu11 No="DMM" CH="1対多から多に増やす"   JS="javascript:MapM2MM(@MyPK);" Img="icon-closecol"
+           Note="例 コレクション内の全員の位置を設定します" />
+  <!--./Img/MapExt/Attachment.png-->
+  <MapMenu No="Ath" CH="新規付属構成部品"     JS="javascript:Ath(@MyPK);" Img="icon-attachment" 
+           Note="単一の添付ファイルと複数の添付ファイルタイプのデータをアップロードおよび参照する。"/>
+  <!--./Img/Frame.gif-->
+  <MapMenu No="Frm" CH="フレームを設定する"    JS="javascript:MapFrame(@MyPK);" Img="icon-frame" 
+           Note="フレーム埋め込みカスタムURL"/>
+  <!--./Img/MapExt/event.png-->
+  <MapMenu11 No="FrmEvent" CH="フォームイベント"    JS="javascript:FrmEvent(@MyPK);" Img="icon-event"
+             Note="特別なアプリケーション要件を実現できます。"/>
+  <!--./Img/MapExt/DTS.gif-->
+    <MapMenu No="MapExt" CH="拡張設定"    JS="javascript:MapExt(@MyPK);" Img="icon-dts"
+            Note="特別なアプリケーション要件を達成するためのフォームのビジネスロジック。"/>
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu111 No="Sln" CH="アクセス制御方式"    JS="javascript:Sln(@MyPK);" Img="icon-dts"
+          Note="さまざまなフィールドへのさまざまなノードのアクセス許可アクセスを実現できます."/>
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu No="MapExt" CH="フォームの属性"    JS="javascript:MapDataEdit(@MyPK);" Img="icon-dts"
+            Note="フォームの基本情報、マップされた物理テーブル、表示形式を変更します...　"/>
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu11 No="BatchEdit" CH="一括修正"    JS="javascript:BatchEdit(@MyPK);" Img="icon-dts"
+            Note="フィールドプロパティを一括で変更します..."/>
+
+  
+  
+  
+  
+    <!--<MapMenu111 No="Ext" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="/WF/Img/Btn/DTS.gif" />-->
+
+  <FExt No="Auto" CH="自動入力" DFor="TB,DDL,Checkbox" />
+
+  <InputCheck No="01" CH="テキストボックスに入力できるのは数値コードのみです（小数点は入力できません）"    JS="this.value=this.value.replace(/\D/g,'')" />
+  <InputCheck No="02" CH="数字のみ入力可能、小数点以下入力可能"    JS="this.value=this.value.replace(/\D/g,'')" />
+
+    <FieldGroup No="IsPass" CH="サブテーブル監査グループ化" CHDesc="合格かどうか、監査担当者、監査日を問わず、3つの監査グループフィールドを一括で追加します。" />
+    <FieldGroup No="Eval"   CH="品質評価" CHDesc="一括で、評価者ID、評価者名、評価スコア、評価内容の4つの監査グループフィールドを追加します。" />
+    <!-- 表单事件 -->
+    <FrmEvent No="FrmLoadBefore" CH="ロード前" CHDesc="" />
+    <FrmEvent No="FrmLoadAfter" CH="ロード後"  CHDesc="" />
+    <FrmEvent No="SaveBefore" CH="保存前"    CHDesc="" />
+    <FrmEvent No="SaveAfter" CH="保存後"     CHDesc="" />
+    <FrmEvent No="DtlSaveEnd" CH="サブテーブル保存後"     CHDesc="" />
+
+  <!-- 公文左边词条 -->
+  <GovWordLeft No="01"  Name="することが" />
+  <GovWordLeft No="02"  Name="お願いします" />
+  <GovWordLeft No="03"  Name="プレゼント" />
+  <GovWordLeft No="04"  Name="報告する" />
+  <GovWordLeft No="05"  Name="提案" />
+  <GovWordLeft No="06"  Name="提案する" />
+  <GovWordLeft No="07"  Name="転送される" />
+  
+  <!--<GovWordLeft No="08"  Name="同意。" />
+  <GovWordLeft No="09"  Name="拟同意，" />
+  <GovWordLeft No="10"  Name="妥否，" />
+  <GovWordLeft No="11"  Name="已核，" />
+  <GovWordLeft No="12"  Name="，" />
+  <GovWordLeft No="13"  Name="。" />
+  <GovWordLeft No="14"  Name="、" />
+  <GovWordLeft No="15"  Name="；" />
+  <GovWordLeft No="16"  Name="？" />-->
+
+  <!-- 公文右边词条 -->
+  <GovWordRight No="01"  Name="同僚"   />
+  <GovWordRight No="02"  Name="知識を読む(Cc)。" />
+  <GovWordRight No="03"  Name="それを読んで。" />
+  <GovWordRight No="04"  Name="読書部門。" />
+  <GovWordRight No="05"  Name="読んで見せてください。" />
+  <GovWordRight No="06"  Name="承認されました。" />
+  <GovWordRight No="07"  Name="指示。" />
+  <GovWordRight No="08"  Name="循環（並列）。" />
+  <GovWordRight No="09"  Name="レビュー。" />
+  <GovWordRight No="10"  Name="通過します。" />
+  <GovWordRight No="11"  Name="承認されました。" />
+  <GovWordRight No="12"  Name="連署。" />
+  <GovWordRight No="13"  Name="取り扱いを主導してください。" />
+  <GovWordRight No="14"  Name="取り扱いを支援します。" />
+  <GovWordRight No="15"  Name="スタッフを派遣して参加させます。" />
+  <GovWordRight No="16"  Name="提案された意見を提出する。" />
+
+ <!-- 处理名字多音字. -->
+  <PinYin No="阿"  Name="a" />
+  <PinYin No="挨"  Name="ai" />
+  <PinYin No="拗"  Name="niu" />
+  <PinYin No="扒"  Name="ba" />
+  <PinYin No="把"  Name="ba" />
+  <PinYin No="蚌"  Name="bang" />
+  <PinYin No="薄"  Name="bo" />
+  <PinYin No="堡"  Name="bao" />
+  <PinYin No="暴"  Name="bao" />
+  <PinYin No="辟"  Name="bi" />
+  <PinYin No="辟"  Name="pi" />
+  <PinYin No="扁"  Name="bian" />
+  <PinYin No="扁"  Name="pian" />
+  <PinYin No="泊"  Name="bo" />
+  <PinYin No="藏"  Name="cong" />
+  <PinYin No="禅"  Name="shon" />
+  <PinYin No="颤"  Name="chan" />
+  <PinYin No="单"  Name="shan" />
+  <PinYin No="度"  Name="du" />
+  <PinYin No="囤"  Name="tun" />
+  <PinYin No="给"  Name="gei" />
+  <PinYin No="会"  Name="hui" />
+  <PinYin No="奇"  Name="qi" />
+  <PinYin No="落"  Name="luo" />
+  <PinYin No="蔓"  Name="man" />
+  <PinYin No="强"  Name="qiang" />
+  <PinYin No="血"  Name="xie" />
+  <PinYin No="幢"  Name="zhuang" />
+  <PinYin No="红"  Name="hong" />
+  <PinYin No="万"  Name="wan" />
+  <PinYin No="盛"  Name="sheng" />
+  <PinYin No="汤"  Name="tang" />
+  <PinYin No="曾"  Name="zeng" />  
+  <PinYin No="解"  Name="xie" /> 
+  <PinYin No="贾"  Name="jia" /> 
+  <PinYin No="翟"  Name="zhai" />   
+  <PinYin No="查"  Name="zha" />
+  <PinYin No="家"  Name="jia" />
+  <PinYin No="邹"  Name="zou" />  
+</DS>
+

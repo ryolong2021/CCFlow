@@ -1,0 +1,434 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+    <script src="../../../js/common/app_common.js"></script>
+</head>
+
+<body>
+    <div class="o-whole o-whole--with-bg o-whole--with-navigation o-whole--global">
+        <div class="o-whole__body-container">
+            <div class="o-whole__navigation" data-simplebar="true">
+                <div class="o-global-navigation">
+                    <header class="o-global-navigation__header">
+                        <button type="button"
+                                class="o-global-navigation__toggle-button">
+                            <i class="a-icon a-icon--menu"></i>
+                        </button>
+                        <div class="o-global-navigation__logo">
+                            <a href="#"><img src="../../../assets/images/logo.svg" alt="Densin" /></a>
+                        </div><button type="button" class="o-global-navigation__noti-button">
+                            <div class="a-nav-icon a-nav-icon--news a-nav-icon--large"><i class="a-icon a-icon--news"></i></div>
+                        </button>
+                    </header>
+                    <div class="o-global-navigation__apply-button">
+                        <button type="button" class="a-apply-button">
+                            <i class="a-icon a-icon--request"></i>申請する
+                        </button>
+                    </div><button type="button"
+                                  class="o-global-navigation__close-button">
+                        <i class="a-icon a-icon--close"></i>
+                    </button>
+                    <nav class="o-global-navigation__nav">
+                        <div class="m-nav-list o-global-navigation__nav-items">
+                            <div class="a-nav-item a-nav-item--request-list">
+                                <a href="requestlist.html" class="a-nav-item__link">
+                                    <div class="a-nav-icon a-nav-icon--request-list a-nav-item__icon">
+                                        <i class="a-icon a-icon--request-list"></i>
+                                    </div><span class="a-nav-item__label">自分の申請を見る</span>
+                                </a>
+                            </div>
+                            <div class="a-nav-item a-nav-item--approval-list">
+                                <a href="#" class="a-nav-item__link">
+                                    <div class="a-nav-icon a-nav-icon--approval-list a-nav-item__icon">
+                                        <i class="a-icon a-icon--approval-list"></i>
+                                    </div><span class="a-nav-item__label">承認依頼を見る</span>
+                                </a>
+                            </div>
+                            <div class="a-nav-item a-nav-item--labor-menu a-nav-item--has-subnav">
+                                <a class="a-nav-item__link">
+                                    <div class="a-nav-icon a-nav-icon--labor-menu a-nav-item__icon">
+                                        <i class="a-icon a-icon--labor-menu"></i>
+                                    </div><span class="a-nav-item__label">労務メニュー</span><span class="a-nav-item__arrow">
+                                        <i class="a-icon a-icon--arrow-down"></i><i class="a-icon a-icon--arrow-up"></i>
+                                    </span>
+                                </a>
+                                <div class="a-nav-item__items a-nav-item__items--n2">
+                                    <div class="a-nav-item a-nav-item--subnav">
+                                        <a href="#" class="a-nav-item__link">
+                                            <span class="a-nav-item__label">人事業務</span>
+                                        </a>
+                                    </div>
+                                    <div class="a-nav-item a-nav-item--subnav">
+                                        <a href="#" class="a-nav-item__link">
+                                            <span class="a-nav-item__label">BS業務</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="a-nav-item a-nav-item--settings">
+                                <a href="#" class="a-nav-item__link">
+                                    <div class="a-nav-icon a-nav-icon--settings a-nav-item__icon">
+                                        <i class="a-icon a-icon--settings"></i>
+                                    </div><span class="a-nav-item__label">メンテナンス</span>
+                                </a>
+                            </div>
+                        </div><button type="button" class="o-global-navigation__logout-button">ログアウト</button>
+                        <div class="m-nav-list o-global-navigation__nav-system-action">
+                            <div class="a-nav-item a-nav-item--news">
+                                <a href="#" class="a-nav-item__link">
+                                    <div class="a-nav-icon a-nav-icon--news a-nav-item__icon"><i class="a-icon a-icon--news"></i></div>
+                                    <span class="a-nav-item__label">お知らせ</span>
+                                </a>
+                            </div>
+                            <div class="a-nav-item a-nav-item--avatar a-nav-item--user-account">
+                                <a href="#" class="a-nav-item__link">
+                                    <div class="a-nav-icon a-nav-icon--avatar a-nav-item__icon">
+                                        <i class="a-icon a-icon--avatar"></i>
+                                    </div><span class="a-nav-item__label">
+                                        <span class="a-nav-item__user-name">
+                                            山田太郎<span class="a-nav-item__user-prefix">さん</span>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+                    <div class="m-shortcut-nav">
+                        <div class="a-nav-item a-nav-item--request-list">
+                            <a href="#" class="a-nav-item__link">
+                                <div class="a-nav-icon a-nav-icon--request-list a-nav-item__icon">
+                                    <i class="a-icon a-icon--request-list"></i>
+                                </div><span class="a-nav-item__label">自分の申請を見る</span>
+                            </a>
+                        </div>
+                        <div class="a-nav-item a-nav-item--approval-list">
+                            <a href="#" class="a-nav-item__link">
+                                <div class="a-nav-icon a-nav-icon--approval-list a-nav-item__icon">
+                                    <i class="a-icon a-icon--approval-list"></i>
+                                </div><span class="a-nav-item__label">承認依頼を見る</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="o-whole__body">
+                <section class="m-section m-section--no-padding">
+                    <div class="m-search-bar" id="search-bar-comp">
+                        <div class="m-search-bar__field">
+                            <div class="m-search-bar__search-input">
+                                <div class="a-text-field a-text-field--type-search m-search-bar__input">
+                                    <span class="a-text-field__icon"><i class="a-icon a-icon--search"></i></span><input type="search"
+                                                                                                                        class="a-text-field__input" />
+                                </div>
+                            </div><button class="m-search-bar__button-close"><i class="a-icon a-icon--close"></i></button>
+                        </div>
+                        <div class="m-search-bar__button">
+                            <button type="button" class="a-search-button a-search-button--light">
+                                <i class="a-icon a-icon--search"></i><span class="a-search-button__label">キーワード検索</span>
+                            </button>
+                        </div>
+                    </div>
+                    <h1 class="a-heading undefined"><span class="a-heading__label">自分の申請を見る</span></h1>
+                </section>
+                <section class="m-section m-section--no-padding p-search-filter-holder">
+                    <div class="m-tabs">
+                        <ul class="m-tabs__tab-list">
+                            <li class="m-tabs__tab m-tabs__tab--active">
+                                <button type="button"
+                                        class="a-tab-nav-item a-tab-nav-item--active">
+                                    メニュー
+                                </button>
+                            </li>
+                            <li class="m-tabs__tab"><button type="button" class="a-tab-nav-item">下書き</button></li>
+                            <li class="m-tabs__tab"><button type="button" class="a-tab-nav-item">履歴から作成</button></li>
+                        </ul>
+                        <div class="m-tabs__indicator"></div>
+                        <div class="m-tabs__contents">
+                            <div class="m-tabs__content m-tabs__content--active">
+                                <section class="m-section m-section--fill-white">
+                                    <div class="m-nav-list m-nav-list--menu" id="menu">
+                                        <div class="a-nav-item a-nav-item--menu-item">
+                                            <a href="#" class="a-nav-item__link">
+                                                <span class="a-nav-item__label">外出・出張の申請</span>
+                                            </a>
+                                        </div>
+                                        <div class="a-nav-item a-nav-item--menu-item">
+                                            <a href="#" class="a-nav-item__link">
+                                                <span class="a-nav-item__label">家族情報の変更</span>
+                                            </a>
+                                        </div>
+                                        <div class="a-nav-item a-nav-item--menu-item a-nav-item--has-subnav">
+                                            <a class="a-nav-item__link">
+                                                <span class="a-nav-item__label">家族情報の変更</span>
+                                                <span class="a-nav-item__arrow">
+                                                    <i class="a-icon a-icon--arrow-down"></i>
+                                                    <i class="a-icon a-icon--arrow-up"></i>
+                                                </span>
+                                            </a>
+                                            <div class="a-nav-item__items a-nav-item__items--n10">
+                                                <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav">
+                                                    <a href="../sample/densin-sample-form.html"
+                                                       class="a-nav-item__link">
+                                                        <span class="a-nav-item__label">弔事の連絡</span>
+                                                    </a>
+                                                </div>
+                                                <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav a-nav-item--disabled">
+                                                    <a href="#" class="a-nav-item__link"><span class="a-nav-item__label">弔事の連絡（代理）</span></a>
+                                                </div>
+                                                <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav a-nav-item--has-subnav">
+                                                    <a class="a-nav-item__link a-nav-item__custom">
+                                                        <span class="a-nav-item__label">慶事の連絡</span>
+                                                        <span class="a-nav-item__arrow">
+                                                            <i class="a-icon a-icon--arrow-down"></i>
+                                                            <i class="a-icon a-icon--arrow-up"></i>
+                                                        </span>
+                                                    </a>
+                                                    <div class="a-nav-item__items a-nav-item__items--n10">
+                                                        <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav">
+                                                            <a href="#"
+                                                               class="a-nav-item__link">
+                                                                <span class="a-nav-item__label">三級メニュー1</span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav a-nav-item--has-subnav" id="d01">
+                                                            <a class="a-nav-item__link a-nav-item__custom">
+                                                                <span class="a-nav-item__label">三級メニュー2</span>
+                                                                <span class="a-nav-item__arrow">
+                                                                    <i class="a-icon a-icon--arrow-down"></i>
+                                                                    <i class="a-icon a-icon--arrow-up"></i>
+                                                                </span>
+                                                            </a>
+                                                            <div class="a-nav-item__items a-nav-item__items--n10" id="c01">
+                                                                <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav">
+                                                                    <a href="#"
+                                                                       class="a-nav-item__link">
+                                                                        <span class="a-nav-item__label">四級メニュー1</span>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav">
+                                                                    <a href="#"
+                                                                       class="a-nav-item__link">
+                                                                        <span class="a-nav-item__label">四級メニュー2</span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav">
+                                                            <a href="#"
+                                                               class="a-nav-item__link">
+                                                                <span class="a-nav-item__label">三級メニュー3</span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav">
+                                                            <a href="#"
+                                                               class="a-nav-item__link">
+                                                                <span class="a-nav-item__label">三級メニュー4</span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="a-nav-item a-nav-item--menu-item a-nav-item--subnav">
+                                                            <a href="#"
+                                                               class="a-nav-item__link">
+                                                                <span class="a-nav-item__label">三級メニュー5</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="a-nav-item a-nav-item--menu-item">
+                                            <a href="#" class="a-nav-item__link">
+                                                <span class="a-nav-item__label">税金・年金情報の変更</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="m-nav-list m-nav-list--menu" id="menu-search-result"></div>
+                                </section>
+                            </div>
+                            <div class="m-tabs__content">
+                                <section class="m-section m-section--no-padding">
+                                    <div class="m-request-info-list">
+                                        <div class="m-request-info m-request-info--draft">
+                                            <div class="m-request-info__content">
+                                                <div class="m-request-info__status">
+                                                    <div class="a-status-info a-status-info--draft">
+                                                        <div class="a-status-info__icon"><i class="a-icon a-icon--draft"></i></div><span class="a-status-info__label">下書き</span>
+                                                    </div>
+                                                </div>
+                                                <div class="m-request-info__detail">
+                                                    <div class="m-request-info__detail-title">弔事の連絡</div>
+                                                    <div class="m-request-info__detail-list">
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">申請日</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">2021/01/29</span>
+                                                        </div>
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">従業員名</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">未入力</span>
+                                                        </div>
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">代理申請者</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">上野 透</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-request-info m-request-info--remand">
+                                            <div class="m-request-info__content">
+                                                <div class="m-request-info__status">
+                                                    <div class="a-status-info a-status-info--remand">
+                                                        <div class="a-status-info__icon"><i class="a-icon a-icon--remand"></i></div><span class="a-status-info__label">差戻し</span>
+                                                    </div>
+                                                </div>
+                                                <div class="m-request-info__detail">
+                                                    <div class="m-request-info__detail-title">弔事の連絡（代理）</div>
+                                                    <div class="m-request-info__detail-list">
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">申請日</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">2021/01/29</span>
+                                                        </div>
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">従業員名</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">未入力</span>
+                                                        </div>
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">代理申請者</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">上野 透</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-request-info m-request-info--waiting">
+                                            <div class="m-request-info__content">
+                                                <div class="m-request-info__status">
+                                                    <div class="a-status-info a-status-info--waiting">
+                                                        <div class="a-status-info__icon"><i class="a-icon a-icon--waiting"></i></div><span class="a-status-info__label">未対応</span>
+                                                    </div>
+                                                </div>
+                                                <div class="m-request-info__detail">
+                                                    <div class="m-request-info__detail-title">弔事の連絡（代理）</div>
+                                                    <div class="m-request-info__detail-list">
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">申請日</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">2021/01/29</span>
+                                                        </div>
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">従業員名</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">-</span>
+                                                        </div>
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">訪問先</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">-</span>
+                                                        </div>
+                                                        <div class="a-request-info-item a-request-info-item--long">
+                                                            <span class="a-request-info-item__label">承認者</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">上野 透</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="m-tabs__content">
+                                <section class="m-section m-section--no-padding">
+                                    <div class="m-request-info-list">
+                                        <div class="m-request-info m-request-info--approval m-request-info--with-duplicate m-request-info--buttons">
+                                            <div class="m-request-info__content">
+                                                <div class="m-request-info__status">
+                                                    <div class="a-status-info a-status-info--approval">
+                                                        <div class="a-status-info__icon"><i class="a-icon a-icon--approval"></i></div><span class="a-status-info__label">承認</span>
+                                                    </div>
+                                                </div>
+                                                <div class="m-request-info__detail">
+                                                    <div class="m-request-info__detail-title">弔事の連絡（代理）</div>
+                                                    <div class="m-request-info__detail-list">
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">申請日</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">2021/01/29</span>
+                                                        </div>
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">代理申請者</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">田中 一郎</span>
+                                                        </div>
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">従業員名</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">福岡</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-button-container m-button-container--horizontal m-request-info__action">
+                                                <button class="a-button a-button--text">
+                                                    <div class="a-button__label">コピーして作成する</div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="m-request-info m-request-info--approval m-request-info--with-duplicate m-request-info--buttons">
+                                            <div class="m-request-info__content">
+                                                <div class="m-request-info__status">
+                                                    <div class="a-status-info a-status-info--approval">
+                                                        <div class="a-status-info__icon"><i class="a-icon a-icon--approval"></i></div><span class="a-status-info__label">承認</span>
+                                                    </div>
+                                                </div>
+                                                <div class="m-request-info__detail">
+                                                    <div class="m-request-info__detail-title">弔事の連絡（代理）</div>
+                                                    <div class="m-request-info__detail-list">
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">申請日</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">2021/01/29</span>
+                                                        </div>
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">代理申請者</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">-</span>
+                                                        </div>
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">従業員名</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">福岡</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-button-container m-button-container--horizontal m-request-info__action">
+                                                <button class="a-button a-button--text">
+                                                    <div class="a-button__label">コピーして作成する</div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="m-request-info m-request-info--remand m-request-info--with-duplicate m-request-info--buttons">
+                                            <div class="m-request-info__content">
+                                                <div class="m-request-info__status">
+                                                    <div class="a-status-info a-status-info--remand">
+                                                        <div class="a-status-info__icon"><i class="a-icon a-icon--remand"></i></div><span class="a-status-info__label">差戻し</span>
+                                                    </div>
+                                                </div>
+                                                <div class="m-request-info__detail">
+                                                    <div class="m-request-info__detail-title">出張申請</div>
+                                                    <div class="m-request-info__detail-list">
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">申請日</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">2021/01/29</span>
+                                                        </div>
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">期間</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">2021/01/27 - 2021/02/28</span>
+                                                        </div>
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">訪問先</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">福岡</span>
+                                                        </div>
+                                                        <div class="a-request-info-item">
+                                                            <span class="a-request-info-item__label">申請者</span><span class="a-request-info-item__separator">：</span><span class="a-request-info-item__value">山田 太郎</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-button-container m-button-container--horizontal m-request-info__action">
+                                                <button class="a-button a-button--text">
+                                                    <div class="a-button__label">コピーして作成する</div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script src="../../../js/components.js"></script>
+</body>
+
+</html>

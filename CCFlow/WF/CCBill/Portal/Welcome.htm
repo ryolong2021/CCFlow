@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8" />
+    <title>ようこそページ-X-admin2.2</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link href="./css/font.css" rel="stylesheet" />
+    <link href="./css/xadmin.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;読み込み中です。少々お待ちください。");
+
+            //获得数数量，并把数量绑定.
+            var handler = new HttpHandler("BP.Frm.WF_CCBill_Portal");
+            var data = handler.DoMethodReturnJSON("Default_Init");
+            GenerFullAllDivVal(data);
+
+            //绑定- 流程发起数
+            data = handler.DoMethodReturnJSON("Default_DataSet");
+
+            //里面有三个数据源, 分别绑定前三个chart.
+            $("#Msg").html("");
+
+
+
+        });
+
+        function Save() {
+
+        }
+    </script>
+
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div id="Msg"></div>
+    <div class="layui-fluid">
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+
+                <div class="layui-card-body ">
+                    <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>フローモデル</h3>
+                                <p>
+                                    <cite id="FlowNum"> 0 </cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>ノード数</h3>
+                                <p>
+                                    <cite id="NodeNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>フォームテンプレート</h3>
+                                <p>
+                                    <cite id="FromNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>インスタンス総数</h3>
+                                <p>
+                                    <cite id="FlowInstaceNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>処理待ち数</h3>
+                                <p>
+                                    <cite id="TodolistNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>返却回数</h3>
+                                <p>
+                                    <cite id="ReturnNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <!--<li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>期限切れ件数</h3>
+                                <p>
+                                    <cite id="OverTimeNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>完了数</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>勤務評定</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>人員</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>ポスト数</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>部署数</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>-->
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-row layui-col-space15">
+
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">開始したフロー件数</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="DTNY" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">処理待ち数量</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="chartDeptNums" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">フローチャートのタイプ分布</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="chartFlowNums" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">処理待ち状態分布</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="main4" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <fieldset>
+                        <cite><b>BPMをご利用ください。</b></cite>
+                        <ul>
+                            <li>ワークフローエンジンは2003年に開発しました、.netとJavaの2つのバージョンを持っています。これらのコード構造、データベース構造、デザイン思想、機能構成、マニュアルは全く同じです。フローフォームテンプレートはこの2つのバージョンでは完全に共通しています。</li>
+                            <li>CCFlowは.netバージョンの略称で、済南チームが研究開発を担当します。JFlowはJava版の略称で、深セン研究開発チームが開発しました。二つの製品の核心コードは社会に100%オープンして、十数年来、私達はずっと自分の約束を実行して、製品の品質を向上させて、心から中国のIT産業にサービスして、国内の有名なワークフローエンジンのNo.になりました。</li>
+                            <li>ワークフローのエンジンの操作が簡単で、概念が分かりやすく、マニュアルが完備しています。コードの注釈が完備しています。</li>
+                            <li>ワークフロー・エンジンはフォーム・エンジンとフロー・エンジンの両方を含み、完璧に結合し、効率的に動作する。フローとフォームのインターフェースの可視化の設計は、中国の国情に適応した多様なシーンの配置が可能です。</li>
+                            <li>ワークフローのエンジンの発展と2003年を駆け抜け、十数年の発展を経て、国内で最も広範な研究グループと応用顧客群を持ち、大手グループ企業のIT部門、ソフトウェア会社、研究院、大学の研究と応用の製品である。</li>
+                            <li>ワークフローエンジンは中小企業の需要を満たすだけでなく、通信レベルのユーザーのアプリケーションを満たすことができます。シーメンス、海南航空、中国船舶、山東省国土資源庁、華電国際、江蘇省測絵院、アモイ証券、天津港、大連華信、北京軟通動力、浙江商銀行、中国新疆天業グループ、中航工業、中航工業、中国際宇宙飛行など国内外の大手企業が政府機関に適用されます。</li>
+                            <li>ccbpmには完全な解決策を持っています。ccformフォームエンジン、cgpm権限管理システム。</li>
+                            <li>ccbpmはあなたの開発フレームワークと統合しやすく、第三者の組織とも一体化しやすいです。配置タイプの開発は業務担当者、ITメンテナに向いている一方、プログラマ向けの高級エンジンAPI開発もあります。</li>
+                            <li>サービス電話：05331-852374939、1866053393</li>
+                        </ul>
+
+                        <cite><b>より多くのリソース</b></cite>
+                        <ul style="">
+                            <!--<li><a href="http://online.ccflow.org" target="_blank">BPMエンジニア養成認証ネットワーク</a></li>-->
+
+                            <li><a href="http://ccflow.org" target="_blank">ccflow公式サイト</a></li>
+                            <li><a href="http://ccbpm.mydoc.io" target="_blank">ccbpmオンラインマニュアル</a></li>
+                            <li><a href="http://ccform.mydoc.io" target="_blank">ccformオンラインマニュアル</a></li>
+                            <li><a href="http://bbs.ccflow.org" target="_blank">ワークフローエンジンフォーラム</a></li>
+                            <li><a href="http://ccflow.ke.qq.com" target="_blank"><b>オンラインビデオチュートリアル</b></a></li>
+                            <li>
+                                オーペンソース資料（ビデオ教程、ppt、文書資料）のSVN：<a href='http://140.143.236.168:7080/svn/ccbpmdocs'
+                                                               target="_blank"> http://140.143.236.168:7080/svn/ccbpmdocs </a>ユーザ名：ccbpm、パスワード：ccbpm
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('DTNY'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            grid: {
+                top: '5%',
+                right: '1%',
+                left: '1%',
+                bottom: '10%',
+                containLabel: true
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: 'ユーザー数',
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line',
+                smooth: true
+            }]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('chartDeptNums'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            grid: {
+                top: '5%',
+                right: '2%',
+                left: '1%',
+                bottom: '10%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: 'PV',
+                    type: 'line',
+                    areaStyle: { normal: {} },
+                    data: [120, 132, 101, 134, 90, 230, 210],
+                    smooth: true
+                },
+                {
+                    name: 'UV',
+                    type: 'line',
+                    areaStyle: { normal: {} },
+                    data: [45, 182, 191, 234, 290, 330, 310],
+                    smooth: true,
+
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('chartFlowNums'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['休暇申請', '清算', '入社申請', '退職届け', 'プロジェクト承認']
+            },
+            series: [
+                {
+                    name: 'アクセス元',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        { value: 335, name: '休暇申請' },
+                        { value: 310, name: '清算' },
+                        { value: 234, name: '入社申請' },
+                        { value: 135, name: '退職届け' },
+                        { value: 1548, name: 'プロジェクト承認' }
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main4'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            series: [
+                {
+                    name: 'インスタンス総数',
+                    type: 'gauge',
+                    detail: { formatter: '{value}%' },
+                    data: [{ value: 88, name: '処理待ち&期限切れ' }]
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+
+</body>
+</html>

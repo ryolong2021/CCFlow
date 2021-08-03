@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>検索の複数選択</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <base target="_self" />
+    <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            //组织主键.
+            var mypk = "MultipleChoiceSearch_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            var i = en.RetrieveFromDBSources();
+
+            GenerFullAllCtrlsVal(en);
+
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+
+            //去掉 ' 号。
+            var tag = en.Doc;
+            while (tag.indexOf('~') > 1) {
+                tag = tag.replace("~", "'");
+            }
+
+            //按照文本计算.
+            $("#TB_Doc").val(tag);
+
+        });
+
+        //执行保存
+        function Save() {
+
+            //组织主键.
+            var mypk = "MultipleChoiceSearch_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.CopyForm(); //复制表单数据.
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.ExtType = "MultipleChoiceSearch";
+            en.MyPK = mypk;
+
+            if (en.Update() == 0)
+                en.Insert();
+
+            window.location.href = "MultipleChoiceSearch.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            return;
+        }
+
+        //删除.
+        function Delete() {
+
+            if (window.confirm('削除してもよろしいですか？') == false)
+                return;
+
+            var mypk = "MultipleChoiceSearch_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+            var i = en.Delete();
+
+            var url = "MultipleChoiceSearch.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+
+
+        <table style="width:100%;">
+            <caption>テキストボックス検索複数選択</caption>
+
+            <tr>
+                <td>データソースタイプ</td>
+                <td>
+
+                    <select id="DDL_DBType" name="DDL_DBType">
+                        <option value="0">SQLを実行</option>
+                        <option value="1">URLを実行してJSONを返します</option>
+                        <option value="2">CCFromRef.jsを実行してJSONを返します</option>
+                    </select>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+
+                    <a href="javascript:ShowHidden('SearchTip')">検索ヒント</a>
+                    <div id="SearchTip" style="color:Gray; display:none">
+                        <ul>
+                            <li>検索テキストボックスに表示される背景文字、例えば、支払人の名前を入力して検索してください。</li>
+                            <li>都市名を入力してください。例えば、beijing、bjで検索します。</li>
+                            <li>人員の番号、名称、アルファベット名などであいまいな検索を行います。</li>
+                        </ul>
+                    </div>
+
+                </td>
+                <td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">データソース</td>
+            </tr>
+
+            <tr>
+                <td colspan=2>
+<textarea rows="3" id="TB_Doc" name="TB_Doc"></textarea>
+                </td>
+            </tr>
+        </table>
+
+
+        <input type="button" value="保存" id="Btn_Save" onclick="Save()" />
+        <input type="button" value="削除" id="Btn_Delete" onclick="Delete()" />
+
+        <a href="javascript:ShowHidden('help')"> <img src="../../../Img/Btn/Help.gif" /> ヘルプ：</a>
+        <div id="help" style="color:Gray; display:none">
+            <ul>
+                <li>SQL書式:</li>
+                <li>SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%' OR No LIKE '%@Key%' OR Name LIKE '%@Key%' </li>
+                <li>SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'</li>
+                <li>URL書式:</li>
+                <li>/DataUser/Handler.ashx?xxx=sss </li>
+                <li>メソッドの書式は以下の通りです。</li>
+                <li>MyFunName</li>
+            </ul>
+        </div>
+
+        <fieldset>
+            <legend>実行効果</legend>
+            <a href="javascript:WinOpen('MultipleChoiceSearch.png');"> <img src="MultipleChoiceSearch.png" /> </a>
+
+        </fieldset>
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿<!-- フローエリアを共通にするために、該当ファイルを作成すること。
+     idの定義が「{pageId}」を固定追加しないといけない
+     例: id="{pageId}DivId" -->
+<!-- ダイアログ画面エリアの設定 -->
+<form id="dialog-form">
+    <div class="o-modal o-modal--dialog o-modal--has-footer" id="app-dialog-div">
+        <div class="o-modal__window">
+            <main class="o-modal__body">
+                <header class="o-modal__header undefined">
+                    <p id="app-dialog-title"></p>
+                </header>
+                <p class="a-text a-text--small a-text--align-left" id="app-dialog-content"></p>
+                <div class="m-form-field" id="denyDiv">
+                    <label class="a-text a-text--small a-text--align-center">理由をご記入ください。</label>
+                    <div class="m-form-field__content">
+                        <div class="a-text-field">
+                            <textarea name="deny_content" id="deny_content"
+                                      class="a-text-field__input"
+                                      rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="o-modal__footer">
+                <button class="a-button a-button--third a-button--large" type="button" id="app-dialog-cancel">
+                    <div class="a-button__label"></div>
+                </button>
+                <button class="a-button a-button--primary a-button--large" type="button" id="app-dialog-ok">
+                    <div class="a-button__label"></div>
+                </button>
+            </footer>
+        </div>
+    </div>
+</form>

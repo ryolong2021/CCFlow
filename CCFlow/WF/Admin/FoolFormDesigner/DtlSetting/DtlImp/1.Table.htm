@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>サブテーブルのインポート</title>
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar(1);
+            var html = "";
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_Table";
+            var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            if (mapExt.GetPara("SelectType") == "")
+                mapExt.SetPara("SelectType", "1");
+
+            //批量为复制.
+            GenerFullAllCtrlsVal(mapExt);
+
+            //设置按钮是否可以用?
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+        });
+
+        function Save() {
+
+            //更新.
+            var fk_mapDtl = GetQueryString("FK_MapDtl");
+            var en = new Entity("BP.Sys.MapDtl", fk_mapDtl);
+            en.ImpModel = 1;
+            en.Update();
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_Table";
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            mapExt.CopyURL();  //从url里面copy数据.
+            mapExt.FK_MapData = GetQueryString("FK_MapDtl");
+            mapExt.CopyForm(); //从from里面copy数据.
+            mapExt.ExtType = "DtlImp";
+            mapExt.AttrOfOper = "Table"; //后台有默认设置，要使主键区分开，所以设置此值 
+            var val = mapExt.Save();
+            window.location.href = window.location.href;
+        }
+        function Delete() {
+            if (confirm('削除してもよろしいですか？') == false)
+                return;
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_Table";
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            mapExt.Delete();
+            window.location.href = window.location.href;
+        }
+
+//        function Save1() {
+
+//            var mapExt = new Entity("BP.Sys.MapExt");
+//            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_Table";
+//            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+//            mapExt.CopyURL();  //从url里面copy数据.
+//            mapExt.FK_MapData = GetQueryString("FK_MapDtl");
+//            mapExt.CopyForm(); //从from里面copy数据.
+//            mapExt.ExtType = "DtlImp";
+//            mapExt.AttrOfOper = "Table";//后台有默认设置，要使主键区分开，所以设置此值 
+//            var val = mapExt.Save();
+//            window.location.href = window.location.href;
+//        }
+
+    </script>
+    <style type="text/css">
+        .style1
+        {
+            height: 21px;
+        }
+    </style>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <form id="cc">
+    <table id="Table1" style="width: 99%;">
+        <!--<caption>从表导入查询</caption>-->
+        <tr>
+            <th colspan="2">基本情報</th>
+        </tr>
+        <tr>
+            <td>
+                <a href="javascript:alert('ウィンドウに表示されているテキスト、たとえば、ドキュメントを検索します。')">タイトル</a>
+            </td>
+            <td>
+                <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
+            </td>
+        </tr>
+        <tr>
+            <td>ポップアップウィンドウのプロパティ</td>
+            <td>
+                高さ：<input type="text" id="TB_H" name="TB_H" value="300" style="width: 80px; text-align: right" />
+                幅：<input type="text" id="TB_W" name="TB_W" value="700" style="width: 80px; text-align: right" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="javascript:alert('検索テキストボックスに表示される背景文字、例えば、支払人の名前を入力して検索してください。')">検索ヒント</a>
+            </td>
+            <td>
+                <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
+            </td>
+        </tr>
+        <tr>
+            <td>アドバンスト設定</td>
+            <td>
+                データソースタイプ
+                <select id="DDL_DBType" name="DDL_DBType">
+                    <option value="0">SQLを実行</option>
+                    <option value="1">URLを実行してJSONを返します</option>
+                    <option value="2">CCFromRef.jsを実行してJSONを返します</option>
+                </select>
+                タイプを選択：
+                <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
+                <label for="RBPara_SelectType_0">フラットモード</label>
+                <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
+                <label for="RBPara_SelectType_1">プルダウンリストモード</label>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('PopValSearchCond')">検索条件設定</a>
+                <div id="PopValSearchCond" style="color: Gray; display: none">
+                    <ul>
+                        <li>この設定はテーブルクエリに有効です。(空可):日付のデフォルト値はJS関数式です。</li>
+                        <li>SQL書式:</li>
+                        <li>$Para=Dept#Label=所属クラス#ListSQL=Select No,Name FROM Demo_BanJi </li>
+                        <li>$Para=XB#Label=性別#EnumKey=XB</li>
+                        <li>$Para=DTFrom#Label=登録日付は#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))から</li>
+                        <li>$Para=DTTo#Label=#DefVal=(new Date())まで</li>
+                        <li>URL書式:</li>
+                        <li>$Para=Dept#Label=所属クラス#ListURL=/DataUser/Handler.ashx?xxx=sss </li>
+                        <li>CCFromRef.jsを実行して、JSON形式を次のように返します：</li>
+                        <li>$Para=Dept#Label=所属クラス#ListFuncName=MyFunc </li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 60px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('TablePage')">データソース</a>
+                <div id="TablePage" style="color: Gray; display: none">
+                    <ul>
+                        <li>検索のSQL文を設定する。No、Nameの2つの列に戻ります。</li>
+                        <li>このパラメーターはccbpm式をサポートします。例、SELECT No, Name FROM WF_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+                        <li>@PageCount、@PageSize、@Keyなど3つのパラメータが必須、それぞれは、@PageCount=何ページ目、@PageSize=各ページのサイズ、@Key=キーワード</li>
+                        <li>例、For SQLServer: SELECT TOP @PageSize * FROM ( SELECT row_number() over(order by
+                            t.No) as rownumber,No,Name,Tel,Email FROM Demo_Student WHERE Name LIKE '%@Key%'
+                            ) A WHERE rownumber > @PageCount
+                            <br />
+                            件数：SELECT COUNT(no) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%')
+                            AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
+                        <li>例、For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
+                            OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                        <li>例、For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
+                            OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 23px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('TablePage_Count')">件数</a>
+                <br />
+                <div id="TablePage_Count" style="color: Gray; display: none">
+                    <ul>
+                        <li>例、For SQLServer: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR
+                            No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                        <li>例、For Oracle: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No
+                            LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                        <li>例、For MySQL: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No
+                            LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB 
+                        </li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag3" name="TB_Tag3" style="width: 98%; height: 23px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('divTag')">データ列名のコメント</a>
+                <div id="divTag" style="color: Gray; display: none">
+                    <ul>
+                        <li>このオプションは空です。右上のリストで調べたり、ツリーの幹のデータソースが表示されるリストをクリックしたりして、日本語で列のヘッダを表示します。</li>
+                        <li>空でない場合、いくつかのフィールドを設定すると、リストにいくつかのフィールドが表示されます。</li>
+                        <li>書式:</li>
+                        <li>例、No=番号,Name=名前,Addr=アドレス,Tel=電話番号,Email=メール</li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="2">
+                <a href="javascript:ShowHidden('SetKey')">インポートデータリストのプライマリーキーを設定します。</a>
+                <div id="SetKey" style="color: Gray; display: none">
+                    <ul>
+                        <li>プライマリーキキーが空ではなく、SQLクエリーのリストにメインキーが設定されている場合、このデータは再導入されません。</li>
+                        <li>プライマリキーが空の場合は、インポートしたデータをフィルタしないで選択したすべてのインポートになります。</li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="text" id="TB_Tag4" name="TB_Tag4" style="width: 99%;" />
+            </td>
+        </tr>
+       
+       <!-- <tr>
+            <td colspan="2">
+                <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="return Save1()" />
+                <input type="button" value="削除" id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
+            </td>
+        </tr>-->
+    </table>
+    </form>
+</body>
+</html>

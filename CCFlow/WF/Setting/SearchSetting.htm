@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>基本設定</title>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script src="../../Comm/Gener.js?va2=2" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            var ensName = GetQueryString("EnsName");
+
+            //全局配置.
+            var en = new Entity("BP.Sys.EnCfg");
+            en.No = ensName;
+            if (en.IsExits() == false) {
+
+                en.SetPara("UIRowStyleGlo", 1); //表格数据行风格(应用全局)
+                en.SetPara("IsEnableDouclickGlo", 1); //是否启动双击打开(应用全局)
+                en.SetPara("IsEnableFocusField", 0); //是否启用焦点字段
+                en.SetPara("FocusField", "なし"); //焦点字段(用于显示点击打开的列
+                en.SetPara("IsEnableRefFunc", 1); //是否启用相关功能列
+
+                en.SetPara("IsEnableOpenICON", 1); //是否启用打开图标
+                en.SetPara("MoveToShowWay", 0); //移动到显示方式
+                en.SetPara("MoveTo", "なし"); //是否启用相关功能列
+                en.SetPara("WinCardW", "1000"); //宽度
+                en.SetPara("WinCardH", "600"); //高度
+                en.SetPara("PageSize", 10); //显示的条数
+                en.SetPara("FontSize", 14); //字体的大小
+
+                en.SetPara("EditerType", 0); //是否启用相关功能列
+
+                //打开url类型.
+                en.SetPara("SearchUrlOpenType", "0"); //默认为打开En.htm
+                en.SetPara("OrderBy", "");
+                en.SetPara("IsDeSc", 1);
+                en.SetPara("IsEnableLazyload", 0); //是否启用懒加载,对树形解构有效.
+
+                en.Url = "";
+                en.Insert();
+            }
+
+            var en = new Entity("BP.Sys.EnCfg");
+            en.No = ensName;
+            en.Retrieve();
+
+            //赋值.
+            GenerBindEnumKey("DDLPara_UIRowStyleGlo", "UIRowStyleGlo");
+            GenerBindEnumKey("DDLPara_MoveToShowWay", "MoveToShowWay");
+            GenerBindEnumKey("DDLPara_EditerType", "EditerType");
+
+            //双击行打开内容类型.
+            //GenerBindEnumKey("DDLPara_SearchUrlOpenType", "SearchUrlOpenType", 0);
+
+            var enName = ensName.substring(0, ensName.length - 1);
+            //全局配置.
+            var myen = new Entity("BP.Sys.EnCfg");
+            myen.No = enName;
+            myen.RetrieveFromDBSources();
+
+            //设置标题.
+            en.GroupTitle = myen.GroupTitle;
+
+            //给页面的控件赋值.
+            GenerFullAllCtrlsVal(en);
+
+        });
+
+        function Save() {
+
+            var ensName = GetQueryString("EnsName");
+            //全局配置.
+            var en = new Entity("BP.Sys.EnCfg", ensName);
+            en.CopyForm(); //从from里面copy数据.
+            en.No = ensName;
+            en.Update();
+
+            //全局配置.
+            var enName = ensName.substring(0, ensName.length - 1);
+            var myen = new Entity("BP.Sys.EnCfg");
+            myen.No = enName;
+            myen.RetrieveFromDBSources();
+            myen.GroupTitle = en.GroupTitle;
+            myen.Save();
+
+            window.location.href = window.location.href;
+        }
+
+        function ShowCols() {
+            var url = "SearchSettingCols.htm?EnsName=" + GetQueryString("EnsName");
+            window.location.href = url;
+        }
+
+        function StartFoolFormDesigner() {
+            var url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + GetQueryString("EnsName") + "&IsFirst=1";
+            WinOpen(url, "dd");
+            //window.location.href = url;
+        }
+
+        //导入设置.
+        function Imp() {
+            var url = "ImpData.htm?EnsName=" + GetQueryString("EnsName");
+            window.location.href = url;
+        }
+
+        //清除傻瓜表达设计内容
+        function ClearMapData() {
+            var alt = "本当に削除しますか？";
+            alt += "\t\n1. システムは、配置順序を含むSys_MapAttr、Sys_MapDataの設計コンテンツをクリアします。
+            alt += "\t\n2. クリアしたら、簡易フォームのデザイナーを起動できます。
+            if (confirm(alt) == false)
+                return;
+
+            var ensName = GetQueryString("EnsName");
+            var mapdata = new Entity("BP.Sys.MapData");
+            mapdata.SetPKVal(ensName);
+            mapdata.Delete();
+
+            alert("正常にクリアされました。");
+
+        }
+
+    </script>
+</head>
+<body>
+
+
+    <div style="width:95%;border-top: 0px solid #C0C0C0;">
+        <input type="button" value="保存" onclick="Save()" />
+        <input type="button" value="表示する列を設定します" onclick="ShowCols()" />
+        <input type="button" value="簡易フォームデザイナーを起動します。" onclick="StartFoolFormDesigner()" />
+        <input type="button" value="フォームのデザイン内容をクリア" onclick="ClearMapData()" />
+        <input type="button" value="データをインポート" onclick="Imp()" />
+    </div>
+
+
+    <div style="overflow:auto;" id="tableDiv">
+        <table style="">
+
+            <tr>
+                <th colspan=4>基本設定</th>
+            </tr>
+
+            <tr bgcolor='white'>
+                <td>テーブルのデータ行スタイル(全体を適用)</td>
+                <td><select name="DDLPara_UIRowStyleGlo" id="DDLPara_UIRowStyleGlo"></select></td>
+
+                <td>ダブルクリックして開くかどうか（グローバルに適用）</td>
+                <td><label><input id="CBPara_IsEnableDouclickGlo" type="checkbox" name="CBPara_IsEnableDouclickGlo" />ダブルクリックして開くかどうか（グローバルに適用）</label></td>
+            </tr>
+
+            <tr bgcolor='white'>
+                <td>フォーカスフィールドを有効にするかどうか</td>
+                <td><label><input id="CBPara_IsEnableFocusField" type="checkbox" name="CBPara_IsEnableFocusField" />フォーカスフィールドを有効にするかどうか</label></td>
+                <td>フォーカスフィールド（クリックして開く列を表示するために使用）</td>
+                <td><input name="TBPara_FocusField" type="text" value="" id="TBPara_FocusField" style="width:100%;" /></td>
+            </tr>
+
+            <tr bgcolor='white'>
+                <td>関連する機能列を有効にするかどうか</td>
+                <td><label><input id="CBPara_IsEnableRefFunc" type="checkbox" name="CBPara_IsEnableRefFunc" />関連する機能列を有効にするかどうか</label></td>
+                <td>アイコンを開くことを有効にしますか？</td>
+                <td><label><input id="CBPara_IsEnableOpenICON" type="checkbox" name="CBPara_IsEnableOpenICON" />アイコンを開くことを有効にしますか？</label></td>
+            </tr>
+
+            <tr bgcolor='white'>
+                <td>表示モードに移動</td>
+                <td>
+                    <select name="DDLPara_MoveToShowWay" id="DDLPara_MoveToShowWay">
+                    </select>
+                </td>
+                <td>キーワードラベル（デフォルト：キーワード:)</td>
+                <td><input name="TBPara_KeyLabel" type="text" id="TBPara_KeyLabel" style="width:100%" /> </td>
+            </tr>
+
+
+            <tr bgcolor=''>
+
+                <td>ポップアップウィンドウの幅</td>
+                <td><input name="TBPara_WinCardW" type="text" id="TBPara_WinCardW" style="width:100%" /></td>
+                <td>ポップアップウィンドウの高さ</td>
+                <td><input name="TBPara_WinCardH" type="text" id="TBPara_WinCardH" style="width:100%" /></td>
+
+            </tr>
+
+            <tr bgcolor=''>
+
+                <td>ページに表示される件数(標準:10)</td>
+                <td colspan="3"><input name="TBPara_PageSize" type="text" id="TBPara_PageSize" style="width:100%" /></td>
+            </tr>
+
+            <tr bgcolor=''>
+                <td>フィールドに移動</td>
+                <td><input name="TBPara_MoveTo" type="text" id="TBPara_MoveTo" style="width:100%" /></td>
+
+                <td>ページのフォントサイズ(標準:14 px)</td>
+                <td colspan="3"><input name="TBPara_FontSize" type="text" id="TBPara_FontSize" style="width:100%" /></td>
+            </tr>
+
+            <tr bgcolor='white'>
+                <td>ラージブロックテキストエディター</td>
+                <td>
+                    <select name="DDLPara_EditerType" id="DDLPara_EditerType">
+                    </select>
+                </td>
+
+                <td>行をダブルクリックして内容を開きます。</td>
+                <td>
+                    <select name="DDLPara_SearchUrlOpenType" id="DDLPara_SearchUrlOpenType">
+                        <option value="0"> En.htm エンティティおよびエンティティ関連の関数エディター</ option>
+                        <option value="1"> EnOnly.htm エンティティエディタ</option>
+                        <option value="2"> /CCForm/FrmGener.htm 簡易フォーム解析器</ option>
+                        <option value="3"> /CCForm/FrmGener.htm 自由フォーム解析器</option>
+                        <option value="9"> カスタムURL</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>URL(カスタムURLの場合に有効)</td>
+                <td colspan=3><input name="TB_Url" type="text" value="" id="TB_Url" style="width:100%;" /></td>
+            </tr>
+
+            <tr>
+            </tr>
+
+            <!-- 卡片的分组显示 -->
+            <tr>
+                <td><a href="javascript:alert('記入フォーマットは：@No=基礎情報、基礎情報権限情報、@IsBatch Start=データ＆フォーム、データ導入導出、@Designer No=設計者、フロー開発設計者情報');">カードのタブグループ表示</a></td>
+                <td colspan=3><input name="TB_GroupTitle" type="text" value="" id="TB_GroupTitle" style="width:100%;" /></td>
+            </tr>
+
+            <tr>
+                <td>クエリーのソート</td>
+                <td><input name="TBPara_OrderBy" type="text" value="" id="TBPara_OrderBy" style="width:100%;" /></td>
+                <td>ソート方法</td>
+                <td><label><input id="CBPara_IsDeSc" type="checkbox" name="CBPara_IsDeSc" />降順かどうか</label></td>
+            </tr>
+
+            <tr>
+                <td>ツリーエンティティに有効します</td>
+                <td colspan=3><label><input id="CBPara_IsEnableLazyload" type="checkbox" name="CBPara_IsEnableLazyload" />ノードレイジーロードを有効にするかどうか？</label></td>
+            </tr>
+
+
+            <tr bgcolor='AliceBlue'>
+                <th colspan="4">カスタムボタンとラベル、関数は\DataUser\JSLabData\SearchSelf.jsに書き込むことができます。</th>
+            </tr>
+
+            <tr>
+                <td>カスタムボタンラベル1</td>
+                <td><input name="TBPara_BtnLab1" type="text" value="" id="TBPara_BtnLab1" style="width:100%;" /></td>
+                <td>Url/Javasccript</td>
+                <td><input name="TBPara_BtnJS1" type="text" value="" id="TBPara_BtnJS1" style="width:100%;" /></td>
+            </tr>
+
+            <tr>
+                <td>カスタムボタンラベル2</td>
+                <td><input name="TBPara_BtnLab2" type="text" value="" id="TBPara_BtnLab2" style="width:100%;" /></td>
+                <td>Url/Javasccript</td>
+                <td><input name="TBPara_BtnJS2" type="text" value="" id="TBPara_BtnJS2" style="width:100%;" /></td>
+            </tr>
+
+        </table>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,803 @@
+﻿<main class="o-modal__body">
+    <section class="m-section m-section--card p-card-main">
+        <section class="m-section m-section--no-padding">
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">手配状態変更</span></h3>
+            <div class="m-form-field">
+                <span class="a-info-table-cell__label">手配状態</span>
+                <div class="m-form-field__content">
+                    <div class="a-pulldown tehaijyotai" id="pulldown">
+                        <select id="dead_jugyoin_zokugarakbn" name="dead_jugyoin_zokugarakbn" class="a-pulldown__select tehaijyotai">
+                        </select>
+                        <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-form-field tehaifuno_details">
+                <label id="tehaifuno" class="a-text a-text--small a-text--align-center"></label>
+            </div>
+            <div class="a-text-field space12">
+            </div>
+            <div class="a-text-field space34">
+            </div>
+            <div class="m-form-field tehaifunocoment1">
+                <label class="a-text a-text--small a-text--align-center">※手配不能時のメッセージを表示、読み取り専用。<span class="a-tag">必須</span></label>
+                <div class="m-form-field__content">
+                    <div class="a-text-field">
+                        <textarea name="inputlength" id="inputlength"
+                                  class="a-text-field__input"
+                                  rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="m-form-field">
+                <span class="a-info-table-cell__label tehaifunocomentlab">⼿配不能コメント</span>
+                <div class="m-form-field__content tehaifunocoment2">
+                    <label class="a-text-field" id="comennt2"></label>
+                </div>
+            </div>
+            <div class="m-form-field">
+                <span class="a-info-table-cell__label">申請番号</span>
+                <div class="m-form-field__content">
+                    <span id="oid_details"></span>
+                </div>
+            </div>
+            <div class="m-form-field">
+                <span class="a-info-table-cell__label">手配履歴</span>
+                <div class="m-data-table undefined">
+                    <div class="m-data-table__container-card">
+                        <div class="m-data-table__card">
+                            <div class="m-data-table__header">
+                                <div class="m-data-table__header-content ">状態</div>
+                                <div class="m-data-table__header-content ">日時</div>
+                                <div class="m-data-table__header-content ">ユーザ</div>
+                            </div>
+                            <div class="m-data-table__container-item">
+                                <div class="m-data-table__item">
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content">キャンセル</span>
+                                    </span>
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content rec_ent_date_cancle"></span>
+                                    </span>
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content rec_ent_user_cancle"></span>
+                                    </span>
+                                </div>
+                                <div class="m-data-table__item">
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content">確認中</span>
+                                    </span>
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content rec_ent_date_kakunintyuwu"></span>
+                                    </span>
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content rec_ent_user_kakunintyuwu"></span>
+                                    </span>
+                                </div>
+                                <div class="m-data-table__item">
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content">手配不能</span>
+                                    </span>
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content rec_ent_date_funo"></span>
+                                    </span>
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content rec_ent_user_funo"></span>
+                                    </span>
+                                </div>
+                                <div class="m-data-table__item">
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content">完了</span>
+                                    </span>
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content rec_ent_date_kannryowu"></span>
+                                    </span>
+                                    <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                        <span class="m-data-table__truncate-content rec_ent_user_kannryowu"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-data-table__container">
+                        <div class="m-data-table__header">
+                            <div class="m-data-table__header-content ">状態</div>
+                            <div class="m-data-table__header-content ">日時</div>
+                            <div class="m-data-table__header-content ">ユーザ</div>
+                        </div>
+                        <div class="m-data-table__container-item">
+                            <div class="m-data-table__item">
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content">キャンセル</span>
+                                </span>
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content rec_ent_date_cancle"></span>
+                                </span>
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content rec_ent_user_cancle"></span>
+                                </span>
+                            </div>
+                            <div class="m-data-table__item">
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content">確認中</span>
+                                </span>
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content rec_ent_date_kakunintyuwu"></span>
+                                </span>
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content rec_ent_user_kakunintyuwu"></span>
+                                </span>
+                            </div>
+                            <div class="m-data-table__item">
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content">手配不能</span>
+                                </span>
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content rec_ent_date_funo"></span>
+                                </span>
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content rec_ent_user_funo"></span>
+                                </span>
+                            </div>
+                            <div class="m-data-table__item">
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content">完了</span>
+                                </span>
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content rec_ent_date_kannryowu"></span>
+                                </span>
+                                <span class="m-data-table__content m-data-table__content--type-data m-data-table__content--align-left m-data-table__content--valign-center">
+                                    <span class="m-data-table__truncate-content rec_ent_user_kannryowu"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding" id="dairilistview">
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">代理申請者の情報</span></h3>
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">代理社員番号</span>
+                                <span id="dairi_syainbango_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">代理社員名</span>
+                                <span id="dairi_syainname_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">代理所属</span>
+                                <span id="dairi_syozoku_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">連絡先電話番号</span>
+                                <span id="dairi_tel_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">連絡先メール</span>
+                                <span id="dairi_mail_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding">
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label" id="sinseiLi"></span></h3>
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">社員番号</span>
+                                <span id="syainbango_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">氏名</span>
+                                <span id="simei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">氏名（カナ）</span>
+                                <span id="furikana_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">会社名称</span>
+                                <span id="kaisyameisyo_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">正式組織名・上</span>
+                                <span id="syosikiwue_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">正式組織名・下</span>
+                                <span id="sosikisita_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">社員区分</span>
+                                <span id="syainkubu"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">職位</span>
+                                <span id="syokui_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">組合区分</span>
+                                <span id="kumiai_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">グッドライフ区分</span>
+                                <span id="glc_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item telandmail telandmail">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">電話番号</span>
+                                <span id="tel_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item telandmail telandmail">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">連絡先メール</span>
+                                <span id="mail_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding">
+            <div class="m-form-field"><label class="m-form-field__label"></label></div>
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">亡くなられた方について</span></h3>
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">あなたから見た続柄</span>
+                                <span id="dead_jugyoin_zokugarakbn_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">姓</span>
+                                <span id="dead_shimei_sei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">名</span>
+                                <span id="dead_shimei_mei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">姓（カナ）</span>
+                                <span id="dead_kanashimei_sei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">名（カナ）</span>
+                                <span id="dead_kanashimei_mei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">同居/別居</span>
+                                <span id="dead_dokyo_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">性別</span>
+                                <span id="dead_seibetsu_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">逝去日</span>
+                                <span id="deaddate_seikyobi_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">逝去時刻</span>
+                                <span id="deadtime_seikyobi_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">年齢</span>
+                                <span id="dead_nenrei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding">
+            <div class="m-form-field"><label class="m-form-field__label"></label></div>
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">喪主について</span></h3>
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">喪主はどなたが務めますか</span>
+                                <span id="organizerkbn2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item organizerarea2">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">姓</span>
+                                <span id="organizer_shimei_sei2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item organizerarea2">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">名</span>
+                                <span id="organizer_shimei_mei2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item organizerarea2">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">姓（カナ）</span>
+                                <span id="organizer_kanashimei_sei2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item organizerarea2">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">名（カナ）</span>
+                                <span id="organizer_kanashimei_mei2"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding">
+            <div class="m-form-field"><label class="m-form-field__label"></label></div>
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">通夜・告別式について</span></h3>
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">通夜について</span>
+                                <span id="tsuyakbn2" class="tsuyakbnari"></span>
+                                <span class="tsuyakbnnashi">なし</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">会場名</span>
+                                <span id="tsuya_basyoumei2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">会場名（カナ）</span>
+                                <span id="tsuya_basyoufurigana2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">郵便番号</span>
+                                <span id="tsuya_yubinbango2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">都道府県・市郡区</span>
+                                <span id="tsuya_todofuken2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">町村・番地</span>
+                                <span id="tsuya_sonmeibanti2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">建物名・部屋番号</span>
+                                <span id="tsuya_mansyonmei2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">日付</span>
+                                <span id="tsuyadate_datetime2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">開始時刻</span>
+                                <span id="tsuyatime_datetime2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item tsuyakbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">会場電話番号</span>
+                                <span id="tsuya_renrakusakitel2"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding">
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">告別式について</span>
+                                <span id="kokubetsushikikbn2" class="kokubetsushikikbnari"></span>
+                                <span class="kokubetsushikikbnnashi">なし</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">会場名</span>
+                                <span id="kokubetsushiki_basyoumei2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">会場名（カナ）</span>
+                                <span id="kokubetsushiki_basyoufurigana2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">郵便番号</span>
+                                <span id="kokubetsushiki_yubinbango2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">都道府県・市郡区</span>
+                                <span id="kokubetsushiki_todofuken2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">町村・番地</span>
+                                <span id="kokubetsushiki_sonmeibanti2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">建物名・部屋番号</span>
+                                <span id="kokubetsushiki_mansyonmei2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">日付</span>
+                                <span id="kokubetsushikidate_datetime2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">開始時刻</span>
+                                <span id="kokubetsushikiteime_datetime2"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item kokubetsushikikbnari">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">会場電話番号</span>
+                                <span id="kokubetsushiki_renrakusakitel2"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section">
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">供花・弔電</span></h3>
+            <div class="m-form-field">
+                <label class="m-form-field__label">供花</label>
+                <div class="m-form-field__content">
+                    <p class="a-text a-text--align-left" id="kyokak_confirm"></p>
+                </div>
+            </div>
+            <div class="m-form-field">
+                <label class="m-form-field__label">弔電</label>
+                <div class="m-form-field__content">
+                    <p class="a-text a-text--align-left" id="tyoden_confirm"></p>
+                </div>
+            </div>
+            
+
+            <div class="m-form-field">
+                <div class="m-info-table" id="label-standard-table">
+                    <div class="m-info-table__header">差出人情報</div>
+                    <div class="m-info-table__container">
+                        <div class="m-info-table__item" id="label-standard-info0">
+                            <div class="a-info-table-cell">
+                                <div class="a-info-table-cell__content">
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text" id="label-standard-kaishaname0"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text" id="label-standard-yakushoku0"></span>
+                                        <span class="a-quota-info__text" id="label-standard-shimei0"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text">供花</span>
+                                        <span class="a-quota-info__number" id="label-standard-kyokanum0"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text">弔電</span>
+                                        <span class="a-quota-info__number" id="label-standard-tyodennum0"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-info-table__item" id="label-standard-info1">
+                            <div class="a-info-table-cell">
+                                <div class="a-info-table-cell__content">
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text" id="label-standard-kaishaname1"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text" id="label-standard-yakushoku1"></span>
+                                        <span class="a-quota-info__text" id="label-standard-shimei1"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text">供花</span>
+                                        <span class="a-quota-info__number" id="label-standard-kyokanum1"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text">弔電</span>
+                                        <span class="a-quota-info__number" id="label-standard-tyodennum1"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__container">
+                        <div class="m-info-table__item" id="label-standard-info2">
+                            <div class="a-info-table-cell">
+                                <div class="a-info-table-cell__content">
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text" id="label-standard-kaishaname2"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text" id="label-standard-yakushoku2"></span>
+                                        <span class="a-quota-info__text" id="label-standard-shimei2"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text">供花</span>
+                                        <span class="a-quota-info__number" id="label-standard-kyokanum2"></span>
+                                    </p>
+                                    <p style="margin-bottom: 13px;">
+                                        <span class="a-quota-info__primary-text">弔電</span>
+                                        <span class="a-quota-info__number" id="label-standard-tyodennum2"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__container label-standard-info3">
+                        <div class="m-info-table__item" id="label-standard-info3" style="flex:100%">
+                            <div class="a-info-table-cell">
+                                <div class="a-info-table-cell__content">
+                                    <p style="margin-bottom: 20px;">
+                                        <span class="a-quota-info__primary-text">ご入力いただいた内容での香料・供花・弔電の手配はございません。</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="m-section m-section--no-padding koryo_kyokak_tyoden_area2" style="margin-top:20px">
+                <div class="m-form-field">
+                    <label class="m-form-field__label">供花お届け先場所</label>
+                    <span class="a-info-table-cell__label" id="todokesakikbn_details"></span>
+                </div>
+                <div class="m-info-table m-info-table--no-border-header atokazari">
+                    <div class="m-info-table__container">
+                        <div class="m-info-table__item tsuya_basyoufurigana_details">
+                            <div class="a-info-table-cell a-info-table-cell--pair">
+                                <div class="a-info-table-cell__content">
+                                    <span class="a-info-table-cell__label">フリガナ</span>
+                                    <span id="tsuya_basyoufurigana_details"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-info-table__item tsuya_basyoumei_details">
+                            <div class="a-info-table-cell a-info-table-cell--pair">
+                                <div class="a-info-table-cell__content">
+                                    <span class="a-info-table-cell__label">会場</span>
+                                    <span id="tsuya_basyoumei_details"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-info-table__item">
+                            <div class="a-info-table-cell a-info-table-cell--pair">
+                                <div class="a-info-table-cell__content">
+                                    <span class="a-info-table-cell__label">郵便番号</span>
+                                    <span id="tsuya_yubinbango_details"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-info-table__item">
+                            <div class="a-info-table-cell a-info-table-cell--pair">
+                                <div class="a-info-table-cell__content">
+                                    <span class="a-info-table-cell__label">都道府県・市郡区</span>
+                                    <span id="tsuya_todofuken_details"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-info-table__item">
+                            <div class="a-info-table-cell a-info-table-cell--pair">
+                                <div class="a-info-table-cell__content">
+                                    <span class="a-info-table-cell__label">町村・番地</span>
+                                    <span id="tsuya_sonmeibanti_details"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-info-table__item">
+                            <div class="a-info-table-cell a-info-table-cell--pair">
+                                <div class="a-info-table-cell__content">
+                                    <span class="a-info-table-cell__label">マンション名</span>
+                                    <span id="tsuya_mansyonmei_details"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-info-table__item">
+                            <div class="a-info-table-cell a-info-table-cell--pair">
+                                <div class="a-info-table-cell__content">
+                                    <span class="a-info-table-cell__label">お届け日</span>
+                                    <span id="tsuya_datetime_details"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-info-table__item">
+                            <div class="a-info-table-cell a-info-table-cell--pair">
+                                <div class="a-info-table-cell__content">
+                                    <span class="a-info-table-cell__label">連絡先電話番号</span>
+                                    <span id="rennrakusaki_details"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </section>
+</main>
+<footer class="o-modal__footer">
+    <button class="a-button a-button--third a-button--huge" id="btn_back_details" type="button">
+        <div class="a-button__label">戻る</div>
+    </button>
+    <button class="a-button a-button--primary a-button--huge" id="btn_submit_detail" type="button">
+        <div class="a-button__label">保存</div>
+    </button>
+</footer>

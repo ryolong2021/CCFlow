@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8"/>
+<title> スクリプトのインポート</title>
+
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+    <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+       <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script language="javascript" type="text/javascript" >
+        $(function () {
+        	init_Page();
+        });
+        function init_Page(){
+        	var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
+        	var data = handler.DoMethodReturnJSON("javaScriptFiles");
+        	if(data=="") $("#tableContent").html("まだスクリプトファイルをアップロードしていません。");
+        	else{
+        		var htm = "";
+        		htm +="<table>";
+        		htm +="<thead><th>スクリプト名</th><th>最終更新日</th></thead>"
+        		for(var i =0 ;i<data.length;i++){
+        			htm +="<tr>";
+        			htm +="<td>"+data[i].FileName+"</td>";
+        			htm +="<td>"+data[i].ChangeTime+"</td>";
+        			htm +="</tr>";
+        		}
+        		htm +="</table>";
+        		$("#tableContent").html(htm);
+        	}
+        }
+        
+        //流程导入.
+        function Imp_Done() {
+           
+            var fileValue = $("#File_Upload").val();
+            //必须要选择文件
+            if (fileValue == "") {
+                $.messager.alert("ヒント", "インポートするJSスクリプトは選択していません。");
+                return;
+            }
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() != ".js") {
+                $.messager.alert("ヒント", "選択したファイルはJSスクリプトファイルではありません。もう一度選択してください。");
+                return;
+            }
+            
+            //获取发送请求时的参数
+            var queryString = document.location.search.substr(1);
+
+            //URL 路径
+            var doMethod = "javaScriptImp_Done";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Comm_Sys";
+            var URL = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
+//           	var URL = Handler + "?DoType=javaScriptImp_Done";
+           	
+           	if(queryString!=null&&queryString.length>0)		
+           		URL += URL+"&"+queryString;
+            
+            //提交数据
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: URL,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                },
+                success: function (data) {
+                      alert(data);
+                      init_Page();
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+<table style=" width:100%">
+<caption>スクリプトのインポート</caption>
+<tr>
+<td valign="top" style="width:30%;">
+
+<fieldset>
+<legend><img src="../../Img/Btn/Help.gif" />スクリプトのインポートについて</legend>
+<ol>
+<li>スクリプトのデフォルトのフォーマットはXMLです</li>
+<li>インポートを繰り返すスクリプトは上書きされます。</li>
+<li>スクリプトの主な機能はフォームの送信時に複雑な検証機能を処理することです。</li>
+</ol>
+</fieldset>
+<fieldset>
+<legend>インポートしたスクリプト</legend>
+	<div id="tableContent">
+	</div>
+</fieldset>
+ </td>
+
+<td  valign="top">
+<fieldset>
+<legend> 本機から導入する</legend>
+<ul>
+<li>本機から導入します。本機のJS形式のファイルを選択して導入ボタンをクリックして導入を完了してください。</li>
+<li> ファイルを選択してください:<input type="file" id="File_Upload" name="File_Upload"  /></li>
+</ul>
+<div style=" text-align:center; padding:5px;">
+<input type=button id="Btn_Do"  value="インポートを実行" onclick="Imp_Done();" />
+ </div>
+</fieldset>
+
+
+ </td>
+</tr>
+</table>
+</form>
+
+</body>
+</html>

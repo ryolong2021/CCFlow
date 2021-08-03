@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+</head>
+
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+
+        <fieldset>
+            <legend>設定</legend>
+            <ul>
+                <li>
+                    <a href="javascript:void(0)" @click="OpenDialog()">設定/変更処理者</a>
+                </li>
+                <li>説明：バインディングされた全員は、ノードの動作を処理することができます。</li>
+                <li> 現在のノードに関連付けされている個人の数が処理されます。これが最も簡単で直接的な方法です。</li>
+                <li> 現在ノードの人員が安定していて、普通は変わらない場合に適用します。</li>
+                <li> 人員の変化が頻繁であれば、部署を設置し、人員を配置する必要があります。</li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend>関連付けされた人員</legend>
+            <div id="emp">
+                <ul>
+                    <li v-show="emps.length===0">設定されていません</li>
+                    <template v-for="emp in emps">
+                        <li v-if="emp.FK_EmpText!=undefined">{{emp.FK_EmpText}}</li>
+                    </template>
+                </ul>
+
+            </div>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                emps: [],
+                deliverWay:DeliveryWay.ByBindEmp
+            },
+            methods: {
+                OpenDialog: function () {
+
+                    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeEmps&Dot2DotEnName=BP.WF.Template.NodeEmp&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID + "&M=" + Math.random();
+                    OpenEasyUiDialogExtCloseFunc(url, '設定人員', 800, 500, function () {
+                        Baseinfo.emps = getEmps();
+                    });
+                }
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.emps = getEmps();
+            }
+        });
+      
+        //保存
+        function Save() {
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.Update();
+        }
+    </script>
+</body>
+</html>

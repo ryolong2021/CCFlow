@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>操作</title>
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <script type="text/javascript">
+
+        var fk_node = GetQueryString("FK_Node");
+        var fk_flow = GetQueryString("FK_Flow");
+        var workid = GetQueryString("WorkID");
+        var fid = GetQueryString("FID");
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("OP_GetStatus");
+            data = JSON.parse(data);
+
+            var html = "";
+
+            //打包下载.
+            if (data.CanPackUp == 1) 
+                html += PackUp(data.PrintType);
+
+           //是否可以删除流程.
+           if (data.IsCanDelete==1) 
+               html += DeleteFlow();
+ 
+            //增加回滚.
+            if (data.CanRollBack == "1")
+                html += Rollback();
+
+            //增加撤销.
+            if (data.CanUnSend == "1")
+                html += addUnSend();
+
+            //增加催办.
+            if (data.CanFlowPress == "1")
+                html += addHurry();
+
+            //增加流程结束.
+            if (data.CanFlowOver == "1")
+                html += addFlowOver();
+
+            //调整工天
+            if (data.CanChangCHRole != undefined)
+                html += addCHNode(data.CanChangCHRole);
+
+
+            $("#ccop").append(html);
+
+        });
+
+        function RollbackIt() {
+            window.location.href = "../Rollback.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow");
+        }
+
+        //回滚流程
+        function Rollback() {
+
+            var html = addBlockBegin("ロールバックフロー");
+
+            html += "ロールバックフロー:<a href=\"javascript:RollbackIt();\" >ロールバックを実行する</a>。";
+            html += "<br />説明：指定されたノードから再承認します。 ";
+
+            html += addBlockEnd();
+
+            return html;
+        }
+
+        //删除流程
+        function DeleteFlow(isCan) {
+
+            if (typeof isCan == "undefined") {
+                return "";
+            }
+
+            var html = addBlockBegin("フローを削除");
+
+            if (isCan == "true") {
+                html += "機能実行:<a href=\"javascript:DeleteFlowInstance('" + GetQueryString("fk_flow") + "','" + GetQueryString("WorkID") + "')\" >クリックして削除フローを実行します</a>。";
+                html += "<br />説明：実行したら、フローが完全に削除されます。";
+            }
+            else {
+                html += "このフローを削除する権限がありません。";
+            }
+
+            html += addBlockEnd();
+            return html;
+        }
+
+        //取回审批
+        function TackBack(isCan, fromNode, toNode) {
+
+            if (typeof isCan == "undefined") {
+                return "";
+            }
+
+            var html = addBlockBegin("承認を取得");
+
+            if (isCan) {
+                html += "機能実行:<a href=\"javascript:Takeback('" + workid + "','" + fk_flow + "','" + fromNode + "','" + toNode + "')\" >クリックして、承認フローの取得を実行します</a>。";
+                html += "<br />説明：正常に取得された場合、ccflowは他の人の作業ノードに残っている作業をあなたのタスクリストに送信します。 ";
+            }
+            else {
+                html += "この権限がありません。";
+            }
+
+            html += addBlockEnd();
+            return html;
+        }
+
+        //催办
+        function addHurry() {
+
+            var html = addBlockBegin("仕事の催促");
+             html += "機能実行:<a href =\"javascript:Press('" + fk_flow + "','" + workid + "','" + fid + "')\" >仕事の催促</a>。";
+            html += addBlockEnd();
+            return html;
+        }
+         //催办.
+        function Press(fk_flow, workid, fid) {
+
+            var msg = window.prompt('催促情報を入力してください。', 'この仕事はxxxのために優先的に処理してください。');
+            if (msg == null)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FID", fid);
+            handler.AddPara("Msg", msg);
+            var data = handler.DoMethodReturnString("Runing_Press");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            alert(data);
+            return;
+        }
+
+        //流程结束
+        function addFlowOver() {
+
+            var html = addBlockBegin("フロー終了");
+            html += "機能実行:<a href =\"javascript:FlowOver('" + fk_flow + "','" + workid + "','" + fid + "')\" >フロー終了</a>。";
+            html += addBlockEnd();
+            return html;
+        }
+
+        function FlowOver(fk_flow,workid,fid) {
+            if (confirm('フローオペレーションを終了してもよろしいですか？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("MyFlow_StopFlow");
+            alert(data);
+        }
+        //撤销发送
+        function addUnSend() {
+
+            var html = addBlockBegin("送信を取り消す");
+            html += "機能実行:<a href =\"javascript:UnSend('" + fk_flow + "','" + workid + "','" + fid + "')\" >送信を取り消す</a>";
+            html += addBlockEnd();
+            return html;
+        }
+
+        //恢复使用流程.
+        function addRollBack() {
+
+            var html = addBlockBegin("アクティベーションフローデータをエンドノードに復元する");
+            html += "機能実行:<a href=\"javascript:DoFunc('OP_ComeBack','" + workid + "','" + fk_flow + "','" + fk_node + "')\" >クリックして回復フローを実行します</a>。";
+            html += "<br />説明：正常に復元された場合、ccflowは保留中の作業を、フローを終了した最後のワーカーに送信します。 ";
+            html += addBlockEnd();
+
+            return html;
+        }
+
+
+        //撤销挂起
+        function addUnHungUp() {
+
+            var html = addBlockBegin("停止解除");
+
+            html += "機能実行:<a href=\"javascript:DoFunc('OP_UnHungUp','" + workid + "','" + fk_flow + "','" + fk_node + "')\" >停止解除フローを実行します</a>。";
+            html += "<br />説明：フローの中断状態を解除します。 ";
+
+            html += addBlockEnd();
+
+            return html;
+        }
+
+        ///增加打印.
+        function PackUp(printType) {
+
+            var fk_node = GetQueryString("FK_Node");
+            if (fk_node == null)
+                fk_node = GetQueryString("NodeID");
+
+            //如果printType是undefined或者null 就执行打包下载
+            if (printType == null || printType == undefined || printType==0) {
+                var html = addBlockBegin("印刷/パッケージのダウンロード");
+                html += "機能実行:<a href='../Packup.htm?FileType=zip,pdf&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "' >印刷実行</a>。";
+                html += "<br />説明：フォームをhtml、pdf、zipファイルに出力し、ダウンロードまたは印刷します。 ";
+            } else {
+                var html = addBlockBegin("RTF/Wordダウンロード");
+                html += "機能実行:<a href='javaScript:void(0)' onclick='WinOpen(\"../PrintDoc.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "\")' >印刷実行</a>。";
+                html += "<br />説明：フォームをWordファイルに出力し、ダウンロードまたは印刷します。 ";
+            }
+
+            html += addBlockEnd();
+            return html;
+        }
+
+
+        //删除流程.
+        function DeleteFlowInstance(flowNo, workid) {
+            var url = '../DeleteFlowInstance.htm?FK_Flow=' + flowNo + '&WorkID=' + workid;
+            WinOpen(url);
+        }
+
+        function DoFunc(doType, workid, fk_flow, fk_node) {
+
+            if (doType == 'OP_DelFlow' || doType == 'Reset') {
+                if (confirm('本当に実行しますか？') == false)
+                    return;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_Node", fk_node);
+            var data = handler.DoMethodReturnString(doType);
+            $("#opmsg").empty().append(data);
+        }
+
+        function Takeback(workid, fk_flow, fk_node, toNode) {
+            if (confirm('本当に実行しますか？') == false)
+                return;
+            var url = '../../GetTask.aspx?DoType=Tackback&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node + '&ToNode=' + toNode + '&WorkID=' + workid;
+            window.location.href = url;
+        }
+
+        function UnSend(fk_flow, workID, fid) {
+            if (confirm('本当に取り消してもよろしいです？') == false)
+                return;
+
+            var url = Handler + "?DoType=OP_UnSend&FK_Node=<%=FK_Node %>&FK_Flow=" + fk_flow + "&WorkID=" + workID;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("OP_UnSend");
+            $("#opmsg").empty().append(data);
+        }
+
+        function addBlockBegin(title) {
+            var html = "<table class='Table' cellspacing='0' cellpadding='0' border='0' style='width:100%;margin-bottom:5px;'>";
+            html += "<tr><td class='GroupTitle'>" + title + "</td></tr>";
+            html += "<tr><td style='padding:10px'>";
+            return html;
+        }
+
+        function addBlockEnd() {
+            return "</td></tr></table>";
+        }
+
+        function addCHNode(data) {
+            var html = addBlockBegin("稼働日を調整する");
+            var IsReadOnly = 1;
+            if (data == 1)
+                IsReadOnly = 0;
+
+           html += "機能実行:<a href='../CH.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") +"&FK_Node=" + GetQueryString("FK_Node") + "&IsReadOnly="+IsReadOnly+"' >稼働日を調整する</a>。";
+           html += "<br />説明：稼働日を調整し、稼働時間を計算します。 ";
+
+            return html;
+        }
+    </script>
+    <div id="ccop" style="width: 100%; height: auto">
+    </div>
+    <div id="opmsg" style="width: 100%; height: auto">
+    </div>
+</body>
+</html>

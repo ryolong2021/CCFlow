@@ -1,0 +1,63 @@
+﻿<!-- 絞り込み検索画面エリアの設定 -->
+<div id="refined_search_common_area" class="o-modal o-modal--has-footer">
+    <div class="o-modal__window">
+
+        <!-- ×ボタン -->
+        <button id="refined_search_common_close_btn" class="o-modal__close-button" type="button">
+            <i class="a-icon a-icon--close"></i>
+        </button>
+
+        <!-- 絞り込み検索画面主体 -->
+        <main class="o-modal__body">
+            <header class="o-modal__header undefined"><p>絞り込み検索</p></header>
+
+            <!-- キーワード検索コントロール -->
+            <div class="m-form-field">
+                <label class="m-form-field__label">キーワード</label>
+                <div class="m-form-field__content">
+                    <div class="a-text-field a-text-field--type-search">
+                        <span class="a-text-field__icon">
+                            <i class="a-icon a-icon--search"></i>
+                        </span>
+                        <input type="search" class="a-text-field__input" id="refined_search_common_search_text" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 申請日コントロール -->
+            <div class="m-form-field">
+                <label class="m-form-field__label">申請日</label>
+                <div class="m-form-field__content">
+                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                        <div class="a-date-range-field undefined">
+                            <div class="a-calendar-field a-date-range-field__start-date">
+                                <div class="a-calendar-field__content">
+                                    <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                        <input type="text" class="a-text-field__input" name="refined_search_commmon_app_date_from" id="refined_search_commmon_app_date_from" />
+                                    </div>
+                                </div>
+                                <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                            </div><span class="a-date-range-field__line">~</span>
+                            <div class="a-calendar-field a-date-range-field__end-date">
+                                <div class="a-calendar-field__content">
+                                    <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                        <input type="text" class="a-text-field__input" name="refined_search_commmon_app_date_to" id="refined_search_commmon_app_date_to" />
+                                    </div>
+                                </div>
+                                <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- 検索ボタン -->
+        <footer class="o-modal__footer">
+            <button id="refined_search_common_search_btn" class="a-button a-button--primary" type="button">
+                <div class="a-button__label">検索</div>
+            </button>
+        </footer>
+    </div>
+</div>

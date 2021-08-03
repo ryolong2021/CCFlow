@@ -1,0 +1,77 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="../../../DataUser/Style/Table0.css" rel="stylesheet"  type="text/css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+     
+     <table style="width:100%">
+     <caption >コードAPI</caption>
+     
+     <tr>
+     <td  style="width:30%;"   valign=top >
+     
+     <ul>
+     <li>このコードはエンティティを作成する方法を示します。</li>
+     <li>一つのエンティティに対するクエリー、変更、削除</li>
+     </ul>
+      </td>
+     <td>
+      
+
+         <font color="green"> //フォームIDを取得します。</font><br />
+         <font color="blue">string</font> fk_mapdata = this.Request.QueryString[<font color="red">"FK_MapData"</font>];
+         <br /><br />
+         
+        <font color="green"> //フォームIDに従って、フォームエンティティを作成し、新規操作を実行します。</font><br />
+         BP.Sys.<font color="blue">GEEntity</font> en = new BP.Sys.GEEntity(fk_mapdata);<br />
+         en.SetValByKey(<font color="red">"DiZhi", "山東省済南市"</font>);<br />
+         en.SetValByKey(<font color="red">"DianHua", "0531-82374939"</font>);<br />
+         en.SetValByKey(<font color="red">"NianLIng", "33"</font>);  <font color="green"> // ここでは10,000文字が省略されています。</font>
+         <br />
+         <font color="green">//Insert操作を実行すると、システムが自動的に新しいintタイプのOIDを作成してデータベースに挿入します。</font><br />
+         en.Insert();<br />
+
+         <br /><br />
+         <font color="green">//フォームIDに従って、フォームエンティティを作成し、検索と更新の操作を実行します。</font><br />
+         <font color="blue">string</font> oid = this.Request.QueryString[<font color="red">"OID"</font>];<br />
+         BP.Sys.<font color="blue">GEEntity</font> myen = new BP.Sys.GEEntity(fk_mapdata, oid);<br /><br />
+
+        <font color="green"> //エンティティからデータを取得します。</font><br />
+         <font color="blue">string</font> diZhi = myen.GetValStringByKey(<font color="red">"DiZhi"</font>);<br />
+         <font color="blue">string</font> dianHua = myen.GetValStringByKey(<font color="red">"DianHua"</font>);<br />
+         <font color="blue">int</font> nianLing = myen.GetValIntByKey(<font color="red">"NianLing"</font>);<br />
+         <font color="green">// ここでは10,000文字が省略されています。</font><br /><br />
+
+         <font color="green">//フィールドに値を設定します。</font><br />
+         en.SetValByKey(<font color="red">"DiZhi", "山東省済南市高新区オリンピックセンター"</font>);<br />
+         en.SetValByKey(<font color="red">"DianHua", "0531-82374939"</font>);<br />
+         en.SetValByKey(<font color="red">"NianLIng", "24"</font>); <br />
+         <font color="green">//Update操作を実行すると、システムはプライマリキーに基づいて更新を実行します。</font><br />
+         myen.Update();<br /><br />
+
+         <font color="green">//フォームIDに基づいてフォームエンティティを作成し、削除操作を実行します。方法１、</font><br />
+         <font color="blue">string</font> myOID = this.Request.QueryString[<font color="red">"OID"</font>];<br />
+         BP.Sys.<font color="blue">GEEntity</font> myenTest = new BP.Sys.GEEntity(fk_mapdata, myOID);<br />
+         myenTest.Delete(); <font color="green">//削除を実行します。</font><br /><br />
+
+         <font color="green">// 削除操作方法２を実行します。</font><br />
+         BP.Sys.<font color="blue">GEEntity</font> myenTest1 = new BP.Sys.<font color="blue">GEEntity</font>(fk_mapdata);<br />
+         myenTest1.PKVal = myOID;<br />
+         myenTest1.Delete(); <font color="green">//削除を実行します。</font><br />
+
+
+      </td>
+
+     </tr>
+
+
+     </table>
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>拡張コントロール</title>
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
+
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+     <script type="text/javascript" src="../../Scripts/easyUI/jquery.easyui.min.js"></script>
+
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            var mypk = GetQueryString("MyPK");
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var fk_mapData = GetQueryString("FK_MapData");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("SQLKey", "EditFExtContral_AthList");
+            handler.AddPara("Paras", "@FK_MapData=" + fk_mapData);
+            var data = handler.DoMethodReturnString("SQLList");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+
+            data = JSON.parse(data);
+
+            // 绑定附件列表"
+            GenerBindDDL("DDL_Ath", data, "NO", "NAME");
+
+            var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+
+            //设置选择的模式.
+            $("#RB_CtrlType_" + mapAttr.UIContralType).attr("checked", "checked");
+
+            switch (mapAttr.UIContralType) {
+                case "0":
+                case "4":
+                case "5":
+                case "8": //手写签名版.
+                case "7":
+                case "10": //文本
+                    break;
+                case "6": //附件扩展组件..
+                    $("#DDL_Ath").val(mapAttr.GetPara("AthRefObj")); //设置选择的值.
+                    $("#DDL_AthShowModel").val(mapAttr.GetPara("AthShowModel")); //设置选择的值.
+                    break;
+                case "9": //超链接
+                    var url = mapAttr.GetPara("Url");
+                    url = url.replace(/[$]/g, '@');
+                    $("#TB_Url").val(url); //设置URL.
+                    //$("#DDL_AthShowModel").val(mapAttr.AthShowModel); //设置选择的值.
+                    break;
+                case "11":
+                   
+                    var html = "";
+                    html += "<li><a href='javascript:EditImg(\""+mypk+"\")'>画像を編集</a></li>";
+                    $("#FrmImg").append(html);
+                    break;
+                default:
+                    alert('判断の要素がありません。' + mapAttr.UIContralType);
+                    break;
+            }
+        });
+
+        
+
+        //执行保存
+        function Save() {
+
+            var fk_mapExt = GetQueryString("MyPK");
+            var frmData = $("#cc").serialize();
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            //增加附件判断
+            var DDL_Ath = $("#DDL_Ath").val();
+            var CtrlType = document.getElementById("RB_CtrlType_6").checked;
+            if (CtrlType && null == DDL_Ath) {
+                alert("このフォームには添付ファイルがありません。最初にフォームデザイナーで添付ファイルを作成してください");
+                return;
+            }
+
+            // var model = $("#Model").val();
+            var model = $('input:radio:checked').val();
+
+            if (model != 6 && model !=9 && model!=11) {
+                var mapAttr = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
+                mapAttr.UIContralType = model;
+                mapAttr.Update();
+                alert('正常に保存');
+                return;
+            }
+
+            //保存附件扩展的逻辑.
+            if (model == 6) {
+
+                //处理附件的保存业务逻辑相对复杂. 把这部分业务逻辑使用js实现, 并把里面的.cs的代码删除掉.
+                var mapAttrAth = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
+                mapAttrAth.UIContralType = model;
+                mapAttrAth.SetPara("AthRefObj", $("#DDL_Ath").val());
+                mapAttrAth.SetPara("AthShowModel", $("#DDL_AthShowModel").val());
+                mapAttrAth.Update();
+
+                //把该附件组件隐藏掉.
+                var ath = new Entity("BP.Sys.FrmAttachment", $("#DDL_Ath").val());
+                ath.IsVisable = 0;
+                ath.Update();
+
+                //删除该附件组件的分组.
+                var group = new Entity("BP.Sys.GroupField");
+                group.Delete("FrmID", GetQueryString("FK_MapData"), "CtrlID", $("#DDL_Ath").val());
+                alert('正常に保存');
+                return;
+            }
+
+            //保存超链接
+            if (model == 9) {
+                var mapAttr = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
+                mapAttr.UIContralType = model;
+                mapAttr.SetPara("Url", $("#TB_Url").val().replace(/@/g,'$'));
+                mapAttr.Update();
+
+                return;
+            }
+
+            //保存图片
+            if (model == 11) {
+                //修改字段属性
+                var mapAttr = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
+                mapAttr.UIContralType = model;
+                mapAttr.Update();
+                //增加FrmImg 属性
+
+                var frmImg = new Entity("BP.Sys.FrmUI.ExtImg");
+                frmImg.MyPK = mapAttr.MyPK;
+                frmImg.FK_MapData = mapAttr.FK_MapData;
+                frmImg.Name = mapAttr.Name;
+                frmImg.IsEdit = 1;
+                frmImg.ImgAppType = 0;
+                frmImg.Save();
+
+                //保存完后编辑图片的属性
+                var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&PKVal=' + frmImg.MyPK;
+               
+                WinOpen(url);
+             
+
+
+            }
+
+
+        }
+        function EditImg(mypk) {
+            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=' + mypk;
+            WinOpen(url);
+        }
+        function SaveAndClose() {
+            Save();
+            window.close();
+        }
+
+        function Close() {
+            window.close();
+        }
+
+    </script>
+</head>
+<body>
+    <form id="cc">
+   
+   <table>
+    <caption>拡張コントロール</caption>
+    <tr>
+    <td>
+  
+   
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_0" type="radio" name="Model" value="0" /><label for="RB_CtrlType_0">設定しない（テキストで示す）</label>
+        </legend>
+        <ul>
+            <li>何も設定しません。</li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_10" type="radio" name="Model" value="10" /><label for="RB_CtrlType_10">テキスト</label>
+        </legend>
+        <ul>
+            <li>テキスト表示用</li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_9" type="radio" name="Model" value="9" /><label for="RB_CtrlType_9">ハイパーリンク</label>
+        </legend>
+       
+           
+        <a href="javascript:ShowHidden('help')">カスタムURL:</a>
+                
+            <div id="help" style="color:Gray; display:none">
+            <ul>
+            <li>外部のURLを使うことを選択しました。</li>
+            <li>外部のURLを使って、私達はdemoを提供して、あなたは自分のフォーマットによってこのurlを編纂しなければなりません。</li>
+            <li>このデモの位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.htm </li>
+            <li>@SDKFroomServHost変数を使用して、構成パスを識別することができます。web.configに設定します。</li>
+            </ul>
+            </div>
+
+            <input type="text" id="TB_Url" name="TB_Url" value=""  style="display:block;width:99%" />
+            <br />
+
+            幅(px)： <input type="text" id="TB_Width" name="TB_Width"  value="" />  
+            高さ(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />   
+            
+          
+    </fieldset>
+
+     <fieldset>
+        <legend>
+            <input id="RB_CtrlType_8" type="radio" name="Model" value="8" /><label for="RB_CtrlType_8">手書きの署名</label>
+        </legend>
+        <ul>
+            <li>モバイルデバイス、PCデバイスの手書き署名、図形描画などの操作に使用します。</li>
+            <li>データは次の場所に保存されます：\DataUser\HandWritingImg\年月\フォームID\フィールド_OID.png</li>
+            <li>画像の高さ、幅がmapAttrの高さと幅が同じです。自由フォームのx、y位置はテキストボックスの位置と同じです。</li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_6" type="radio" name="Model" value="6" /><label for="RB_CtrlType_6">添付の展示フィールドに設定</label>
+        </legend>
+        <ul>
+            <li>添付ファイルを選択してください
+                <select id="DDL_Ath" name="DDL_Ath">
+                </select>添付ファイルのアップロードされたファイルデータはこのコントロールに表示されます。</li>
+            <li><a href="javascript:EditAth()">添付ファイルを編集</a></li>
+            <script type="text/javascript">
+                function EditAth() {
+                    //增加附件判断
+                    var DDL_Ath = $("#DDL_Ath").val();
+                    if (null == DDL_Ath) {
+                        alert("このフォームには添付ファイルがありません。最初にフォームデザイナーで添付ファイルを作成してください");
+                        return;
+                    }
+                    var ddl = document.getElementById("DDL_Ath");
+                    var mypk = ddl.options[ddl.selectedIndex].value;
+                    var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=' + mypk;
+                    WinOpen(url);
+                }
+            </script>
+            <li>ファイルデータ表示モード:
+                <select id="DDL_AthShowModel" name="DDL_AthShowModel">
+                    <option value="0">簡潔モード、フォーマット：添付ファイル(x) </option>
+                    <option value="1">ファイル名、フォーマットだけ：私のファイル1.doc、私のファイル2.doc</option>
+                </select>
+                .</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_4" type="radio" name="Model" value="4" /><label for="RB_CtrlType_4">マップコントロール</label>
+        </legend>
+        <ul>
+            <li>モバイルデバイス用</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_7" type="radio" name="Model" value="7" /><label for="RB_CtrlType_7">携帯の写真コントロール</label>
+        </legend>
+        <ul>
+            <li>モバイルデバイス用</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_5" type="radio" name="Model" value="5" /><label for="RB_CtrlType_5">携帯電話の録音コントロール</label>
+        </legend>
+        <ul>
+            <li>モバイルデバイス用</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_11" type="radio" name="Model" value="11" /><label for="RB_CtrlType_11">画像のコントロール</label>
+        </legend>
+        <ul id="FrmImg">
+            <li>画像ファイルの表示に使用します</li>
+            
+        </ul>
+    </fieldset>
+      </td>
+    </tr>
+   </table>
+
+   
+    <input type="button" value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
+   
+    </form>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>タイムアウト処理規則</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src='../../Img/loading.gif' />&nbsp;読み込み中です。しばらくお待ちください......");
+
+            var nodeID = GetQueryString("FK_Node");
+            var nodeEntity = new Entity("BP.WF.Node", nodeID); //流程实体.
+
+            var nodes = new Entities("BP.WF.Nodes"); //节点s.
+            nodes.Retrieve("FK_Flow", nodeEntity.FK_Flow);
+
+            //绑定数据源.
+            GenerBindDDL("DDL_Nodes", nodes, "NodeID", "Name", nodeEntity.DoOutTime);
+
+            if (nodeEntity.OutTimeDeal == 3) {
+                //自动移交到指定的人员.
+                document.getElementById("TB_Shift").value = nodeEntity.DoOutTime;
+            }
+
+            if (nodeEntity.OutTimeDeal == 4) {
+                //向指定的人员发送消息.
+                document.getElementById("TB_SendEmps").value = nodeEntity.DoOutTime;
+            }
+
+            if (nodeEntity.OutTimeDeal == 6) {
+                //执行SQL.
+                document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
+            }
+
+            //  if (nodeEntity.IsEval == 1)
+            //   document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
+
+            //调用公共类库的方法:执行批量主表赋值.
+            GenerFullAllCtrlsVal(nodeEntity);
+
+            $("#Msg").html("");
+
+        });
+    </script>
+</head>
+<body >
+
+<form id="cc">
+    <div id="bar" class="cs-tr cs-bar">
+        <input type="button" value="保存" onclick="Save()" />
+    </div>
+    <fieldset>
+        <legend><input type="radio" value="0"  id="RB_OutTimeDeal_0" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_0">処理しない</label> </legend>
+        <ul style=" color:Gray">
+            <li>タイムアウトが終了すると、タイムアウト状態が常に処理されます。</li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend><input type="radio" value="1"  id="RB_OutTimeDeal_1" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_1">自動に次へ遷移</label> </legend>
+
+        <ul style=" color:Gray">
+            <li>タイムアウトしたので、現在のノードは次のステップに自動的に移動します。特定の条件を制御して次に移動しないと、現在のノードの送信前イベントに関連するトラフィックロジックを作成する必要があります。</li>
+            <li>自動的に次に移動するには、次のノードと次のノードの受信者を明確にする必要があります。だから、以下の2つの操作は自動的に次に移動できません。</li>
+            <li>1. 現在のノードの方向条件制御規則は選択モードである。</li>
+            <li>2. 次のノードの受入者（承認者）規則は前のノードで選択された。</li>
+        </ul>
+    </fieldset>
+
+
+    <fieldset>
+    <legend><input type="radio" value="2"  id="RB_OutTimeDeal_2" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_2">指定されたノードに遷移</label> </legend>
+ 
+        <ul style=" color:Gray">
+        <li> 遷移するノード：<select id="DDL_Nodes" name="DDL_Nodes" > </select>
+        </li>
+        </ul>
+    </fieldset>
+
+
+
+    <fieldset>
+    <legend><input type="radio" value="3"  id="RB_OutTimeDeal_3" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_3">指定された担当者に引き渡す</label> </legend>
+        <br />
+         <a href="javascript:ShowHidden('shift');" > 移管する人員を入力してください：</a>
+        <br />
+         <div id="shift" style="display:none">
+            <ul>
+                <li>入力を受けるのは人員の作業アカウントである必要があります。</li>
+                <li>複数人員の場合は半角のコンマで区切られます、例えば：zhangsan,lisi。</li>
+                <li>タイムアウト後は指定された人員に自動移管します。</li>
+            </ul>
+          </div>
+      
+      <input id="TB_Shift" name="TB_Shift"  type="text"  />
+    </fieldset>
+
+
+    <fieldset>
+        <legend><input type="radio" value="4" id="RB_OutTimeDeal_4" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_4">指定された人にメッセージを送ります。</label> </legend>
+        <br />
+        <a href="javascript:ShowHidden('emps');"> 送信する人員を入力してください。</a>
+        <br />
+        <div id="emps" style="display:none">
+            <ul>
+                <li>入力を受けるのは人員の作業アカウントである必要があります。</li>
+                <li>複数人員の場合は半角のコンマで区切られます、例えば：zhangsan,lisi。</li>
+                <li>タイムアウト後、システムはこの人たちにメッセージを送ります。</li>
+            </ul>
+        </div>
+        <input id="TB_SendEmps" name="TB_SendEmps" type="text" />
+
+    </fieldset>
+
+
+    <fieldset>
+        <legend><input type="radio" value="5"  id="RB_OutTimeDeal_5" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_5">フローを削除</label> </legend>
+
+         <ul style=" color:Gray">
+            <li>タイムアウトしたら自動的に現在のフローを削除します。</li>
+        </ul>
+    </fieldset>
+
+
+    <fieldset>
+        <legend><input type="radio" value="6" id="RB_OutTimeDeal_6" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_6">SQLを実行</label> </legend>
+        <br />
+        <a href="javascript:ShowHidden('sql');"> 実行するSQLを入力してください：</a>
+        <br />
+        <div id="sql" style="display:none">
+            <ul>
+                <li>現在のsqlはccbpmの表現式をサポートします。</li>
+                <li>関連するSQLを実行し、関連する業務ロジックを処理する。</li>
+            </ul>
+        </div>
+
+        <textarea id="TB_SQL" name="TB_SQL" rows="3"> </textarea>
+    </fieldset>
+
+
+    <fieldset>
+        <legend>その他のオプション</legend>
+        <br />
+        <input type="checkbox" id="CB_IsEval" name="CB_IsEval" /><label for="CB_IsEval">品質審査ポイントかどうか</label>
+    </fieldset>
+
+
+    <div style="float:right" id="Msg"> </div>
+
+
+<script type="text/javascript">
+
+    function Save() {
+
+        $("#Msg").html("保存しています。しばらくお待ちください......");
+
+        var checked = document.getElementById("CB_IsEval").checked;
+        if (checked == true)
+            checked = 1;
+        else
+            checked = 0;
+
+        var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
+        node.IsEval = checked; //是否是质量考核.
+
+        //如果是无.
+        if (document.getElementById("RB_OutTimeDeal_0").checked == true) {
+            node.OutTimeDeal = 0;
+        }
+
+
+        //如果是自动运行到下一个节点.
+        if (document.getElementById("RB_OutTimeDeal_1").checked == true) {
+            node.OutTimeDeal = 1;
+        }
+
+        //跳转到指定的节点.
+        if (document.getElementById("RB_OutTimeDeal_2").checked == true) {
+            node.OutTimeDeal = 2;
+            node.DoOutTime = $("#DDL_Nodes").val(); //
+        }
+
+        //移交指定的人员.
+        if (document.getElementById("RB_OutTimeDeal_3").checked == true) {
+            node.OutTimeDeal = 3;
+            node.DoOutTime = $("#TB_Shift").val(); //
+        }
+
+        //要发送给指定的人员.
+        if (document.getElementById("RB_OutTimeDeal_4").checked == true) {
+            node.OutTimeDeal = 4;
+            node.DoOutTime = $("#TB_SendEmps").val(); //
+        }
+
+        //删除流程.
+        if (document.getElementById("RB_OutTimeDeal_5").checked == true) {
+            node.OutTimeDeal = 5;
+            //node.DoOutTime = $("#TB_SendEmps").val(); //
+        }
+
+        //执行sql.
+        if (document.getElementById("RB_OutTimeDeal_6").checked == true) {
+            node.OutTimeDeal = 6;
+            node.DoOutTime = $("#TB_SQL").val(); //
+        }
+
+        node.Update(); //执行更新.
+        window.location.href = window.location.href;
+    }
+</script>
+
+</form>
+
+</body>
+</html>

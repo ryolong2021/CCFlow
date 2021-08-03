@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>外部データソース</title>
+	<link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+	<link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+	<link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+	<script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+	<script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+	<script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+	<script src="../../../Scripts/config.js" type="text/javascript"></script>
+	<script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="SFTable.js" type="text/javascript"></script>
+	<base target="_self" />
+	<style type="text/css">
+		.style1
+		{
+			width: 184px;
+		}
+		.style2
+		{
+			width: 284px;
+		}
+	</style>
+	<script type="text/javascript" language="javascript">
+	    function Save() {
+
+			var no = $("#TB_No").val() || "";
+			if (no == "") {
+				alert('番号を入力してください。');
+				return;
+			}
+			var name = $("#TB_Name").val() || "";
+			if (name == "") {
+			    alert('名称を入力してください。');
+			    return;
+			}
+
+			var en = new Entity("BP.Sys.SFTable");
+			en.CopyForm();
+
+			if (en.IsExits() == true) {
+			    alert("番号はすでに存在します[" + en.No + "]");
+			    return;
+			}
+
+			en.SrcType = 6; //自定义数据表.
+			en.FK_Val = en.No;
+			en.Insert();
+
+			alert("正常に保存しました。");
+			window.location.href = "Default.htm";
+
+		}
+	</script>
+</head>
+<body>
+    <form action="" id="cc">
+        <table style="width: 95%; margin: 5px; padding: 5px;">
+            <caption>
+                <a href="./Default.htm">戻る</a> - JQuery外部キー
+            </caption>
+            <tr>
+                <th>アイテム</th>
+                <th class="style2">値</th>
+                <th>コメント</th>
+            </tr>
+            <tr>
+                <td >メソッド名</td>
+                <td class="style2"><input type="text" id="TB_No" name="TB_No" /></td>
+                <td>メソッド英字名。</td>
+            </tr>
+            <tr>
+                <td >メソッドの説明</td>
+                <td class="style2"><input type="text" id="TB_Name" name="TB_Name" /></td>
+                <td>メソッド日本語名</td>
+            </tr>
+        </table>
+        <input type="button" value="保存" onclick="Save()" />
+
+        <font color=gray>
+        <fieldset>
+        <legend>ヘルプ</legend>
+        <ul>
+        <li>まず、\DataUser\SFTable.jsファイルに関数を記述します。このファイルは、フロー開発者が書き換えることができます。</li>
+        <li>この関数のフォーマット要件については、SFTable.jsのヘッダーファイルを参照してください。</li>
+        <li>この機能インターフェースは外部データソースのjsメソッドをSys_SFTableに登録します。</li>
+        <li>メソッド名はSFTable.jsの関数名、メソッド説明は中国語の説明が入力されています。</li>
+        <li>例 Function XCLX()の関数があり、メソッド名はXCLXであり、メソッドはストロークタイプとして記述されます。</li>
+        <li>フォームがフィールドを参照している場合、このフィールドは下のフレームに表示されますが、彼は外部データソースタイプで、Sys_MapAttrには2つの記録があります。それぞれFiledName、FieldNameTです。</li>
+        </ul>
+        </fieldset>
+        </font>
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>サブテーブルイベント</title>
+    <script type="text/javascript">
+      
+    </script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <base target="_self" />
+    <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID) {
+
+            var ctrl = document.getElementById(ctrlID);
+            if (ctrl.style.display == "block") {
+                ctrl.style.display = 'none';
+            } else {
+                ctrl.style.display = 'block';
+            }
+        }
+    </script>
+
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            //从表事件.
+            var ens = new Entities("BP.Sys.FrmEvents");
+            ens.Retrieve("FK_MapData", GetQueryString("FK_MapData"));
+
+            for (var i = 0; i < ens.length; i++) {
+                var mypk = ens[i].MyPK;
+
+                var en = new Entity("BP.Sys.FrmEvent", ens[i]);
+                en.MyPK = mypk;
+                var newRow = "";
+                newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
+                newRow += "<td><a href='ActionForDtlEntity.htm?&FK_Event=" + en.FK_Event + "&MyPK=" + en.MyPK + "&FK_MapData="+en.FK_MapData+"&FK_Node=" + en.FK_Node + "'>" + en.FK_Event + "</a></td>";
+                newRow += "<td>" + PushWayText(en.FK_Event, en.EventDoType) + "</td>";
+                newRow += "<td>" + en.DoDoc + "</td>";
+                newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />削除</a>";
+                newRow += "</td>";
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
+            }
+        });
+
+
+        function PushWayText(EventListOfNode, doType) {
+
+            var ret = {
+                "DtlSaveBefore": ["無効化", "ストアドプロシージャを実行します", "SQL文を実行", "URLを実行する", "WebServices", "DDLファイルを実行するためのクラスとメソッド", "EventBaseクラス", "業務単位"],
+                "DtlSaveEnd": ["無効化", "ストアドプロシージャを実行します", "SQL文を実行", "URLを実行する", "WebServices", "DLファイルを実行するためのクラスとメソッド", "EventBaseクラス","業務単位"],
+                "DtlItemSaveBefore": ["無効化", "ストアドプロシージャを実行します", "SQL文を実行", "URLを実行する", "WebServices", "DLファイルを実行するためのクラスとメソッド", "EventBaseクラス","業務単位"],
+                "DtlItemSaveAfter": ["無効化", "ストアドプロシージャを実行します", "SQL文を実行", "URLを実行する", "WebServices", "DLファイルを実行するためのクラスとメソッド", "EventBaseクラス","業務単位"],
+                "DtlItemDelBefore": ["無効化", "ストアドプロシージャを実行します", "SQL文を実行", "URLを実行する", "WebServices", "DLファイルを実行するためのクラスとメソッド", "EventBaseクラス","業務単位"],
+                "DtlItemDelAfter": ["無効化", "ストアドプロシージャを実行します", "SQL文を実行", "URLを実行する", "WebServices", "DLファイルを実行するためのクラスとメソッド", "EventBaseクラス","業務単位"]
+            };
+
+            return ret[EventListOfNode][doType];
+        }
+
+        function Delete(myPK) {
+
+            if (window.confirm('削除してもよろしいですか？') == false)
+                return;
+            var en = new Entity("BP.Sys.FrmEvent");
+            en.MyPK = myPK;
+            en.Delete();
+            window.location.href = window.location.href;
+        }
+
+        function ActionForDtlEntity(eventType) {
+
+            var url = 'ActionForDtlEntity.htm?FK_Node=' + GetQueryString('FK_Node');
+            url += '&FK_Flow=' + GetQueryString('FK_Flow');
+            url += '&FK_Event=' + eventType;
+            url += '&FK_MapData=' + GetQueryString('FK_MapData');
+            url += '&tk=' + Math.random();
+
+            window.location.href = url;
+        }
+
+          //删除.
+        function Del(mypk) {
+         
+            if (window.confirm('削除してよろしいですか？') == false)
+                return;
+
+            var eventEn = new Entity("BP.Sys.FrmEvent",mypk);
+            eventEn.SetPKVal(mypk);
+            eventEn.Delete();
+
+            window.location.href = window.location.href;
+        }
+
+    </script>
+ 
+    
+</head>
+<body onkeypress="Esc();" style="font-size: smaller">
+    <form method="post" action="./ActionForDtl.htm?FK_Node=102&amp;FK_Flow=001&amp;tk=0.047329046785519&amp;s=0.3961371863054315"
+    id="form1">    
+    <div style="margin:8px">
+        <table id="Table1" style="width: 100%">
+            <caption>
+                <div style="float: left"><img src='../../Img/Event.png' /> サブテーブルイベント</div>
+                <div style="float: right">
+                    <a href="http://ccbpm.mydoc.io" target="_blank">ヘルプ</a>
+                </div>
+            </caption>
+            <tr>
+                <th> 順序</th>
+                <th> マーク</th>
+                <th>イベント名</th>
+                <!--<th> 执行类型 </th>-->
+                <th> コンテンツ</th>
+                <th>操作</th>
+            </tr>
+        </table>
+        <fieldset style="border: 0px;">
+        <input type="button" value="+新規イベント" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp; 
+            <div id="state" style="display: none; color: Gray">
+                <ul>
+                    <li><a href="javascript:ActionForDtlEntity('DtlSaveBefore');">サブテーブル保存前</a> </li>
+                    <li><a href="javascript:ActionForDtlEntity('DtlSaveEnd');">サブテーブル保存後</a>
+                    </li>
+                    <li><a href="javascript:ActionForDtlEntity('DtlItemSaveBefore');">データを保存する前に</a>
+                    </li>
+                    <li><a href="javascript:ActionForDtlEntity('DtlItemSaveAfter');">一つデータ保存後</a>
+                    </li>
+                    <li><a href="javascript:ActionForDtlEntity('DtlItemDelBefore');">一つデータ削除前</a>
+                    </li>
+                    <li><a href="javascript:ActionForDtlEntity('DtlItemDelAfter');">一つデータ削除後</a>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    </form>
+</body>
+</html>

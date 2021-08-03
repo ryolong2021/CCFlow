@@ -1,0 +1,111 @@
+<form id="setmaildetailform">
+    <div class="o-modal o-modal--maximum" id="create-modal">
+        <div class="o-modal__window">
+            <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close"></i></button>
+            <main class="o-modal__body">
+                <section class="m-section m-section--no-padding p-card-main">
+                    <section class="m-section m-section--no-padding">
+                        <div class="m-form-field">
+                            <label class="m-form-field__label" id="management_id_detail"></label>
+                            <div class="m-form-field__content">
+                                <h1 class="a-heading undefined"><span class="a-heading__label" id="management_title_detail"></span></h1>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="m-section m-section--no-padding">
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">送信状況</span></h3>
+                        <h5 class="a-heading a-heading--h5 undefined"><span class="a-heading__label">送信状況</span></h5>
+                        <p class="a-text a-text--align-left" id="operation_flg_detail"></p>
+                    </section>
+                    <section class="m-section m-section--no-padding">
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">送信先</span></h3>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">TO:</label>
+                            <div class="m-form-field__content">
+                                <p class="a-text a-text--align-left" id="email_to_detail"></p>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">その他送信先:</label>
+                            <div class="m-form-field__content">
+                                <p class="a-text a-text--align-left" id="email_to_other_detail"></p>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">CC:</label>
+                            <div class="m-form-field__content">
+                                <p class="a-text a-text--align-left" id="email_cc_detail"></p>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label m-form-field__label--normal">その他送信先:</label>
+                            <div class="m-form-field__content">
+                                <p class="a-text a-text--align-left" id="email_cc_other_detail"></p>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label">BCC:</label>
+                            <div class="m-form-field__content">
+                                <p class="a-text a-text--align-left" id="email_bcc_detail"></p>
+                            </div>
+                        </div>
+                        <div class="m-form-field">
+                            <label class="m-form-field__label m-form-field__label--normal">その他送信先:</label>
+                            <div class="m-form-field__content">
+                                <p class="a-text a-text--align-left" id="email_bcc_other_detail"></p>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="m-section m-section--no-padding">
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">送信タイミング</span></h3>
+                        <h5 class="a-heading a-heading--h5 undefined"><span class="a-heading__label">申請者区分</span></h5>
+                        <p class="a-text a-text--align-left" id="seisinsyakbn_detail"></p>
+                        <h5 class="a-heading a-heading--h5 undefined"><span class="a-heading__label">ワークフロー</span></h5>
+                        <p class="a-text a-text--align-left" id="workflow_detail"></p>
+                        <h5 class="a-heading a-heading--h5 undefined"><span class="a-heading__label">ステータス</span></h5>
+                        <p class="a-text a-text--align-left" id="sendtimingkbn_detail"></p>
+                    </section>
+                    <section class="m-section m-section--no-padding">
+                        <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">内容</span></h3>
+                        <h5 class="a-heading a-heading--h5 undefined"><span class="a-heading__label">件名</span></h5>
+                        <p class="a-text a-text--align-left" id="email_temp_name_detail"></p>
+                        <h5 class="a-heading a-heading--h5 undefined"><span class="a-heading__label">テキスト</span></h5>
+                        <div class="a-email-template-viewer" id="email_temp_content_detail">
+                        </div>
+                        <div class="a-email-template-viewer">
+                            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">テスト送信</span></h3>
+                            <p>実際に稼働を開始する前に、件名やテキストに誤りがないか、テスト送信をして確認しましょう。</p>
+                            <p>問題なければ確認へ進んでください。</p><br />
+                            <h5 class="a-heading a-heading--h5 undefined"><span class="a-heading__label">その他の送信先</span></h5>
+                            <div class="m-recipient-input">
+                                <template class="m-recipient-input__template">
+                                    <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input" /></div>
+                                </template>
+                                <ul class="m-recipient-input__list" id="test_email_div_detail">
+                                    <li class="m-recipient-input__item">
+                                        <div class="m-recipient-input__input">
+                                            <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input input-group-email_detail" name="test_email_input_detail1" id="test_email_input_detail1"/></div>
+                                        </div>
+                                        <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                    </li>
+                                    <li class="m-recipient-input__item">
+                                        <div class="m-recipient-input__input">
+                                            <div class="a-text-field a-text-field--type-email"><input type="email" class="a-text-field__input input-group-email_detail" name="test_email_input_detail1" id="test_email_input_detail1"/></div>
+                                        </div>
+                                        <div class="m-recipient-input__remove-button"><button><i class="a-icon a-icon--close"></i></button></div>
+                                    </li>
+                                </ul>
+                                <div class="m-recipient-input__add-button"><button type="button" class="a-add-item-button"><i class="a-icon a-icon--add-item"></i>送信アドレスを追加</button></div>
+                            </div>
+                            <section class="m-section m-section--no-padding p-card-main__section-actions">
+                                <button type="button" class="a-button a-button--secondary a-button--large" id="test_send_btn_detail">
+                                    <div class="a-button__label">テスト送信</div>
+                                </button>
+                            </section>
+                        </div>
+                    </section>
+                </section>
+            </main>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,197 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>マクロコントロール</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+    <meta name="generator" content="www.leipi.org" />
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <link rel="stylesheet" href="leipi.style.css">
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script type="text/javascript">
+function createElement(type, name)
+{     
+    var element = null;     
+    try {        
+        element = document.createElement('<'+type+' name="'+name+'">');     
+    } catch (e) {}   
+    if(element==null) {     
+        element = document.createElement(type);     
+        element.name = name;     
+    } 
+    return element;     
+}
+    </script>
+</head>
+<body>
+<div class="content">
+    <table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th><span>コントロール名称</span><span class="label label-important">*</span></th>
+            <th><span>タイプ</span></th>
+        </tr>
+        <tr>
+            <td>
+                <input id="orgname" type="text" placeholder="必須項目"/>
+            </td>
+            <td>
+                <select  id="orgtype" class="span7">
+                    <optgroup label="----一般的な日付マクロコントロール----">
+                        <option value="sys_datetime">現在の日付+時間 [ 1997-01-01 12:30 ]</option>
+                        <option value="sys_date">現在の日付 [ 1997-01-01 ]</option>
+                        <option value="sys_date_cn">現在の日付 [ 1997年1月1日 ]</option>
+                        <option value="sys_date_cn_short1">現在の日付 [ 1997年1月 ]</option>
+                        <option value="sys_date_cn_short4">現在年 [ 1997 ]</option>
+                        <option value="sys_date_cn_short3">現在年 [ 1997年 ]</option>
+                        <option value="sys_date_cn_short2">現在の日付 [ 1月1日 ]</option>
+                        <option value="sys_time">現在時刻 [ 12:30 ]</option>
+                        <option value="sys_week">今週 [ 月曜日 ]</option>
+                    </optgroup>
+                    <optgroup label="----拡張定義----">
+                        <option value="sys_userid">現在のユーザID　例：9527</option>
+                        <option value="sys_realname">現在のユーザー名　例：東京太郎</option>
+                        <option value="sys_dept">現在のユーザー部門　例：人事部</option>
+                    </optgroup>
+                </select>
+            </td>
+        </tr>
+    </thead>
+    <tbody id='itemAttr'>
+        <tr>
+            <th><span>コントロールのスタイル</span></th>
+            <th><span>表示可否</span></th>
+        </tr>
+        <tr>
+            <td>
+                幅<input id="orgwidth" type="text" value="150" class="input-small span1" placeholder="auto"/> px
+                &nbsp;&nbsp;
+                フォントサイズ<input id="orgfontsize" type="text" value="" class="input-small span1" placeholder="auto"/> px
+                
+            </td>
+            <td>
+                <label class="checkbox"> <input id="orghide" type="checkbox"> 非表示 </label>
+            </td>
+        </tr>
+    </tbody>
+    
+    </table>
+</div>
+<script type="text/javascript">
+var oNode = null,thePlugins = 'macros';
+window.onload = function() {
+    if( UE.plugins[thePlugins].editdom ) {
+        oNode = UE.plugins[thePlugins].editdom;
+        var gTitle=oNode.getAttribute('title').replace(/&quot;/g,"\""),gHidden=oNode.getAttribute('orghide'),gFontSize=oNode.getAttribute('orgfontsize'),gWidth=oNode.getAttribute('orgwidth'),gType=oNode.getAttribute('orgtype');
+        gTitle = gTitle==null ? '' : gTitle;
+        $G('orgname').value = gTitle;
+        //if( oNode.tagName == 'INPUT' ) {}
+        if(oNode.getAttribute('orghide')=='1'){
+            $G('orghide').checked = true;
+        }
+        $G('orgname').value    = gTitle;
+        $G('orgtype').value    = gType; 
+        $G('orgwidth').value = gWidth;
+        $G('orgfontsize').value = gFontSize;
+    }
+}
+
+dialog.oncancel = function () {
+    if( UE.plugins[thePlugins].editdom ) {
+        delete UE.plugins[thePlugins].editdom;
+    }
+};
+dialog.onok = function (){
+    if ( $G('orgname').value == '' ) {
+        alert('コントロール名は空にできません。');
+        return false;
+    }
+    var gTitle=$G('orgname').value.replace(/\"/g,"&quot;"),gFontSize=$G('orgfontsize').value,gWidth=$G('orgwidth').value,gType=$G('orgtype').value;
+    if( !oNode ) {
+        try {
+                /*
+                if ( $G('orgtype').value.indexOf('sys_list')>0 ) {
+                    oNode = document.createElement("select");
+                    var objOption = new Option('{macros}', '');
+                    oNode.options[oNode.options.length] = objOption;
+                } else {
+                    //input
+                }*/
+                oNode = createElement('input','leipiNewField');
+                oNode.setAttribute('type','text');
+                oNode.setAttribute('value','{macros}');
+                
+                oNode.setAttribute('title',gTitle);
+                oNode.setAttribute('name','leipiNewField');
+                oNode.setAttribute('leipiPlugins',thePlugins);
+                oNode.setAttribute('orgtype',gType); 
+                if( $G('orghide').checked ) {
+                    oNode.setAttribute('orghide', '1' ) ;
+                } else {
+                    oNode.setAttribute('orghide', '0' ) ;
+                }
+                if( gFontSize != '' ) {
+                    oNode.style.fontSize = gFontSize + 'px';
+                    oNode.setAttribute('orgfontsize',gFontSize );
+                }
+                if( gWidth != '' ) {
+                    oNode.style.width = gWidth + 'px';
+                    oNode.setAttribute('orgwidth',gWidth );
+                }
+                editor.execCommand('insertHtml',oNode.outerHTML);
+                return true;
+            } catch ( e ) {
+                try {
+                    editor.execCommand('error');
+                } catch ( e ) {
+                    alert('コントロールの異常です。我々にフィードバックしてもらうか、助けを求めてください。');
+                }
+                return false;
+            }
+    } else {
+        var norgname = oNode.getAttribute('name').replace(/\"/g,"&quot;");
+        var oNewNode = null;
+        domUtils.remove(oNode,false);  //删除当前控件，再创建一个新的
+        /*
+        if ( $G('orgtype').value.indexOf('sys_list') > 0 ) {
+            oNewNode = document.createElement("select");
+            var objOption = new Option('{macros}', '');
+            oNewNode.options[oNewNode.options.length] = objOption;
+        }*/
+        oNewNode = createElement('input','leipiNewField');
+        oNewNode.setAttribute('type','text');
+        oNewNode.setAttribute('value','{macros}');
+        oNewNode.setAttribute('title',gTitle);
+        oNewNode.setAttribute('name',norgname);
+        oNewNode.setAttribute('leipiPlugins',thePlugins ); 
+        oNewNode.setAttribute('orgtype',gType); 
+        if( $G('orghide').checked ) {
+            oNewNode.setAttribute('orghide', '1' ) ;
+        } else {
+            oNewNode.setAttribute('orghide', '0' ) ;
+        }
+        if( gFontSize != '' ) {
+            oNewNode.style.fontSize = gFontSize + 'px';
+            oNewNode.setAttribute('orgfontsize',gFontSize );
+        }else{
+            oNewNode.setAttribute('orgfontsize', '');
+        }
+        if( gWidth != '' ) {
+            oNewNode.style.width = gWidth + 'px';
+            oNewNode.setAttribute('orgwidth',gWidth );
+        }else{
+            oNewNode.setAttribute('orgwidth', '');
+        }
+        editor.execCommand('insertHtml',oNewNode.outerHTML);
+        delete UE.plugins[thePlugins].editdom;
+    }
+};
+</script>
+</body>
+</html>

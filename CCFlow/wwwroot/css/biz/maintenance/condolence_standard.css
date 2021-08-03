@@ -1,0 +1,61 @@
+﻿/* 文字列は水平方向に中央に配置 */
+.a-calendar-field-aeonibs-text {
+    display:flex;
+    align-items:center;
+    line-height:50px;
+}
+.m-form-field-aeonibs-margin {
+    margin-right:12px;
+}
+
+/* preview直下のtableエレメントのスタイルの設定 */
+.previewwrapper {
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px 10px 20px 10px;
+    font-size: 14px;
+    line-height: 1.5em;
+    color: black;
+}
+
+    .previewwrapper .subject {
+        font-weight: bold;
+    }
+
+    .previewwrapper .resultarea {
+        margin: 10px 0 0 0;
+    }
+
+        .previewwrapper .resultarea table {
+            border-collapse: collapse;
+            border: solid 2px black;
+        }
+
+            .previewwrapper .resultarea table tr th,
+            .previewwrapper .resultarea table tr td {
+                border: solid 1px black;
+                font-size: 14px;
+                padding: 3px 5px;
+                text-align: center;
+                color: black;
+            }
+
+.a-text-field__input-aeonibs-background {
+    background-color: white;
+}
+
+.a-date-range-field-aeonibs-width {
+    width: 290px;
+}
+
+.m-form-field__content-aeonibs-width {
+    width: 260px;
+}
+
+.m-section-aeonibs-left {
+    margin: unset !important;
+}
+
+.aeonibs-height-32 {
+    height: 32px;
+}

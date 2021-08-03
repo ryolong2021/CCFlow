@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>37229d4f-19f6-49ff-bbd2-e6c6c0a5d936</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataUser\**" />
+    <Compile Remove="GPM\**" />
+    <Compile Remove="SDKFlowDemo\**" />
+    <Compile Remove="Service References\**" />
+    <Compile Remove="WF\**" />
+    <Content Remove="DataUser\**" />
+    <Content Remove="GPM\**" />
+    <Content Remove="SDKFlowDemo\**" />
+    <Content Remove="Service References\**" />
+    <Content Remove="WF\**" />
+    <EmbeddedResource Remove="DataUser\**" />
+    <EmbeddedResource Remove="GPM\**" />
+    <EmbeddedResource Remove="SDKFlowDemo\**" />
+    <EmbeddedResource Remove="Service References\**" />
+    <EmbeddedResource Remove="WF\**" />
+    <None Remove="DataUser\**" />
+    <None Remove="GPM\**" />
+    <None Remove="SDKFlowDemo\**" />
+    <None Remove="Service References\**" />
+    <None Remove="WF\**" />
+    <TypeScriptCompile Remove="WF\**" />
+  </ItemGroup>
+   
+  <ItemGroup>
+    <Compile Remove="AssemblyInfo.cs" />
+    <Compile Remove="Default.aspx.cs" />
+    <Compile Remove="Default.aspx.designer.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+   
+  <ItemGroup>
+    <Content Remove="web.config" />
+    <Content Remove="Web.Debug.config" />
+    <Content Remove="Web.Release.config" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Default.aspx" />
+    <None Remove="Global.asax" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
+    <PackageReference Include="BarcodeLib" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.8.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MySql.Data" Version="8.0.19" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Npgsql" Version="4.1.2" />
+    <PackageReference Include="NPOI" Version="2.4.1" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
+    <PackageReference Include="Radzen.Blazor" Version="2.11.12" />
+    <PackageReference Include="SendGrid" Version="9.21.2" />
+    <PackageReference Include="System.CodeDom" Version="4.7.0" />
+    <PackageReference Include="System.Data.Odbc" Version="4.7.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
+    <PackageReference Include="ThoughtWorks.QRCode.Core" Version="1.0.1.2" />
+    <PackageReference Include="PDFlib_dotnet" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Components\BP.En30\BP.En30.NetCore.csproj" />
+    <ProjectReference Include="..\Components\BP.WF\BP.WF.NetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\pages\biz\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FtpSupport">
+      <HintPath>..\RefDLL\FtpSupport.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

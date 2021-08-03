@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8" />
+    <title>ようこそページ-X-admin2.2</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link href="../../WF/Admin/Portal2020/css/font.css" rel="stylesheet" />
+    <link href="../../WF/Admin/Portal2020/css/xadmin.css" rel="stylesheet" />
+
+
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../../WF/Comm/Gener.js"></script>
+
+    <script src="../../WF/Admin/Portal2020/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="../../WF/Scripts/echartsjs/echarts.min.js"></script>
+    
+
+    
+</head>
+<body>
+    <div id="Msg"></div>
+    <div class="layui-fluid">
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+
+                <div class="layui-card-body ">
+                    <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>フローモデル</h3>
+                                <p>
+                                    <cite id="FlowNum"> 0 </cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>ノード数</h3>
+                                <p>
+                                    <cite id="NodeNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>フォームテンプレート</h3>
+                                <p>
+                                    <cite id="FromNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>インスタンス総数</h3>
+                                <p>
+                                    <cite id="FlowInstaceNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>処理待ち数</h3>
+                                <p>
+                                    <cite id="TodolistNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs6">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>返却回数</h3>
+                                <p>
+                                    <cite id="ReturnNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <!--<li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>期限切れ件数</h3>
+                                <p>
+                                    <cite id="OverTimeNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>完了数</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>勤務評定</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>人員数</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>ポスト数</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="layui-col-md2 layui-col-xs6 ">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>部署数</h3>
+                                <p>
+                                    <cite>0</cite>
+                                </p>
+                            </a>
+                        </li>-->
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-row layui-col-space15">
+
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">フロー開始数-月</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="FlowsByNY" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">フロー開始数-部門</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="FlowsByDept" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">処理待ち数-部署</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="TodolistByDept" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">処理待ち数-フロー</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="TodolistByFlow" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">期限切れ件数-フロー</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="OverTimeByFlow" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">期限切れ件数-部門</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="OverTimeByDept" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <fieldset>
+                        <cite><b>BPMへようこそ</b></cite>
+                        <ul>
+                            <li>ワークフローエンジンは2003年に開発され、.netとjavaの2つのバージョンがあります。それらのコード構造、データベース構造、設計アイデア、機能構成、および操作マニュアルはまったく同じです。フローシートテンプレートは、これら2つのバージョンで完全に共通です。</li>
+                            <li>CCFlowは.netバージョンの略で、Jinanチームによって開発されました。 JFlowは、Shenzhenチームによって開発されたjavaバージョンの略語です。 2つの製品のコアコードは100％オープンソースです。10年以上にわたり、私たちは約束を果たし、製品の品質向上に努め、中国のIT業界に誠実にサービスを提供し、中国の国内のオープンソースBPM分野で第1位になりました。</li>
+                            <li>ワークフローのエンジンの操作が簡単で、概念が分かりやすく、マニュアルが完備しています。コードの注釈が完備しています。</li>
+                            <li>ワークフロー・エンジンはフォーム・エンジンとフロー・エンジンの両方を含み、完璧に結合し、効率的に動作する。フローとフォームのインターフェースの可視化の設計は、中国の国情に適応した多様なシーンの配置が可能です。</li>
+                            <li>ワークフローのエンジンの発展と2003年を駆け抜け、十数年の発展を経て、国内で最も広範な研究グループと応用顧客群を持ち、大手グループ企業のIT部門、ソフトウェア会社、研究院、大学の研究と応用の製品である。</li>
+                            <li>ワークフローエンジンは中小企業の需要を満たすだけでなく、通信レベルのユーザーのアプリケーションを満たすことができます。シーメンス、海南航空、中国船舶、山東省国土資源庁、華電国際、江蘇省測絵院、アモイ証券、天津港、大連華信、北京軟通動力、浙江商銀行、中国新疆天業グループ、中航工業、中航工業、中国際宇宙飛行など国内外の大手企業が政府機関に適用されます。</li>
+                            <li>ccbpmは完全な解決策を持っています。ccformフォームエンジン、ccgpm権限管理システムがあります。</li>
+                            <li>ccbpmあなたの開発フレームワークと統合しやすく、第三者の組織と一体化しています。配置タイプの開発は業務担当者、ITメンテナ、プログラマ向けの高級エンジンAPI開発もあります。</li>
+                            <li>サービス電話：05331-852374939、1866053393</li>
+                        </ul>
+
+                        <cite><b>より多くのリソース</b></cite>
+                        <ul style="">
+                            <!--<li><a href="http://online.ccflow.org" target="_blank">BPMエンジニア養成認証ネットワーク</a></li>-->
+
+                            <li><a href="http://ccflow.org" target="_blank">ccflow公式サイト</a></li>
+                            <li><a href="http://ccbpm.mydoc.io" target="_blank">ccbpmオンラインマニュアル</a></li>
+                            <li><a href="http://ccform.mydoc.io" target="_blank">ccformオンラインマニュアル</a></li>
+                            <li><a href="http://bbs.ccflow.org" target="_blank">ワークフローエンジンフォーラム</a></li>
+                            <li><a href="http://ccflow.ke.qq.com" target="_blank"><b>オンラインビデオ教程</b></a></li>
+                            <li>
+                                オーペンソース資料（ビデオ教程、ppt、文書資料）：SVN：<a href='http://140.143.236.168:7080/svn/ccbpmdocs'
+                                                               target="_blank"> http://140.143.236.168:7080/svn/ccbpmdocs </a>ユーザ名：ccbpm、パスワード：ccbpm
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>-->
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            var FlowsByNY_X = new Array(); 
+            var FlowsByNY_Y = new Array();
+            var FlowsByDept_X = new Array(); 
+            var FlowsByDept_Y = new Array();
+            var TodolistByDept_X = new Array(); 
+            var TodolistByDept_Y = new Array(); 
+            var TodolistByFlow_Pie = new Array(); 
+            var TodolistByFlow_Select = {};
+            var OverTimeByDept_X = new Array(); 
+            var OverTimeByDept_Y = new Array();
+
+            $("#Msg").html("<img src=../../WF/Admin/Portal/Img/loading_small.gif />&nbsp;読み込み中です。少々お待ちください。");
+
+            //获得数数量，并把数量绑定.
+            var handler = new HttpHandler("BP.WF.HttpHandler.DataUser_AppCoder");
+            var data = handler.DoMethodReturnJSON("FlowDesignerWelcome_Init");
+            GenerFullAllDivVal(data);
+
+            //绑定- 流程发起数
+            data = handler.DoMethodReturnJSON("FlowDesignerWelcome_DataSet");
+
+            //流程发起-按月份.
+            var FlowsByNYs = data.FlowsByNY;
+            $.each(FlowsByNYs,function(i,FlowsByNY) {
+                FlowsByNY_X[i]=FlowsByNY.FK_NY;
+                FlowsByNY_Y[i]=FlowsByNY.Num;
+            })
+            queryChart_FlowsByNY(FlowsByNY_X, FlowsByNY_Y);
+
+            //流程发起-按部门.
+            var FlowsByDepts = data.FlowsByDept;
+            $.each(FlowsByDepts,function(i,FlowsByDept) {
+                FlowsByDept_X[i]=FlowsByDept.DeptName;
+                FlowsByDept_Y[i]=FlowsByDept.Num;
+            })
+            queryChart_FlowsByDept(FlowsByDept_X, FlowsByDept_Y);
+
+            //待办-按部门.
+            var TodolistByDepts = data.TodolistByDept;
+            $.each(TodolistByDepts,function(i,TodolistByDept) {
+                TodolistByDept_X[i]=TodolistByDept.DeptName;
+                TodolistByDept_Y[i]=TodolistByDept.Num;
+            })
+            queryChart_TodolistByDept(TodolistByDept_X, TodolistByDept_Y);
+
+            //待办-按流程.
+            var TodolistByFlows = data.TodolistByFlow; 
+            $.each(TodolistByFlows,function(i,TodolistByFlow) {
+                TodolistByFlow_Pie[i]=TodolistByFlow.name;
+                TodolistByFlow_Select[TodolistByFlow.name] = i<6;
+            })
+            queryChart_TodolistByFlow(TodolistByFlow_Pie,TodolistByFlow_Select,TodolistByFlows);
+
+            //逾期-按流程.
+            var OverTimeByFlows = data.OverTimeByFlow;
+            queryChart_OverTimeByFlow(OverTimeByFlows);
+
+            //逾期-按部门.
+            var OverTimeByDepts = data.OverTimeByDept;
+            $.each(OverTimeByDepts,function(i,OverTimeByDept) {
+                OverTimeByDept_X[i]=OverTimeByDept.DeptName;
+                OverTimeByDept_Y[i]=OverTimeByDept.Num;
+            })
+            queryChart_OverTimeByDept(OverTimeByDept_X,OverTimeByDept_Y);
+
+            $("#Msg").html("");
+        });
+
+        
+        //流程发起-按月份.
+        function queryChart_FlowsByNY(FlowsByNY_X,FlowsByNY_Y) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('FlowsByNY'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: FlowsByNY_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: 'フロー数',
+                    data: FlowsByNY_Y,
+                    type: 'line',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //流程发起-按部门.
+        function queryChart_FlowsByDept(FlowsByDept_X,FlowsByDept_Y) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('FlowsByDept'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: FlowsByDept_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: 'フロー数',
+                    data: FlowsByDept_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //待办-按部门.
+        function queryChart_TodolistByDept(TodolistByDept_X,TodolistByDept_Y) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('TodolistByDept'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: TodolistByDept_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '処理待ち数',
+                    data: TodolistByDept_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //待办-按流程.
+        function queryChart_TodolistByFlow(TodolistByFlow_Pie,TodolistByFlow_Select,TodolistByFlows) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('TodolistByFlow'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+               legend: {
+                    type: 'scroll',
+                    orient: 'vertical',
+                    right: 0,
+                    top: 20,
+                    bottom: 20,
+                    data: TodolistByFlow_Pie,
+                    selected: TodolistByFlow_Select
+                    
+                },
+                series: [{
+                    type: 'pie',
+                    name: '処理待ち数',
+                    radius: '45%',
+                    center: ['20%', '50%'],
+                    data: TodolistByFlows,
+                    
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //逾期-按流程.
+        function queryChart_OverTimeByFlow(OverTimeByFlows) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('OverTimeByFlow'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                series: [{
+                    type: 'pie',
+                    name: '期限切れ件数',
+                    radius: '25%',
+                    center: ['50%', '50%'],
+                    data: OverTimeByFlows,
+                    
+                    
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //逾期-按部门.
+        function queryChart_OverTimeByDept(OverTimeByDept_X,OverTimeByDept_Y) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('OverTimeByDept'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: OverTimeByDept_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: 'フロー数',
+                    data: OverTimeByDept_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+       
+
+    </script>
+
+</body>
+</html>

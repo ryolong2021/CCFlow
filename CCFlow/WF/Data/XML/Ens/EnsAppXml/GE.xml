@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!--
+  作用：描述与设置 Ens 的信息。
+  其它：信息存储在BP.Sys.AppCfg
+  DBType = String Int Enum Boolen
+  -->
+  <!-- 信息发布 -->
+  <Item EnsName="BP.GE.Infos" No="NumOfTabList" Name="表示されるタブページの最大数" DefVal="" 
+        Desc="多くのカテゴリがページに影響を与えないように防止する。" DBType="Int" EnumKey="NumOfTabList"  EnumVals="@0=1@1=2@2=3@3=4" WinCardH="300" WinCardW="300" />
+  <Item EnsName="BP.GE.Infos" No="HotList" Name="情報コンテンツレッテル" DefVal="情報公開" 
+        Desc="タイトルの上に表示されます。" DBType="String" EnumKey="HotList" EnumVals="@0=左@1=右@2=上@3=下" WinCardH="300" />
+  <Item EnsName="BP.GE.Infos" No="PosSort" Name="情報カテゴリが表示される箇所" DefVal="10" 
+        Desc="左と右に効果する" DBType="Enum" EnumKey="Pos" EnumVals="@0=左@1=右@2=上@3=下" WinCardH="300" />
+</NewDataSet>

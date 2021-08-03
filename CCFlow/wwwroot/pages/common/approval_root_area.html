@@ -1,0 +1,45 @@
+﻿<div id="approvalroot">
+    <h2 class="a-heading a-heading--h2 undefined"><span class="a-heading__label">承認状況</span></h2>
+    <div class="m-form-field">
+        <label id="rootlb" class="m-form-field__label">自動承認</label>
+        <div class="m-form-field__content">
+            <ul id="rootarealist" class="m-approval-workflow">
+                <li id="rootarea" class="m-approval-workflow__item">
+                    <div class="a-approval-step a-approval-step--auto">
+                        <span class="a-approval-step__icon">
+                            <i id="rooticon" class="a-icon a-icon--status-a"></i>
+                        </span>
+                        <span class="a-approval-step__name" id="rootname"></span>
+                        <span class="a-approval-step__name" id="rootnode"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <a class="a-internal-link" id="internal-link">詳しく見る<i class="a-icon a-icon--link"></i></a>
+
+    <div class="o-modal" id="modal-approval-detail">
+        <div class="o-modal__window">
+            <button id="approval-detail-close" class="o-modal__close-button" type="button"><i class="a-icon a-icon--close"></i></button>
+            <main class="o-modal__body">
+                <header class="o-modal__header undefined">
+                    <p>ステータス詳細</p>
+                </header>
+                <ul id="rootarealistdetail" class="m-approval-status-list">
+                    <li id="rootareadetail" class="m-approval-status-list__item">
+                        <div class="a-approval-status-item">
+                            <span class="a-approval-status-item__icon-status">
+                                <i id="rooticondetail" class="a-icon a-icon--status-a"></i>
+                            </span>
+                            <div class="a-approval-status-item__content">
+                                <span id="roottitle" class="a-approval-status-item__title"></span>
+                                <time id="rootdatatime" class="a-approval-status-item__time"></time>
+                                <span id="rootnamedetail"></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </main>
+        </div>
+    </div>
+</div>

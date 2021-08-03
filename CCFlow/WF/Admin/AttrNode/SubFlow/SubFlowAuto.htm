@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>サブフローを自動的にトリガーする</title>
+    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+        //打开窗体.
+        function OpenEasyUiDialogExt(url, title, w, h, isReload) {
+
+            OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
+                if (isReload == true) {
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;読み込み中です。しばらくお待ちください......");
+
+            //求出来已经设置的自动触发子流程.
+            var nodeID = GetQueryString("FK_Node");
+            var ens = new Entities("BP.WF.Template.SubFlowAutos");
+            ens.Retrieve("FK_Node", nodeID, "SubFlowType", 1, "Idx");
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.SetPara("SubFlowAutoNum", ens.length);
+            node.Update();
+
+            //console.log(ens);
+
+            var html = "";
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                html += "<tr>";
+                html += "<td class=Idx>" + (i + 1) + "</td>";
+                html += "<td>" + en.SubFlowNo + "</td>";
+                html += "<td>" + en.SubFlowName + "</td>";
+                html += "<td>" + en.SubFlowModelText + "</td>";
+                html += "<td>" + en.SendModelText + "</td>";
+
+                //  html += "<td>" + en.YGWorkWayText + "</td>";
+                html += "<td><a href=\"javascript:Edit('" + en.MyPK + "');\" >編集</a></td>";
+                html += "<td><a href=\"javascript:Delete('" + en.MyPK + "');\" >削除</a></td>";
+                html += "<td>";
+                html += "<a href=\"javascript:DoUp('" + en.MyPK + "')\">上へ移動</a> - <a href=\"javascript:DoDown('" + en.MyPK + "')\">下へ移動</a>";
+                html += "</td>";
+                html += "</tr>";
+            }
+
+            $("#Table1 tr:last").after(html);
+
+            $("#Msg").html("");
+
+        });
+
+        function DoUp(mypk) {
+            var en = new Entity("BP.WF.Template.SubFlowAuto", mypk);
+            en.DoMethodReturnString("DoUp");
+            window.location.href = window.location.href;
+        }
+        function DoDown(mypk) {
+            var en = new Entity("BP.WF.Template.SubFlowAuto", mypk);
+            en.DoMethodReturnString("DoDown");
+            window.location.href = window.location.href;
+        }
+
+        //查询集团的流程.
+        function AddGroup() {
+            var webUser = new WebUser();
+
+            var url = "SubFlowAutoDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
+            OpenEasyUiDialogExt(url, "サブフローを選択", 500, 400, true);
+        }
+        //查询集团的流程.
+        function AddOrg() {
+            var webUser = new WebUser();
+            var url = "SubFlowAutoDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
+            OpenEasyUiDialogExt(url, "サブフローを選択", 500, 400, true);
+        }
+
+        //删除成功.
+        function Delete(pk) {
+
+            if (confirm('削除してもよろしいですか？') == false)
+                return;
+
+            var en = new Entity("BP.WF.Template.SubFlowAuto", pk);
+            en.Delete();
+            window.location.href = window.location.href;
+        }
+
+        //编辑.
+        function Edit(pk) {
+
+            var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowAuto&PKVal=" + pk;
+
+            // OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
+            OpenEasyUiDialogExt(url, '編集', 500, 400, true);
+
+            //window.location.href = url;
+
+        }
+        function Help() {
+            var url = "http://ccbpm.mydoc.io";
+            window.open(url);
+        }
+    </script>
+</head>
+<body>
+    <div style="right:30px; position:absolute; z-index:100; top:-4px">
+        <input type="button" value="グループのサブフローを追加" onclick="AddGroup()" />
+        <input type="button" value="本組織のサブフローを追加します。" onclick="AddOrg()" />
+        <input type="button" value="助けがほしい" onclick="Help()" />
+    </div>
+    <table id="Table1" style="width: 100%">
+        <caption><img style="margin-bottom:8px;" align="middle" src='../../../Img/Event.png' />
+            サブフローを自動的にトリガーする
+        </caption>
+        <tr>
+            <th>
+                順序
+            </th>
+            <th>
+                番号
+            </th>
+            <th>
+                フロー名
+            </th>
+            <th>
+                運転モード
+            </th>
+            <th>
+                送信モード
+            </th>
+            <th>
+                編集
+            </th>
+            <th>
+                削除
+            </th>
+            <th>
+                順序
+            </th>
+        </tr>
+    </table>
+    <br />
+
+    <div style="position:relative;" id="Msg">
+    </div>
+    <!--
+    <fieldset>
+                    <legend>記入ヘルプ</legend>
+                    <ul>
+                        <li>継続フローは現在のサブフローです。</li>
+                        <li>継続フローは、サブフローの一つであり、サブフローは一回だけ開始される。</li>
+                    </ul>
+                </fieldset>-->
+</body>
+</html>

@@ -1,0 +1,156 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            InitBar(SelectorModel.DeptAndStation);
+
+            //获取节点岗位
+            var ens = new Entities("BP.WF.Template.NodeStations");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            var html = "<ul>";
+            if (ens.length == 0)
+                html += "<li>設定されていません</li>";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                console.log(en);
+                html += "<li>" + en.FK_StationText + "</li>";
+            }
+            html += "</ul>";
+            document.getElementById("stas").innerHTML = html;
+
+            //获取节点部门
+            ens = new Entities("BP.WF.Template.NodeDepts");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+
+            var html = "<ul>";
+            if (ens.length == 0)
+                html += "<li>設定されていません</li>";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                console.log(en);
+                html += "<li>" + en.FK_DeptText + "</li>";
+            }
+
+            document.getElementById("dept").innerHTML = html;
+        });
+
+        function OpenStation11() {
+            var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+            OpenEasyUiDialogExt(url, '職位の設置', 800, 500, true);
+        }
+
+        function OpenStation() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+            OpenEasyUiDialogExt(url, '職位の設置', 800, 500, true);
+        }
+
+
+
+        function OpenNew() {
+            var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+            OpenEasyUiDialogExt(url, '部門を関連付けします', 800, 500, true);
+        }
+        function OpenOld() {
+            var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
+            var nodeID = GetQueryString("FK_Node");
+            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+            OpenEasyUiDialogExt(url, '部門を関連付けします', 800, 500, true);
+        }
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
+            node.SelectorModel = SelectorModel.DeptAndStation;
+            node.Update();
+            alert("正常に保存しました。");
+        }
+    </script>
+</head>
+<body >
+
+<div id="bar"> </div>
+
+<table  style="width:100%;">
+
+<tr>
+    <td style="width:50%;" valign=top>
+        <fieldset>
+            <legend>職位の設置</legend>
+
+            <ul>
+                <li> <a href="javascript:OpenStation()"> ポストの設定と変更（ツリー構造）</a>  </li>
+                <li> <a href="javascript:OpenDot2DotStations()"> ポストの設定と変更（グループ構造）</a>  </li>
+            </ul>
+        </fieldset>
+
+    </td>
+
+    <td style="width:50%;" valign=top>
+
+        <fieldset>
+            <legend>部署の設置</legend>
+
+            <ul>
+                <li> <a href="javascript:OpenNew()">部門の設定/変更</a> </li>
+            </ul>
+        </fieldset>
+    </td>
+</tr>
+
+
+
+
+<tr>
+<td valign=top> 
+    <fieldset>
+        <legend>設定済み役職</legend>
+        <div id="stas"> </div>
+    </fieldset>
+</td>
+
+<td valign=top>
+
+    <fieldset>
+        <legend>設定された部門</legend>
+        <div id="dept"> </div>
+    </fieldset>
+
+</td>
+
+</tr>
+</table>
+
+
+<fieldset>
+    <legend id="help" >説明</legend>
+    <ul>
+        <li>ccbpmこの職位の集合を備え、この部門の集合を備えた者を、ノードの選択範囲とする。</li>
+    </ul>
+</fieldset>
+
+
+</body>
+</html>

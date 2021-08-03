@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>簡潔なモード</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            InitBar("Simple");
+            var html = "";
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
+            var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            //格式化.
+            mapExt.Tag4 = FormatSQL(mapExt.Tag4);
+
+            //批量为复制.
+            GenerFullAllCtrlsVal(mapExt);
+
+            //去掉 ' 号。
+            var tag = mapExt.Tag4;
+            while (tag.indexOf('~') > 1) {
+                tag = tag.replace("~", "'");
+            }
+
+            //按照文本计算.
+            $("#TB_Tag4").val(tag);
+
+            //设置按钮是否可以用?
+            if (i == 0) {
+                $("#Btn_FullData").attr("disabled", true);
+            } else {
+                $("#Btn_FullData").removeAttr("disabled");
+            }
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var frmID = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+            en.SetPara("TBFullCtrl", "Simple");
+            en.Update();
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
+            var n = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            mapExt.CopyURL();  //从url里面copy数据.
+            mapExt.CopyForm(); //从from里面copy数据.
+
+            mapExt.ExtType = "FullData";
+            mapExt.AttrOfOper = GetQueryString("KeyOfEn");
+            mapExt.FK_MapData = GetQueryString("FK_MapData");
+            var sql = $("#TB_Tag4").val();
+            mapExt.Tag4 = sql; //设置主表的SQL.
+            if (mapExt.Update() == 0)
+                mapExt.Insert();
+            window.location.href = window.location.href;
+        }
+    </script>
+    <style type="text/css">
+        .style1 {
+            height: 21px;
+        }
+    </style>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <form id="cc">
+        <table id="table" style="width: 100%;">
+            <caption>
+                テキストボックスのために他のコントローラーを埋める
+            </caption>
+            <tr>
+                <td>
+                    データソースタイプ
+                </td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+                        <option value="0">SQLを実行</option>
+                        <option value="1">URLを実行してJSONを返します</option>
+                        <option value="2">CCFromRef.jsを実行してJSONを返します</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    データソース: <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" /> ヘルプ: </a>
+                         <div id='sqlexp' style='color: Gray; display: none'>
+                             <ul>
+                                 <li>SQL埋めるヘルプ:</li>
+                                 <li>1. 検索用SQL文を設定し、SELECT文の結果にはNo、Nameを含める必要があります。</li>
+                                 <li>2. このSQLは@Keyキーワードを含んでいなければなりません。@Keyにはテキストボックスで入力されたデータを設定します。</li>
+                                 <li>3. SQL検索結果は他のフィールド名と一致し、コントローラーの内容が自動設定できます。</li>
+                                 <li>4. 例：SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
+                                 <li>5.URL符号化防止のためにlikeの最初の%を[%]と書き、llike '%@Key%'を'[%]@Key%'と書く。</li>
+                             </ul>
+                             <fieldset>
+                                 <legend>マスターテーブルの実行結果</legend>
+                                 <img src="1.Simple.png" style="width:90%;" />
+                             </fieldset>
+
+                             <fieldset>
+                                 <legend>サブテーブル運行効果</legend>
+                                 <img src="1.Simple-1.png" style="width:90%;" />
+                             </fieldset>
+                         </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 100%;">
+                    <textarea rows="4" name="TB_Tag4" id="TB_Tag4" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

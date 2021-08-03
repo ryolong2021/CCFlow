@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ドロップダウンに連動する時他のコントロールにデータを埋めることを設定する</title>
+    <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        var mapExt;
+        $(function () {
+
+            //            $("#Msg").html("読み込み中です。少々お待ちください。");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            var json = handler.DoMethodReturnString("DDLFullCtrl_Init");
+
+            if (json.indexOf('err@') == 0) {
+                alert(json);
+                return;
+            }
+
+            json = JSON.parse(json);
+
+            mapExt = json['Sys_MapExt'][0];
+
+            //绑定数据源.
+            GenerBindDDL("DDL_FK_DBSrc", json['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(mapExt);
+
+            if (mapExt.W == "0") {
+                document.getElementById("Btn_FullDtl").disabled = true;
+                document.getElementById("Btn_FullDDL").disabled = true;
+            }
+
+            if (mapExt.DBType != 0)
+                $("#TR_SQL").hide();
+
+            return;
+
+            //            $("#Msg").html("");
+        });
+
+        function changeDoc(obj) {
+            if (obj.value == 0)
+                $("#TR_SQL").show();
+            else
+                $("#TR_SQL").hide();
+
+            if (obj.value != mapExt.DBType)
+                $("#TB_Doc").val("");
+            else
+                $("#TB_Doc").val(mapExt.Doc);
+        }
+
+        //装载  模版.
+        function LoadTemplate() {
+
+            //打开方向条件.
+            var url = "../../SettingTemplate.htm?TemplateType=DDLFullCtrl";
+            WinOpen(url, 'ss');
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+    <table id="table" style="width: 100%;">
+        <caption>
+            ドロップダウンに連動する時他のコントロールにデータを埋めることを設定する
+        </caption>
+        <tr>
+            <td>
+                データソースタイプ
+            </td>
+            <td>
+                <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+                    <option value="0">SQLを実行</option>
+                    <option value="1">URLを実行してJSONを返します</option>
+                    <option value="2">SFTable.jsを実行してJSONを返します</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="TR_SQL">
+            <td>
+                SQLデータソースを実行する
+            </td>
+            <td>
+                <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc">
+                </select>
+            </td>
+            <td>
+                ccformは他のデータソースからのデータの取り込みを許可します。
+                <!--<a href="/WF/Comm/Sys/SFDBSrcNewGuide.aspx" ><img src='../../../../WF/Img/Setting.png' border=0 />设置/新建数据源</a>-->
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                実行用のデータソース
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="width: 100%;">
+                <textarea rows="4" name="TB_Doc" id="TB_Doc"> </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" value="テンプレートを読み込む" onclick="LoadTemplate()" id="Btn_load" />
+                <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                <input type="button" value="削除" onclick="Delete()" id="Btn_Delete" />
+                <input type="button" value="サブテーブルを埋める" onclick="FullDtl()" id="Btn_FullDtl" title="データが入力されたら、指定されたサブテーブルデータを変更する必要があります。例：メインテーブルの選択された担当者、サブテーブルの該当担当者の履歴情報。" />
+                <input type="button" value="ドロップダウンにデータを設定" onclick="FullDDL()" id="Btn_FullDDL" title="データが入力されたら、指定したドロップダウンボックスの内容を変更する必要があります。例：人を選択すると、人のポストのドロップダウンボックスが表示されます。ドロップダウンボックスの内容は、人のポストを表示することだけが必要です。" />
+                <a href="javascript:ShowHidden('sqlexp')">埋め込みヘルプ:</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div id='sqlexp' style='color: Gray; display: none'>
+                    <ul>
+                        <li>1. クエリのSQL文を設定します。このSQLは@Keyキーワードを含んでいなければなりません。@Keyは選択されたItem値です。</li>
+                        <li>2. SQL返した列は他のフィールド名と一致しています。コントロールデータのオートフィルが完了します。</li>
+                        <li>3. 例：SELECT Name as CZYName, Tel as DianHua, Email as YouJian FROM WF_Emp WHERE
+                            No = '@Key' </li>
+                        <li>フォームがある場合：CZYName、DianHua、YouJiianフィールドのデータは自動的に入力されます。</li>
+                        <li>ccformがデモを用意しました。フォームライブラリ\ネイティブデータソース\フォーム要素\基本関数を参照してください。</li>
+                        <li>
+                            <img alt="" src="../Img/DDLCtrlFull.png" /></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="Msg">
+    </div>
+    <script type="text/javascript">
+
+        function FullDtl() {
+            var myPK = GetQueryString('MyPK');
+            if(myPK == null ||myPK == undefined)
+                myPK = "DDLFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn"); 
+            var DBType = $("#DDL_DBType").val();
+            var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL&DBType=' + DBType;
+            window.location.href = url;
+            return;
+        }
+
+        //填充ddl.
+        function FullDDL() {
+
+            var myPK = GetQueryString('MyPK');
+            if(myPK == null ||myPK == undefined)
+             myPK  = "DDLFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");; 
+            var DBType = $("#DDL_DBType").val();
+            var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL&DBType=' + DBType;
+            window.location.href = url;
+            return;
+        }
+
+        function Save() {
+
+            $("#Msg").html("保存しています。しばらくお待ちください......");
+            //组织主键.
+            var mypk = "DDLFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.CopyForm(); //复制表单数据.
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.ExtType = "DDLFullCtrl";
+            en.MyPK = mypk;
+
+            if (en.Update() == 0)
+                en.Insert();
+            $("#Msg").html("<font color=green>正常に保存</font>");
+            window.location.href = window.location.href;
+            return;
+
+        }
+
+        function Delete() {
+
+            if (window.confirm('削除してもよろしいですか？') == false)
+                return false;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            var data = handler.DoMethodReturnString("DDLFullCtrl_Delete");
+            alert(data);
+            window.location.href = window.location.href;
+            return;
+        }
+    </script>
+    </form>
+</body>
+</html>

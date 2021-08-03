@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+  
+  <!-- 事件类型 -->
+  <Source No="Node" CH="ノードイベント"  EN="" JP="ノードイベント"/>
+  <Source No="Flow" CH="フローイベント"  EN="" JP="フローイベント"/>
+  <Source No="Frm"  CH="フォームイベント"  EN="" JP="フォームイベント"/>
+
+  <!-- 表单事件 -->
+  <Item111 No="PageLoadFull"  CH="搭載入力データ" EN="When the node before saving" JP="搭載入力データ" EventType="Frm" EventDesc="読み込む前に、フォームのデータ初期化を事前に実行してもいいです。" />
+  
+  
+  <Item No="FrmLoadBefore"  CH="ノードフォームの読み込み前" EN="When the node before saving" JP="ノードフォームの読み込み前" EventType="Frm" EventDesc="読み込む前に、フォームのデータ初期化を事前に実行してもいいです。" />
+  <Item No="FrmLoadAfter"   CH="ノードフォームの読み込み後" EN="When the node saved" JP="ノードフォームの読み込み後" EventType="Frm"    EventDesc="ロード後、安全処理を実行します。" />
+  <Item No="SaveBefore"  CH="フォームを保存する前に" EN="When the node before saving" JP="フォームを保存する前に"  EventType="Frm"      EventDesc="いくつかのデータの完全性チェックが実行できます。" />
+  <Item No="SaveAfter" CH="フォームの保存後" EN="When the node saved" JP="フォームの保存後" EventType="Frm" EventDesc="対応する業務論理処理ができます。"/>
+
+  <!-- 节点事件类型(可以删除了.) -->
+  <Item No="WorkArrive" CH="ジョブ到着" JP="ジョブ到着"  EventType="Node" IsHaveMsg="1"  Note="ジョブが現在のノードに送信されたときをトリガーにするイベントは、通常、メッセージを設定するために使用されます。" />
+  <Item No="SendWhen" CH="ノードが送信される前に" JP="ノードが送信される前に"  EventType="Node" IsHaveMsg="0" />
+  <Item No="SendSuccess" CH="ノード送信成功時" JP="ノード送信成功時"  EventType="Node"  IsHaveMsg="1" />
+  <Item No="SendError" CH="ノード送信失敗時" JP="ノード送信失敗時"  EventType="Node" IsHaveMsg="0" />
+  <Item No="ReturnBefore" CH="ノードが戻る前に" JP="ノードが戻る前に"  EventType="Node"  IsHaveMsg="0" />
+  <Item No="ReturnAfter" CH="ノードが戻ったら" JP="ノードが戻ったら" EventType="Node" IsHaveMsg="1" />
+  <Item No="UndoneBefore" CH="ノードが送信をキャンセルする前に" JP="ノードが送信をキャンセルする前に"  EventType="Node" IsHaveMsg="0" />
+  <Item No="UndoneAfter" CH="ノードが送信をキャンセルした後" JP="ノードが送信をキャンセルした後" EventType="Node" IsHaveMsg="1" />
+  <Item No="WhenReadWork" CH="ジョブが開かれた後" JP="ジョブが開かれた後" EventType="Node" IsHaveMsg="0" />
+
+
+  <!-- 流程事件类型 -->
+	<Item No="FlowOverBefore" CH="フラー終了前" EN="When the node after sending cancellation" JP="フラー終了前" EventType="Flow" IsHaveMsg="0" />
+	<Item No="FlowOverAfter" CH="フラー終了後" EN="When the node after sending cancellation" JP="フラー終了後"  EventType="Flow" IsHaveMsg="1" />
+  <Item No="BeforeFlowDel" CH="フロー削除前" EN="When the node after sending cancellation" JP="フロー削除前" EventType="Flow"  IsHaveMsg="0" />
+  <Item No="AfterFlowDel" CH="フロー削除後" EN="When the node after sending cancellation" JP="フロー削除後" EventType="Flow"  IsHaveMsg="1" />
+
+    <!-- 从表事件 -->
+    <ItemDtl No="DtlSaveBefore" CH="サブテーブル保存前" EN="" JP="サブテーブル保存前" EventType="Dtl" />
+    <ItemDtl No="DtlSaveEnd" CH="サブテーブル保存後" EN="" JP="サブテーブル保存後"  EventType="Dtl" />
+    <ItemDtl No="DtlItemSaveBefore" CH="データを保存する前に" EN="" JP="データを保存する前に" EventType="Dtl" />
+    <ItemDtl No="DtlItemSaveAfter" CH="一つデータ保存後" EN="" JP="一つデータ保存後" EventType="Dtl"  />
+    <ItemDtl No="DtlItemDelBefore" CH="一つデータ削除前" EN="" JP="一つデータ削除前" EventType="Dtl"  />
+    <ItemDtl No="DtlItemDelAfter" CH="一つデータ削除後" EN="" JP="一つデータ削除後" EventType="Dtl"  />
+
+</NewDataSet>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+  <!--
+   TBType= 编号
+   Name=名称
+   Note=描述
+   For=适用于哪些文本框.
+   onblur，onchange，ondblclick，onkeypress，onkeyup
+  -->
+  <Item No="NotNull" Name="フィールドは空にできません" Note="該当の項目が空できるかをチェックする"  ForCtrl="TB" />
+  <Dtl ItemNo="NotNull" ForEvent="onblur" Exp="sdsdsd"   Msg="フィールドは空にできません"   Note=""/>
+  <Dtl ItemNo="NotNull" ForEvent="onkeypress" Exp="sdsds" Msg="フィールドは空にできません"  Note=""/>
+  
+  <Item No="Tel" Name="携帯電話の番号が正しく入力されているか確認してください" Note="携帯電話番号の入力チェックに適用します"  ForCtrl="TB" />
+  <Dtl ItemNo="Tel"  ForEvent="onblur"  Exp="/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/" Msg="不正な携帯番号" />
+
+  <Item No="TelNotNull" Name="携帯電話の番号が正しく入力されているか確認してください（送信時に空にすることはできません）" Note="携帯電話番号の入力チェックに適用します"  ForCtrl="TB" />
+  <Dtl ItemNo="TelNotNull"  ForEvent="onblur"   Exp="/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/" Msg="不正な携帯番号" />
+  <Dtl ItemNo="TelNotNull"  ForEvent="onsubmit" Exp="/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/" Msg="不正な携帯番号" />
+  
+</NewDataSet>

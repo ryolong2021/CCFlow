@@ -1,0 +1,1992 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>弔事の連絡</title>
+    <!-- CSSエリア 開始 -->
+    <link rel="stylesheet" href="../../../css/common/components.css">
+    <link rel="stylesheet" href="../../../css/common/components_custom.css">
+    <link rel="stylesheet" href="../../../css/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="../../../css/common/app.css">
+    <!-- CSSエリア 終了 -->
+    <!-- jquery -->
+    <script src="../../../js/vendor/jquery-2.1.1.js"></script>
+    <!-- validate コンポーネント(項目入力チェック用)：validate, additional-methods, messages_ja -->
+    <script src="../../../js/vendor/jquery.validate.js"></script>
+    <script src="../../../js/vendor/additional-methods.js"></script>
+    <script src="../../../js/vendor/messages_ja.js"></script>
+    <!-- 郵便番号から住所自動表示する方法：jpostal -->
+    <script src="../../../js/vendor/jquery.jpostal.js"></script>
+    <!-- 日付パネルを表示する方法：datetimepicker -->
+    <script src="../../../js/vendor/jquery.datetimepicker.full.js"></script>
+    <!-- 日付フォーマット用 -->
+    <script src="../../../js/vendor/moment-with-locales.js"></script>
+    <!-- 共通定数：app_const -->
+    <script src="../../../js/common/app_const.js"></script>
+    <!-- 共通メッセージ：msg_comm -->
+    <script src="../../../js/common/msg_comm.js"></script>
+    <!-- CCFLOW相関 -->
+    <script src="../../../../WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <!-- 共通関数：app_common -->
+    <script src="../../../js/common/app_common.js"></script>
+
+</head>
+<body>
+    <form id="form1">
+        <div class="o-whole o-whole--with-bg o-whole--with-navigation o-whole--global">
+            <div class="o-whole__body-container" id="bodyContainer">
+                <!-- メッセージダイアログボックス -->
+                <script>GetSubHtmlDataToHtml("bodyContainer", "../../../pages/common/app_dialog_area.html");</script>
+                <!-- ヘルプダイアログボックス -->
+                <div class="o-modal" id="modal-help-huyo">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close"></i></button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header o-modal__header--has-icon">
+                                <i class="a-icon a-icon--help"></i>
+                                <p>扶養の状況について</p>
+                            </header>
+                            <h4><span class="a-heading__label">扶養の有無により手配内容が変わる場合、選択が必要です。</span></h4>
+                            <p class="a-text a-text--align-left">
+                                例：従業員本人が扶養しているお子さままたは従業員本人の配偶者が扶養しているお子さまが亡くなった場合は扶養親族を選択。<br />
+                                従業員本人および配偶者が扶養していないお子さまが亡くなった場合は扶養親族ではないを選択。
+                            </p>
+                        </main>
+                    </div>
+                </div>
+                <!-- ヘルプダイアログボックス -->
+                <div class="o-modal" id="modal-help-koryo">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close"></i></button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header o-modal__header--has-icon">
+                                <i class="a-icon a-icon--help"></i>
+                                <p>香料とは？</p>
+                            </header>
+                            <h4 class="a-heading a-heading--h4 undefined"><span class="a-heading__label">香料(こうりょう)とは</span></h4>
+                            <p class="a-text a-text--align-left">「御香料」は葬儀などで故人に対してお供えする金品のことです。</p>
+                        </main>
+                    </div>
+                </div>
+                <!-- ヘルプダイアログボックス -->
+                <div class="o-modal" id="modal-help-kuge">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close"></i></button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header o-modal__header--has-icon">
+                                <i class="a-icon a-icon--help"></i>
+                                <p>供花とは？</p>
+                            </header>
+                            <h4 class="a-heading a-heading--h4 undefined"><span class="a-heading__label">供花(きょうか、くげ)とは</span></h4>
+                            <p class="a-text a-text--align-left">「供花」とは故人に供える花のことを指します。供花には死者の霊を慰めると同時に祭壇や会場を飾る意味があり、葬儀の際は、親族や親戚一同と書かれ祭壇の両側に置かれていることが一般的です。</p>
+                        </main>
+                    </div>
+                </div>
+                <!-- ヘルプダイアログボックス -->
+                <div class="o-modal" id="modal-help-tyoden">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close"></i></button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header o-modal__header--has-icon">
+                                <i class="a-icon a-icon--help"></i>
+                                <p>弔電とは？</p>
+                            </header>
+                            <h4 class="a-heading a-heading--h4 undefined"><span class="a-heading__label">弔電とは</span></h4>
+                            <p class="a-text a-text--align-left">弔電についての一般的な説明がここには入ります弔電についての一般的な説明がここには入ります弔電についての一般的な説明がここには入ります弔電についての一般的な説明がここには入ります。</p>
+                        </main>
+                    </div>
+                </div>
+                <!-- ヘルプダイアログボックス -->
+                <div class="o-modal" id="modal-help">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close" id="modal-help-close"></i></button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header o-modal__header--has-icon">
+                                <i class="a-icon a-icon--help"></i>
+                                <p>通夜/告別式の有無とは？</p>
+                            </header>
+                            <h4 class="a-heading a-heading--h4 undefined"><span class="a-heading__label">供花・弔電のお届け先を確認させていただいております。</span></h4>
+                            <p class="a-text a-text--align-left">通夜・告別式会場への送付が間に合わない場合や、後日受け取りとしたい場合は後飾りを選択いただきますと、指定の送付先を入力できます。</p>
+                        </main>
+                    </div>
+                </div>
+                <!-- PDF -->
+                <div class="o-modal o-modal--fullscreen" id="pdf-page">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button"><i class="a-icon a-icon--close"></i></button>
+                        <main class="o-modal__body">
+                            <header class="o-modal__header o-modal__header--has-icon">
+                                <h2>慶弔に関する規定</h2> 
+                            </header>
+                            <iframe src="" style="width:100%;height:100%" id="iframe-pdf"></iframe>
+                        </main>
+
+                    </div>
+                </div>
+                <!-- 入力画面 -->
+                <div class="o-modal o-modal--fullscreen o-modal--has-footer o-modal--opened" id="input-page">
+                    <div class="o-modal__window">
+                        <button class="o-modal__close-button" type="button" id="btn-page-close"><i class="a-icon a-icon--close"></i></button>
+                        <main class="o-modal__body">
+                            <!-- 本人申請 -->
+                            <section class="m-section m-section--border">
+                                 <h1 class="a-heading a-heading--h1 undefined">
+                                    <span class="a-heading__label p-title">弔事の連絡</span>
+                                </h1>
+                                <p class="a-text a-text--align-left f-noagent">このたびは逝去の報に接し、心からお悔やみ申し上げます。近親者が亡くなられた方には、慶弔休暇（もしくは特別休暇）の調整他のため、以下に連絡の取れる連絡先・葬儀等についての情報をお聞きしております。</p>
+                                <a class="a-modal-opener undefined" id="link-page-pdf" hidden>慶弔に関する規定<i class="a-icon a-icon--link-new-window"></i></a>
+                            </section>
+
+                            <section class="m-section p-setting-input-form__body">
+                                <section class="m-section m-section--border">
+                                    <div class="a-help-button a-help-button--with-children">
+                                        <i class="a-icon a-icon--help"></i>
+                                        <span class="a-help-button__children"> を押すと項目の詳しい説明が表示されます。 </span>
+                                    </div>
+                                    <!-- 社員情報 (本人申請)-->
+                                    <h3 class="a-heading a-heading--h3 undefined  f-noagent">
+                                        <span class="a-heading__label">社員情報</span>
+                                    </h3>
+                                    <p class="a-text a-text--align-left f-noagent">社員区分によって見舞金や慶弔休暇日数などの支給範囲が異なりますのでご確認ください。</p>
+                                    <div class="m-accordion f-noagent m-accordion--opened">
+                                        <button type="button" class="m-accordion__label">
+                                            確認する
+                                            <i class="a-icon a-icon--arrow-down"></i>
+                                        </button>
+                                        <div class="m-accordion__detail">
+                                            <div class="m-info-table m-info-table--no-border-header" id="applicantInfo">
+                                                <div class="m-info-table__container">
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">社員番号</span>
+                                                                <span id="label-emp-shainbango"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">氏名</span>
+                                                                <span id="label-emp-shainshime"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">氏名（カナ）</span>
+                                                                <span id="label-emp-shainkana"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">会社名称</span>
+                                                                <span id="label-emp-kaishaname"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">正式組織名・上</span>
+                                                                <span id="label-emp-shozokuname"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">正式組織名・下</span>
+                                                                <span id="label-emp-bushoname"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">社員区分</span>
+                                                                <span id="label-emp-kbnname"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">職位</span>
+                                                                <span id="label-emp-shokuiname"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">組合区分</span>
+                                                                <span id="label-emp-kumiainame"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">グッドライフ区分</span>
+                                                                <span id="label-emp-goodlifename"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 代理で申請をする方の社員情報 -->
+                                    <h3 class="a-heading a-heading--h3 undefined f-agent">
+                                        <span class="a-heading__label">代理で申請をする方の社員情報</span>
+                                    </h3>
+                                    <div class="m-accordion m-accordion--opened f-agent">
+                                        <button type="button" class="m-accordion__label">
+                                            確認する
+                                            <i class="a-icon a-icon--arrow-down"></i>
+                                        </button>
+                                        <div class="m-accordion__detail">
+                                            <div class="m-info-table m-info-table--no-border-header" id="applicantAgentInfo">
+                                                <div class="m-info-table__container">
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">社員番号</span>
+                                                                <span id="label-agent-shainbango"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">所属</span>
+                                                                <span id="label-agent-shozokuname"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">氏名</span>
+                                                                <span id="label-agent-shainshime"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item">
+                                                        <div class="a-info-table-cell a-info-table-cell--pair">
+                                                            <div class="a-info-table-cell__content">
+                                                                <span class="a-info-table-cell__label">氏名（カナ）</span>
+                                                                <span id="label-agent-shainkana"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- 連絡情報 -->
+                                <section class="m-section m-section--border">
+                                    <h3 class="a-heading a-heading--h3 undefined">
+                                        <span class="a-heading__label">
+                                            連絡の取れる電話番号/メールアドレス
+                                            <span class="m-form-field__label-addons">
+                                                <span class="a-tag">必須</span>
+                                            </span>
+                                        </span>
+                                    </h3>
+                                    <p class="a-text a-text--align-left">本連絡に関して弔事手配業者からの連絡先となります。</p>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">電話番号</label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-4 m-form-field__row--column-size-pc-4">
+                                                    <input type="text" name="text-contact-tel1" id="text-contact-tel1" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                    <input type="text" name="text-contact-tel2" id="text-contact-tel2" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                    <input type="text" name="text-contact-tel3" id="text-contact-tel3" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">メールアドレス</label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-email">
+                                                    <input type="email" name="text-contact-email" id="text-contact-email" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                    <input type="hidden" name="text-contact-tel" id="text-contact-tel" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- ご不幸にあわれた方の社員情報 (代理申請) -->
+                                <section class="m-section m-section--border f-agent">
+                                    <h3 class="a-heading a-heading--h3 undefined">
+                                        <span class="a-heading__label">
+                                            ご不幸にあわれた方の社員情報
+                                        </span>
+                                    </h3>
+                                    <p class="a-text a-text--align-left">社員区分によって見舞金や慶弔休暇日数などの支給範囲が異なりますのでご確認ください。</p>
+                                    <div class="m-form-field__content">
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                            <div class="m-form-field p-setting-input-form__form-field">
+                                                <label class="m-form-field__label">
+                                                    社員番号
+                                                    <span class="m-form-field__label-addons f-modify">
+                                                        <span class="a-tag">必須</span>
+                                                    </span>
+                                                </label>
+                                                <div class="m-form-field__content">
+                                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                                        <div class="a-address-search-field">
+                                                            <div class="a-text-field">
+                                                                <input type="text" id="text-unhappiness-shainbango" name="text-unhappiness-shainbango" class="a-text-field__input" maxlength="10" autocomplete="off" />
+                                                            </div>
+                                                            <button type="button" class="a-button a-button--third" id="btn-search-empcode">
+                                                                <div class="a-button__label">検索</div>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">氏名</label>
+                                                <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                    <input type="text" id="text-unhappiness-shainshime" name="text-unhappiness-shainshime" class="a-text-field__input" disabled="" />
+                                                </div>
+                                            </div>
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">氏名（カナ）</label>
+                                                <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                    <input type="text" id="text-unhappiness-shainkana" name="text-unhappiness-shainkana" class="a-text-field__input" disabled="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">会社名称</label>
+                                                <div class="m-form-field__content">
+                                                    <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                        <input type="text" id="text-unhappiness-kaishaname" name="text-unhappiness-kaishaname" class="a-text-field__input" disabled="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">正式組織名・上</label>
+                                                <div class="m-form-field__content">
+                                                    <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                        <input type="text" id="text-unhappiness-shozokuname" name="text-unhappiness-shozokuname" class="a-text-field__input" disabled="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">正式組織名・下</label>
+                                                <div class="m-form-field__content">
+                                                    <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                        <input type="text" id="text-unhappiness-bushoname" name="text-unhappiness-bushoname" class="a-text-field__input" disabled="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">社員区分</label>
+                                                <div class="m-form-field__content">
+                                                    <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                        <input type="text" id="text-unhappiness-kbnname" name="text-unhappiness-kbnname" class="a-text-field__input" disabled="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">職位</label>
+                                                <div class="m-form-field__content">
+                                                    <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                        <input type="text" id="text-unhappiness-shokuiname" name="text-unhappiness-shokuiname" class="a-text-field__input" disabled="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">組合区分</label>
+                                                <div class="m-form-field__content">
+                                                    <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                        <input type="text" id="text-unhappiness-kumiainame" name="text-unhappiness-kumiainame" class="a-text-field__input" disabled="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-form-field">
+                                                <label class="m-form-field__label">グッドライフ区分</label>
+                                                <div class="m-form-field__content">
+                                                    <div class="a-text-field a-text-field--disabled a-text-field--type-text">
+                                                        <input type="text" id="text-unhappiness-goodlifename" name="text-unhappiness-goodlifename" class="a-text-field__input" disabled="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- 亡くなられた方情報 -->
+                                <section class="m-section m-section--border">
+                                    <h3 class="a-heading a-heading--h3 undefined">
+                                        <span class="a-heading__label">亡くなられた方について</span>
+                                    </h3>
+                                    <p class="a-text a-text--align-left">続柄や扶養状況によって各種手続きが発生する場合があります。</p>
+                                    <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                姓
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-died-lastname" name="text-died-lastname" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                名
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-died-firstname" name="text-died-firstname" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                姓（カナ）
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-died-lastname_kana" name="text-died-lastname_kana" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                名（カナ）
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-died-firstname_kana" name="text-died-firstname_kana" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                あなたから見た続柄
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-pulldown" id="pulldown-died-relationship">
+                                                    <select id="select-died-relationship" name="select-died-relationship" class="a-pulldown__select">
+                                                    </select>
+                                                    <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                性別
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-died-gender_male" name="radio-died-gender" class="a-radio__input" type="radio" value="5" checked="" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">男</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-died-gender_female" name="radio-died-gender" class="a-radio__input" type="radio" value="6" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">女</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">同居/別居</label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-died-living_yes" name="radio-died-living" class="a-radio__input" type="radio" value="1" checked="" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">同居</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-died-living_no" name="radio-died-living" class="a-radio__input" type="radio" value="0" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">別居</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                年齢
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-text-field">
+                                                        <input type="text" id="text-died-age" name="text-died-age" class="a-text-field__input" maxlength="3" autocomplete="off" />
+                                                        <div class="a-unit-text-field-unit__icon"><i class="a-icon a-icon--unit-age"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>                                           
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                逝去日
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-calendar-field undefined">
+                                                        <div class="a-calendar-field__content">
+                                                            <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                                <input type="text" class="a-text-field__input" id="text-died-death_date" name="text-died-death_date" maxlength="10" autocomplete="off" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                逝去時刻
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                                    <div class="a-pulldown" id="pulldown-died-death_time">
+                                                        <select id="select-died-death_time" name="select-died-death_time" class="a-pulldown__select">
+                                                        </select>
+                                                        <div class="a-pulldown__icon-container">
+                                                            <i class="a-icon a-icon--arrow-down"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-died-dependent">
+                                        <label class="m-form-field__label">
+                                            扶養の状況
+                                            <span class="m-form-field__label-addons">
+                                                <div class="a-help-button" id="help-opener-huyo">
+                                                    <i class="a-icon a-icon--help"></i>
+                                                </div>
+                                            </span>
+                                        </label>
+                                        <div class="m-form-field__content">
+                                            <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                <label class="a-radio a-radio--grey undefined">
+                                                    <input id="radio-died-dependent_yes" name="radio-died-dependent" class="a-radio__input" type="radio" value="1" checked="" />
+                                                    <div class="a-radio__body">
+                                                        <span class="a-radio__indicator"></span>
+                                                        <div class="a-radio__label">扶養親族</div>
+                                                    </div>
+                                                </label>
+                                                <label class="a-radio a-radio--grey undefined">
+                                                    <input id="radio-died-dependent_no" name="radio-died-dependent" class="a-radio__input" type="radio" value="0" />
+                                                    <div class="a-radio__body">
+                                                        <span class="a-radio__indicator"></span>
+                                                        <div class="a-radio__label">扶養でない</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- 葬儀について -->
+                                <section class="m-section m-section--border">
+                                    <h3 class="a-heading a-heading--h3 undefined">
+                                        <span class="a-heading__label">葬儀について</span>
+                                    </h3>
+                                    <label class="m-form-field__label">喪主はどなたが務めますか</label>
+                                    <p class="a-text a-text--align-left">取得できる慶弔休暇日数が異なります。</p>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-mourner-own_yes" name="radio-mourner" class="a-radio__input" type="radio" value="1" checked="" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">自分</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-mourner-own_no" name="radio-mourner" class="a-radio__input" type="radio" value="0" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">自分以外</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-mourner">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                姓
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-mourner-lastname" name="text-mourner-lastname" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                名
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-mourner-firstname" name="text-mourner-firstname" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-mourner">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                姓（カナ）
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-mourner-lastname_kana" name="text-mourner-lastname_kana" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                名（カナ）
+                                                <span class="m-form-field__label-addons f-modify">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-mourner-firstname_kana" name="text-mourner-firstname_kana" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">通夜/告別式の有無について</label>
+                                            <p class="a-text a-text--align-left">終了している場合は、なしを選択してください。</p>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-funeral-both" name="radio-funeral" class="a-radio__input" type="radio" value="3" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">通夜と告別式</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-funeral-wakeonly" name="radio-funeral" class="a-radio__input" type="radio" value="1" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">通夜のみ</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-funeral-funeralonly" name="radio-funeral" class="a-radio__input" type="radio" value="2" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">告別式のみ</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-funeral-none" name="radio-funeral" class="a-radio__input" type="radio" value="0" checked="" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">なし</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="area-decline">
+                                        <label class="a-checkbox">
+                                            <input type="checkbox" class="a-checkbox__input" id="chk-funeral-decline">
+                                            <div class="a-checkbox__body">
+                                                <span class="a-checkbox__indicator">
+                                                    <i class="a-icon a-icon--check-white"></i>
+                                                </span>
+                                                <div class="a-checkbox__label">一般参列を辞退する</div>
+                                            </div>
+                                        </label>
+                                        <ul class="a-caption-list">
+                                            <li>供花・弔電はまとめてのご手配となるため、一方のみを手配された後にもう一方を申請することはできません。予めご了承ください。</li>
+                                        </ul>
+                                        <br />
+                                    </div>
+                                    <h4 class="a-heading a-heading--h4 undefined area-wake">
+                                        <span class="a-heading__label">通夜について</span>
+                                    </h4>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                日付
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-calendar-field undefined">
+                                                        <div class="a-calendar-field__content">
+                                                            <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                                <input type="text" class="a-text-field__input" id="text-wake-date" name="text-wake-date" maxlength="10" autocomplete="off" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                開始時刻
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                                    <div class="a-pulldown" id="pulldown-wake-time">
+                                                        <select id="select-wake-time" name="select-wake-time" class="a-pulldown__select">
+                                                        </select>
+                                                        <div class="a-pulldown__icon-container">
+                                                            <i class="a-icon a-icon--arrow-down"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                会場名
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-wake-placeName" name="text-wake-placeName" class="a-text-field__input" maxlength="100" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                会場名（カナ）
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-wake-placeName_kana" name="text-wake-placeName_kana" class="a-text-field__input" maxlength="100" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                郵便番号
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-address-search-field">
+                                                        <div class="a-text-field">
+                                                            <input class="a-text-field__input" name="text-wake-postcode" id="text-wake-postcode" maxlength="8" autocomplete="off">
+                                                        </div>
+                                                        <button type="button" class="a-button a-button--third" id="btn-wake-postcode">
+                                                            <div class="a-button__label">住所検索</div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                都道府県・市郡区
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-wake-address1" name="text-wake-address1" class="a-text-field__input" maxlength="50" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                町村・番地
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-wake-address2" name="text-wake-address2" class="a-text-field__input" maxlength="50" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                建物名・部屋番号
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-wake-address3" name="text-wake-address3" class="a-text-field__input" maxlength="50" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-wake">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                会場電話番号
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__content">
+                                                    <div class="m-form-field__row m-form-field__row--column-size-4 m-form-field__row--column-size-pc-4">
+                                                        <input type="text" id="text-wake-tel1" name="text-wake-tel1" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="text" id="text-wake-tel2" name="text-wake-tel2" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="text" id="text-wake-tel3" name="text-wake-tel3" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="hidden" name="text-wake-tel" id="text-wake-tel" value="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="a-heading a-heading--h4 undefined area-funeral">
+                                        <span class="a-heading__label">告別式について</span>
+                                    </h4>
+                                    <div id="area-sameplace">
+                                        <label class="a-checkbox area-funeral">
+                                            <input type="checkbox" class="a-checkbox__input" id="chk-funeral-sameplace">
+                                            <div class="a-checkbox__body">
+                                                <span class="a-checkbox__indicator">
+                                                    <i class="a-icon a-icon--check-white"></i>
+                                                </span>
+                                                <div class="a-checkbox__label">通夜と同じ場所</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                日付
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-calendar-field undefined">
+                                                        <div class="a-calendar-field__content">
+                                                            <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                                <input type="text" class="a-text-field__input" id="text-funeral-date" name="text-funeral-date" maxlength="10" autocomplete="off" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                開始時刻
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                                    <div class="a-pulldown" id="pulldown-funeral-time">
+                                                        <select id="select-funeral-time" name="select-funeral-time" class="a-pulldown__select">
+                                                        </select>
+                                                        <div class="a-pulldown__icon-container">
+                                                            <i class="a-icon a-icon--arrow-down"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                会場名
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-funeral-placeName" name="text-funeral-placeName" class="a-text-field__input" maxlength="100" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                会場名（カナ）
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-funeral-placeName_kana" name="text-funeral-placeName_kana" class="a-text-field__input" maxlength="100" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                郵便番号
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-address-search-field">
+                                                        <div class="a-text-field">
+                                                            <input class="a-text-field__input" name="text-funeral-postcode" id="text-funeral-postcode" maxlength="8" autocomplete="off" />
+                                                        </div>
+                                                        <button type="button" class="a-button a-button--third" id="btn-funeral-postcode">
+                                                            <div class="a-button__label">住所検索</div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                都道府県・市郡区
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-funeral-address1" name="text-funeral-address1" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                町村・番地
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-funeral-address2" name="text-funeral-address2" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                建物名・部屋番号
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-funeral-address3" name="text-funeral-address3" class="a-text-field__input" maxlength="50" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-funeral">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                会場電話番号
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__content">
+                                                    <div class="m-form-field__row m-form-field__row--column-size-4 m-form-field__row--column-size-pc-4">
+                                                        <input type="text" id="text-funeral-tel1" name="text-funeral-tel1" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="text" id="text-funeral-tel2" name="text-funeral-tel2" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="text" id="text-funeral-tel3" name="text-funeral-tel3" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="hidden" name="text-funeral-tel" id="text-funeral-tel" value="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- 香料・供花・弔電　代理申請　給付内容なし-->
+                                <section class="m-section m-section--border arrange-no" hidden>
+                                    <h3 class="a-heading a-heading--h3 undefined">
+                                        <span class="a-heading__label">香料・供花・弔電について</span>
+                                    </h3>
+                                    <p class="a-text a-text--align-left">
+                                        会社より手配しますので、受取の可否を選択してください。<br />辞退されても、逝去日から1年以内であれば受け取ることができます。詳しくは慶弔に関する規定を確認してください。
+                                    </p>
+                                    <p class="a-text a-text--align-left">
+                                        <br />ご入力いただいた内容での香料・供花・弔電の手配はございません。
+                                    </p>
+                                </section>
+                                <!-- 香料・供花・弔電-->
+                                <section class="m-section m-section--border arrange-ok">
+                                    <h3 class="a-heading a-heading--h3 undefined">
+                                        <span class="a-heading__label">香料・供花・弔電について</span>
+                                    </h3>
+                                    <p class="a-text a-text--align-left">
+                                        会社より手配しますので、受取の可否を選択してください。<br />辞退されても、逝去日から1年以内であれば受け取ることができます。詳しくは慶弔に関する規定を確認してください。
+                                    </p>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                香料
+                                                <span class="m-form-field__label-addons">
+                                                    <div class="a-help-button" id="help-opener-koryo"><i class="a-icon a-icon--help"></i></div>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-opener-koryo_yes" name="radio-opener-koryo" class="a-radio__input" type="radio" value="0" checked="" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">受け取る</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-opener-koryo_no" name="radio-opener-koryo" class="a-radio__input" type="radio" value="1" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">辞退する</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                供花
+                                                <span class="m-form-field__label-addons">
+                                                    <div class="a-help-button" id="help-opener-kuge"><i class="a-icon a-icon--help"></i></div>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-opener-kuge_yes" name="radio-opener-kuge" class="a-radio__input" type="radio" value="0" checked="" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">受け取る</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-opener-kuge_no" name="radio-opener-kuge" class="a-radio__input" type="radio" value="1" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">辞退する</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                弔電
+                                                <span class="m-form-field__label-addons">
+                                                    <div class="a-help-button" id="help-opener-tyoden"><i class="a-icon a-icon--help"></i></div>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-opener-tyoden_yes" name="radio-opener-tyoden" class="a-radio__input" type="radio" value="0" checked="" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">受け取る</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-opener-tyoden_no" name="radio-opener-tyoden" class="a-radio__input" type="radio" value="1" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">辞退する</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12" id="area-standard">
+                                        <div class="m-form-field">
+                                            <p class="a-text a-text--align-left">香料・供花・弔電の支給基準は下記となります。</p>
+                                            <div class="m-info-table" id="label-standard-table">
+                                                <div class="m-info-table__header">差出人情報</div>
+                                                <div class="m-info-table__container">
+                                                    <div class="m-info-table__item" id="label-standard-info0">
+                                                        <div class="a-info-table-cell">
+                                                            <div class="a-info-table-cell__content">
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text" id="label-standard-kaishaname0">イオンアイビス(株)</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text" id="label-standard-yakushoku0">代表取締役社長</span>
+                                                                    <span class="a-quota-info__text" id="label-standard-shimei0">佐藤一郎</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">香料</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-koryonum0">50,000円</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">供花</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-kyokanum0">1基</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">弔電</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-tyodennum0">1通</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-info-table__item" id="label-standard-info1">
+                                                        <div class="a-info-table-cell">
+                                                            <div class="a-info-table-cell__content">
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text" id="label-standard-kaishaname1">イオンアイビス(株)</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text" id="label-standard-yakushoku1">代表取締役社長</span>
+                                                                    <span class="a-quota-info__text" id="label-standard-shimei1">佐藤一郎</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">香料</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-koryonum1">50,000円</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">供花</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-kyokanum1">1基</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">弔電</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-tyodennum1">1通</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="m-info-table__container">
+                                                    <div class="m-info-table__item" id="label-standard-info2">
+                                                        <div class="a-info-table-cell">
+                                                            <div class="a-info-table-cell__content">
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text" id="label-standard-kaishaname2">イオンアイビス(株)</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text" id="label-standard-yakushoku2">代表取締役社長</span>
+                                                                    <span class="a-quota-info__text" id="label-standard-shimei2">佐藤一郎</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">香料</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-koryonum2">50,000円</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">供花</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-kyokanum2">1基</span>
+                                                                </p>
+                                                                <p style="margin-bottom: 13px;">
+                                                                    <span class="a-quota-info__primary-text">弔電</span>
+                                                                    <span class="a-quota-info__number" id="label-standard-tyodennum2">1通</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="m-info-table__container">
+                                                    <div class="m-info-table__item" id="label-standard-info3" style="flex:100%">
+                                                        <div class="a-info-table-cell">
+                                                            <div class="a-info-table-cell__content">
+                                                                <p style="margin-bottom: 20px;">
+                                                                    <span class="a-quota-info__primary-text">ご入力いただいた内容での香料・供花・弔電の手配はございません。</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-allnight">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                通夜/告別式の有無について
+                                                <span class="m-form-field__label-addons">
+                                                    <div class="a-help-button" id="help-opener"><i class="a-icon a-icon--help"></i></div>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-6 m-form-field__row--column-size-pc-6">
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-allnight-wake" name="radio-allnight" class="a-radio__input" type="radio" value="0" checked />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">通夜</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-allnight-funeral" name="radio-allnight" class="a-radio__input" type="radio" value="1" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">告別式</div>
+                                                        </div>
+                                                    </label>
+                                                    <label class="a-radio a-radio--grey undefined">
+                                                        <input id="radio-allnight-rear" name="radio-allnight" class="a-radio__input" type="radio" value="2" />
+                                                        <div class="a-radio__body">
+                                                            <span class="a-radio__indicator"></span>
+                                                            <div class="a-radio__label">後飾り</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="a-heading a-heading--h4 undefined area-rear">
+                                        <span class="a-heading__label">後飾りのお届け先情報</span>
+                                    </h4>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-rear">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                名前
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-text-field a-text-field--type-text">
+                                                        <input type="text" id="text-rear-name" name="text-rear-name" class="a-text-field__input" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-rear">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                郵便番号
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-address-search-field">
+                                                        <div class="a-text-field">
+                                                            <input type="text" class="a-text-field__input" name="text-rear-postcode" id="text-rear-postcode" maxlength="8" autocomplete="off">
+                                                        </div>
+                                                        <button type="button" class="a-button a-button--third" id="btn-rear-postcode">
+                                                            <div class="a-button__label">住所検索</div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-rear">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                都道府県・市郡区
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-rear-address1" name="text-rear-address1" class="a-text-field__input" maxlength="50" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-rear">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                町村・番地
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-rear-address2" name="text-rear-address2" class="a-text-field__input" maxlength="50" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-rear">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                建物名・部屋番号
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="a-text-field a-text-field--type-text">
+                                                    <input type="text" id="text-rear-address3" name="text-rear-address3" class="a-text-field__input" maxlength="50" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-rear">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                電話番号
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__content">
+                                                    <div class="m-form-field__row m-form-field__row--column-size-4 m-form-field__row--column-size-pc-4">
+                                                        <input type="text" id="text-rear-tel1" name="text-rear-tel1" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="text" id="text-rear-tel2" name="text-rear-tel2" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="text" id="text-rear-tel3" name="text-rear-tel3" class="a-text-field__input" maxlength="4" autocomplete="off" />
+                                                        <input type="hidden" name="text-rear-tel" id="text-rear-tel" value="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-12 area-rear">
+                                        <div class="m-form-field">
+                                            <label class="m-form-field__label">
+                                                お届け日
+                                                <span class="m-form-field__label-addons">
+                                                    <span class="a-tag">必須</span>
+                                                </span>
+                                            </label>
+                                            <div class="m-form-field__content">
+                                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                                    <div class="a-calendar-field undefined">
+                                                        <div class="a-calendar-field__content">
+                                                            <div class="a-text-field a-text-field--type-text a-calendar-field__input">
+                                                                <input type="text" class="a-text-field__input" id="text-rear-date" name="text-rear-date" autocomplete="off" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="a-calendar-field__icon"><i class="a-icon a-icon--calendar"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </section>
+                        </main>
+                        <!-- ボタン -->
+                        <footer class="o-modal__footer">
+                            <button class="a-button a-button--secondary a-button--huge cancel-confirm-button" id="btn-form-draft_save" type="button" hidden>
+                                <div class="a-button__label">下書き保存</div>
+                            </button>
+                            <button class="a-button a-button--primary a-button--huge" id="btn-form-confirm" type="button" hidden>
+                                <div class="a-button__label">確認</div>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+                <!-- 確認画面 -->
+                <div class="o-modal o-modal--fullscreen o-modal--has-footer o-modal--has-back-button" id="confirm-page">
+                    <div class="o-modal__window">
+                        <main class="o-modal__body">
+                            <a class="a-modal-back-button o-modal__back-button" id="btn-form-back">
+                                <i class="a-icon a-icon--back"></i>
+                                戻る
+                            </a>
+                            <a class="a-modal-back-button o-modal__back-button" id="btn-other-back" hidden>
+                                <i class="a-icon a-icon--back"></i>
+                                戻る
+                            </a>
+                            <h1 class="a-heading a-heading--h1 undefined">
+                                <span class="a-heading__label">弔事の連絡(確認)</span>
+                            </h1>
+                            <h5 class="a-heading a-heading--h5 undefined state-over">
+                                <span class="a-heading__label">※内容に問題がなければ、ページ下部のボタンを押下してください。</span>
+                            </h5>
+                            <br />
+                            <h2 class="a-heading a-heading--h2 undefined">
+                                <span class="a-heading__label">申請内容</span>
+                            </h2>
+                            <h3 class="a-heading a-heading--h3 undefined f-noagent">
+                                <span class="a-heading__label">社員情報</span>
+                            </h3>
+                            <h3 class="a-heading a-heading--h3 undefined f-agent">
+                                <span class="a-heading__label">代理で申請をする方の社員情報</span>
+                            </h3>
+                            <section class="m-section m-section--border" id="applicantInfoArea">
+                            </section>
+
+                            <section class="m-section m-section--border">
+                                <h3 class="a-heading a-heading--h3 undefined">
+                                    <span class="a-heading__label">連絡の取れる電話番号／メールアドレス</span>
+                                </h3>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">電話番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-contact-tel">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">メールアドレス</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-contact-email">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="m-section m-section--border f-agent">
+                                <h3 class="a-heading a-heading--h3 undefined">
+                                    <span class="a-heading__label">ご不幸にあわれた方の社員情報</span>
+                                </h3>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">社員番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-shainbango">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">氏名</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-shainshime">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">氏名（カナ）</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-shainkana">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">会社名称</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-kaishaname">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">正式組織名・上</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-shozokuname">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">正式組織名・下</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-bushoname">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">社員区分</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-kbnname">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">職位</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-shokuiname">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">組合区分</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-kumiainame">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">グッドライフ区分</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-delegator-goodlifename">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="m-section m-section--border">
+                                <h3 class="a-heading a-heading--h3 undefined">
+                                    <span class="a-heading__label">亡くなられた方について</span>
+                                </h3>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">名前</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-fullname">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">名前（カナ）</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-fullname_kana">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">あなたから見た続柄</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-relationship">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">性別</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-gender">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">同居／別居</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-living">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">年齢</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-age">&nbsp;</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">逝去日</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-death_date">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">逝去時刻</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-death_time">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-died-dependent">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">扶養の状況</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-died-dependent">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="m-section m-section--border">
+                                <h3 class="a-heading a-heading--h3 undefined">
+                                    <span class="a-heading__label">葬儀について</span>
+                                </h3>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">喪主はどなたが務めますか</label>
+                                    <div class="m-form-field__content">
+                                        <p class="a-text a-text--align-left" id="p-mourner">&nbsp;</p>
+                                    </div>
+                                </div>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-mourner">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">名前</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-mourner-fullname">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">名前（カナ）</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-mourner-fullname_kana">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">通夜／告別式について</label>
+                                    <div class="m-form-field__content">
+                                        <p class="a-text a-text--align-left" id="p-funeral">&nbsp;</p>
+                                    </div>
+                                </div>
+                                <br />
+                                <h4 class="a-heading a-heading--h4 undefined area-wake">
+                                    <span class="a-heading__label">通夜について</span>
+                                </h4>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-wake">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">日付</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-date">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">開始時刻</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-time">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-wake">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">会場名</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-placeName">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">会場名（カナ）</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-placeName_kana">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-wake">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">郵便番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-postcode">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">都道府県・市郡区</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-address1">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-wake">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">町村・番地</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-address2">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">建物名・部屋番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-address3">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-wake">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">会場電話番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-wake-tel">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <h4 class="a-heading a-heading--h4 undefined area-funeral">
+                                    <span class="a-heading__label">告別式について</span>
+                                </h4>
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-funeral">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">日付</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-date">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">開始時刻</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-time">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-funeral">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">会場名</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-placeName">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">会場名（カナ）</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-placeName_kana">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-funeral">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">郵便番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-postcode">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">都道府県・市郡区</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-address1">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-funeral">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">町村・番地</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-address2">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">建物名・部屋番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-address3">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-funeral">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">会場電話番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-funeral-tel">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+                            <!-- 香料・供花・弔電　確認画面　代理申請　給付内容なし-->
+                            <section class="m-section m-section--border arrange-no" hidden>
+                                <h3 class="a-heading a-heading--h3 undefined">
+                                    <span class="a-heading__label">香料・供花・弔電について</span>
+                                </h3>
+                                <p class="a-text a-text--align-left">
+                                    <br />ご入力いただいた内容での香料・供花・弔電の手配はございません。
+                                </p>
+                            </section>
+                            <!-- 香料・供花・弔電　確認画面-->
+                            <section class="m-section m-section--border arrange-ok">
+                                <h3 class="a-heading a-heading--h3 undefined">
+                                    <span class="a-heading__label">香料・供花・弔電について</span>
+                                </h3>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">香料</label>
+                                    <div class="m-form-field__content">
+                                        <p class="a-text a-text--align-left" id="p-opener-koryo">&nbsp;</p>
+                                    </div>
+                                </div>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">供花</label>
+                                    <div class="m-form-field__content">
+                                        <p class="a-text a-text--align-left" id="p-opener-kuge">&nbsp;</p>
+                                    </div>
+                                </div>
+                                <div class="m-form-field">
+                                    <label class="m-form-field__label">弔電</label>
+                                    <div class="m-form-field__content">
+                                        <p class="a-text a-text--align-left" id="p-opener-tyoden">&nbsp;</p>
+                                    </div>
+                                </div>
+                                <div class="m-form-field" id="p-standard-table">
+                                </div>
+                                <div class="m-form-field area-allnight">
+                                    <label class="m-form-field__label">供花・弔電のお届先</label>
+                                    <div class="m-form-field__content">
+                                        <p class="a-text a-text--align-left" id="p-allnight">&nbsp;</p>
+                                    </div>
+                                </div>
+                                <br />
+                                <h4 class="a-heading a-heading--h4 undefined area-rear">
+                                    <span class="a-heading__label">後飾りのお届け情報</span>
+                                </h4>
+                                <div class="m-form-field area-rear">
+                                    <label class="m-form-field__label">名前</label>
+                                    <div class="m-form-field__content">
+                                        <p class="a-text a-text--align-left" id="p-rear-name">&nbsp;</p>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-rear">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">郵便番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-rear-postcode">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">都道府県・市郡区</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-rear-address1">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-rear">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">町村・番地</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-rear-address2">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">建物名・部屋番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-rear-address3">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-field__row m-form-field__row--column-size-12 m-form-field__row--column-size-pc-6 area-rear">
+                                    <div class="m-form-field" style="margin-bottom:0px">
+                                        <label class="m-form-field__label">電話番号</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-rear-tel">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <label class="m-form-field__label">お届け日</label>
+                                        <div class="m-form-field__content">
+                                            <p class="a-text a-text--align-left" id="p-rear-date">&nbsp;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </main>
+                        <footer class="o-modal__footer">
+                            <button class="a-button a-button--primary" id="btn-form-request" type="button">
+                                <div class="a-button__label">申請</div>
+                            </button>
+                            <button class="a-button a-button--primary" id="btn-form-modify" type="button">
+                                <div class="a-button__label">修正</div>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- 4dのコンポーネント -->
+    <script src="../../../js/components.js"></script>
+
+    <!-- 弔事の連絡 -->
+    <script src="../../../js/biz/condolence/page_condolence.js"></script>
+</body>
+</html>

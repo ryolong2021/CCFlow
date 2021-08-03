@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>認証方式の登録</title>
+</head>
+<body>
+
+<fieldset width='100%' ><legend>&nbsp;承認の詳細&nbsp; </ legend> <BR> <Table class = 'Table' cellpadding = '2' cellspacing = '2'>
+<TR>
+<TH >項目</TH>
+<TH >内容</TH>
+</TR>
+<TR>
+<TD  nowrap >認可先:</TD>
+<TD  nowrap ><input type=text value="" /> <input type=button  value="認可者を選択" id="Btn_Auto" /> </TD>
+</TR>
+<TR>
+<TD  nowrap >承認日の取り消し：</TD>
+<TD ><input name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$TB_DT" type="text" value="2017-10-13 12:20" maxlength="20" id="ContentPlaceHolder1_Tools1_ToolsWap1_TB_DT" class="TBcalendar" onfocus="WdatePicker({dateFmt:&#39;yyyy-MM-dd HH:mm&#39;});" /></TD>
+</TR>
+<TR>
+<TD  nowrap >認可方法:</TD>
+<TD ><select name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$DDL_AuthorWay" id="ContentPlaceHolder1_Tools1_ToolsWap1_DDL_AuthorWay">
+	<option selected="selected" value="0">無許可</option>
+	<option value="1">すべてのフロー認証</option>
+	<option value="2">指定フローのライセンス</option>
+
+</select></TD>
+</TR>
+<TR>
+<TD colspan=1 ><b><a href="javascript:WinShowModalDialog('ToolsSet.aspx?RefNo=AthFlows&d=2017/9/29 12:20:55')" >許可するフローの範囲を設定する</a></b></TD>
+<TD  nowrap colspan=1  ><input type="submit" name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$Btn_Save" value="保存" id="ContentPlaceHolder1_Tools1_ToolsWap1_Btn_Save" class="Btn" /></TD>
+</TR>
+<TR>
+<TD class='BigDoc' colspan=2 valign=top>説明：ライセンスの回収日が確定した後、被認可者はあなたの身分でログインできません。<br>指定した日付に達していない場合は、権限を取得できます。</TD>
+</TR></Table>
+<Br>
+
+</fieldset>
+
+</body>
+</html>

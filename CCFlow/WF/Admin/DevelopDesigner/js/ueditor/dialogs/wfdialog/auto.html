@@ -1,0 +1,333 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title></title>
+        <script type="text/javascript" src="../internal.js"></script>
+        <script type="text/javascript" src="../../../jquery.js"></script>
+        <script type="text/javascript" src="../../../bootstrap/bootstrap.js"></script>
+        <link rel="stylesheet" href="../../../bootstrap/bootstrap.css">
+        <link rel="stylesheet" href="../../../bootstrap/bootstrap-responsive.css">
+        <style type="text/css">
+            *{color: #838383;margin: 0;padding: 0}
+            a {text-decoration: none;}
+            .sqlopt a {
+                color: #005580;
+                text-decoration: none;
+            }
+            .sqlopt a:hover {
+                text-decoration: underline;
+            }
+            html,body {font-size: 12px;}
+            body {
+                padding-left: 20px;padding-right: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="tblwrap" style="padding-top:10px;">
+            <table class="table table-striped table-bordered" style="margin-top:18px;margin-bottom: 0;">
+                <thead>
+                    <tr>
+                        <th> <span> コントロール名:</span><span class="label label-important">*</span> </th>
+                        <th> <span> タイプ:</span></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="itemName" type="text" placeholder="必須項目" style="width:203px;"/>
+                        </td>
+                        <td>
+                            <select onchange="javascript:fnTypeChange(this.value);" style="width:209px;" id="itemType">
+                                <optgroup label="----単一行入力ボックス----">
+                                    <option value="sys_date">現在の日付、形は1999-01-01のようです。</option>
+                                    <option value="sys_date_cn">現在の日付、形は2009年1月1日のようです。</option>
+                                    <option value="sys_date_cn_short3">現在の日付、形は2009年のようです。</option>
+                                    <option value="sys_date_cn_short4">現在の年、形は2009のようです。</option>
+                                    <option value="sys_date_cn_short1">現在の日付、形は2009年1月のようです。</option>
+                                    <option value="sys_date_cn_short2">現在の日付、形は1月1日のように表示されます。</option>
+                                    <option value="sys_time">現在の時刻</option>
+                                    <option value="sys_date">現在の日付[カレンダーコントロール]</option>
+                                    <option value="sys_datetime">現在の日付+時刻[カレンダーコントロール]</option>
+                                    <option value="sys_week">周の中の何曜日、形は月曜日のようです。</option>
+                                    <option value="sys_userid">現在のユーザID</option>
+                                    <option value="sys_realname">現在のユーザ名</option>
+                                    <option value="sys_deptname">現在のユーザー部門</option>
+                                    <!--option value="sys_realname_date">現在のユーザ名+日付</option>
+                                    <option value="sys_realname_datetime">現在のユーザ名+日付+時刻</option>
+                                    <option value="sys_formname">フォーム名</option>
+                                    <option value="sys_runname">作業名/文号</option>
+                                    <option value="sys_rundate">フロー開始日</option>
+                                    <option value="sys_rundatetime">フロー開始日付+時刻</option>
+                                    <option value="sys_runid">採番</option>
+                                    <option value="sys_autonum">文号カウンター</option>
+                                    <option value="sys_ip">担当者ipアドレス</option>
+                                    <option value="sys_manager1">部門主管（本部門）</option>
+                                    <option value="sys_manager2">部門主管（上級部門）</option>
+                                    <option value="sys_manager3">部門主管（一級部門）</option-->
+                                    <!--option value="sys_sql">sqlクエリステートメントから</option-->
+                                </optgroup>
+                                <!--optgroup label="----プルダウンメニュー----">
+                                    <option value="sys_list_dept">部門リスト</option>
+                                    <option value="sys_list_user">人員リスト</option>
+                                    <option value="sys_list_pos">ロールリスト</option>
+                                    <option value="sys_list_prcsuser1">フロー設定のすべての担当者一覧</option>
+                                    <option value="sys_list_prcsuser2">本手順で担当者リスト</option>
+                                    <option value="sys_list_manager1">部門主管（本部門）</option>
+                                    <option value="sys_list_manager2">部門主管（上級部門）</option>
+                                    <option value="sys_list_manager3">部門主管（一級部門）</option>
+                                    
+                                </optgroup-->
+                            </select>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id='itemAttr'>
+                    <tr>
+                        <th> <span> コントロールのスタイル:</span> </th>
+                        <th> <span> 可視性:</span> </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="controls">
+                                <div class="input-prepend input-append">
+                                    <span class="add-on">フォントサイズ</span><input style="display:inline;width: 32px;" class="span2" id="itemSize" size="1" type="text"><span class="add-on">px</span>
+                                    <span class="add-on">幅</span><input style="display:inline;width: 32px;" class="span2" id="itemWidth" size="1" type="text"><span class="add-on">px</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <label> <input id="hidden" type="checkbox"> 非表示 </label>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody id="itemSql" style="display:none;">
+                    <tr> <th colspan="2"> SQLクエリステートメント ('SQL句にある単一引用符を記号`に置き換えてください。) <span class="sqlopt" style="float:right"><a class="btn" title="SQLライティングガイド" onclick="fnShowGuide();" href="javascript:;"><i class="icon-question-sign"></i></a>  <a class="btn" title="SQLステートメントのテスト" onclick="fnCheckSql(true);" href="javascript:;"><i class="icon-play"></i></a></span></th> </tr>
+                    <tr>
+                        <td colspan="2">
+                            <textarea style="width:440px;height: 45px;" id="txtSql" title="マクロコントロールタイプがSQLクエリステートメントから選択されている場合は、ご入力ください。"></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><!-- end tblwrap-->
+        <div style="display:none;margin-bottom: 27px;">
+            <div class="page-header">
+                <h3>SQLライティングインストラクション<span style="position: fixed;right: 20px;"><a href="javascript:;" title="コントロールのプロパティーページに戻る" onclick="fnShowGuide();" class="btn"><i class="icon-home"></i></a></span></h3>
+            </div>
+            <!--div>
+                <div class="alert alert-error">
+                    <a class="close" data-dismiss="alert">×</a>
+                    <strong>注意！</strong> SQLステートメント内の単一引用符を記号 `に置き換えてください。
+                </div>
+                <blockquote>
+                    <p>マクロコントロールは、手動入力を置き換えることができ、ユーザー指定の要件に従って自動値選択を実現できるため、ワークフローのフォーム入力がよりインテリジェントで便利になります。マクロコントロールタイプの現在の日付を選択し、フォームで【確認】をクリックして、
+					コントロールが生成され、フォームに入力するときに現在の日付が自動的に入力されます。さらに、マクロコントロールは、フォームに表示する必要のないフィールドに対して非表示にできる非表示の属性もサポートしています。マクロコントロールのサポートは、SQLクエリとステートメントから来ています。 </p>
+                </blockquote>
+                <p>SQLステートメントからのマクロ制御は、その定義形式がより複雑であるため、SQL言語の専門知識とOAシステムのデータベース構造の理解が必要です。テクニカルサポート担当者の指導の下で完了することをお勧めします。</p><br/>
+                <p>SQLステートメントは次の形式で記述できます。</p><br/>
+                <strong>次のようなドロップダウンメニュータイプの文：</strong><br/><br/>
+                <p>
+                    <code>SELECT name FROM book_category ORDER BY sort</code><br/><br/>
+					この文は、すべての書籍のカテゴリ名をリストし、シーケンス番号の順に表示することを意味します
+                </p>
+                <br/>
+                <p>
+                    <strong>次のような単一行の入力ボックスステートメント：</strong><br/><br/>
+                    <code>SELECT realname FROM common_member WHERE username = `gzzr`</code><br/><br/>
+					このステートメントは、ユーザー名がgzzrであるユーザーの実名を照会することを意味します。<br/><br/>
+                </p>
+                <strong>現在、SQLステートメントでは次のマクロ変数がサポートされており、ユーザーにとってより便利です。</strong><br/><br/>
+                <code>[sys_user_id]</code> 現在のユーザーのユーザーIDを示します<br/><br/>
+                <code>[sys_dept_id]</code> 現在のユーザーの部門IDを示します<br/><br/>
+                <code>[sys_pos_id]</code> 現在のユーザーロールIDを表します<br/><br/>
+                <code>[sys_run_id]</code> フォームデータテーブルのクエリに使用できる現在のワークフロー番号を示します<br/><br/>
+                <p>
+					例えば：<br/><br/>
+                    <code>SELECT realname FROM common_member WHERE uid=`[sys_user_id]`</code><br/><br/>
+					この文は、現在のユーザーの本名を照会することを意味します
+                </p>
+                <br/>
+                <p>
+                    <code>SELECT realname FROM common_member WHERE FIND_IN_SET(deptid,`[sys_dept_id]`)</code><br/><br/>
+					この文は、現在の部門のすべてのユーザーの名前を照会することを意味します
+                </p>
+                <br/>
+                <p>
+                    <code>SELECT realname FROM common_membe WHERE deptid = `[sys_dept_id]` ORDER BY uid</code><br/><br/>
+					この文は、現在の部門のすべてのユーザーの名前を照会し、ロール番号でソートすることを意味します
+                </p>
+                <p>SQLステートメントを使用して、システムコード設定で設定されたコードをクエリできます。ドロップダウンメニューは、コード定義に従って動的に変更できます。</p><br/><br/>
+				例えば：<br/><br/>
+                <code>SELECT name FROM common_syscode WHERE number = `AREA` ORDER BY sort</code><br/><br/>
+                <p>この文は、システムコード「エリア」のすべての値をリストすることを意味します。「エリア」のコード番号は「AREA」です。</p>
+            </div-->
+        </div>
+        <script type="text/javascript">
+            var oNode = null;
+            window.onload = function() {
+                //如果是编辑控件
+                if( UE.plugins['auto'].editdom ) {
+                    oNode = UE.plugins['auto'].editdom;
+                    if( oNode.tagName == 'INPUT' ) {
+                        if(oNode.getAttribute('hide')=='1'){
+                            $G('hidden').checked = true;
+                        }
+                    }
+                    $G('itemName').value	= oNode.getAttribute('title');
+                    $G('itemType').value	= oNode.getAttribute('datafld');
+                    $G('txtSql').value	= oNode.getAttribute('datasrc');
+                    var sSizeFull = oNode.style.width;
+                    $G('itemWidth').value = sSizeFull.substr(0, sSizeFull.length - 2);//这里的substr是为了去掉末尾的'px'
+                    var sFontSize = oNode.style.fontSize;
+                    $G('itemSize').value = sFontSize.substr(0, sFontSize.length - 2);//这里的substr是为了去掉末尾的'px'
+                }
+                fnTypeChange( $G('itemType').value );
+            }
+			
+            function fnShowGuide(){
+                $('#tblwrap').slideToggle().siblings().slideToggle();
+            }
+            function fnTypeChange( sV ){
+                var aAllowItem = ['sys_list_dept','sys_list_user','sys_list_pos',
+                    'sys_list_prcsuser1','sys_list_prcsuser2','sys_list_manager1',
+                    'sys_list_manager2','sys_list_manager3','sys_list_sql'];
+                if( sV == "sys_sql" || sV =="sys_list_sql" ){
+                    $('#itemSql').show().siblings('tbody').hide();
+                } else {
+                    $('#itemSql').hide().siblings('tbody').show();
+                }
+                if($.inArray(sV,aAllowItem) == -1) {
+                    $('#hidden').removeAttr('disabled').parent().css('cursor', 'default');
+                } else {
+                    $G('hidden').checked = false;
+                    $('#hidden').attr('disabled','disabled').parent().css('cursor', 'not-allowed');
+                }
+            }
+            function fnCheckSql ( bCheckFlag ) {
+                //检测单引号和回车
+                var sExpr1 = /\n/g;
+                var sExpr2 = /'/g;
+                var sSql = $G("txtSql").value;
+                if( sSql.match(sExpr1) || sSql.match(sExpr2) ) {
+                    var sMsg = "あなたのsql文には引号とenterキーがあり、標準に合わないです。交換しますか？";
+                    if( window.confirm(sMsg) ) {
+                        sSql = sSql.replace( sExpr1,"" );
+                        sSql = sSql.replace( sExpr2,"`" );
+                        $G("txtSql").innerHTML = sSql;
+                    } else {
+                        return (false);
+                    }
+                }
+                if( bCheckFlag ) {
+                    var oDate = new Date();
+                    var sUrl = parent.getItemUrl + '&sql=' + sSql;
+                    ajax.request(sUrl, {timeout:60000,onsuccess:function (xhr) {
+                            try {
+                                alert(xhr.responseText);
+                            } catch ( e ) {
+                                alert ( ' SQLをテストする時問題が発生しましたので、OA管理者に連絡してください。');
+                                return false;
+                            }
+                        },onerror:function() {
+                            alert('Request TimeOut');
+                        }});
+                }
+                return (true);
+            }
+            dialog.oncancel = function () {
+                if( UE.plugins['auto'].editdom ) {
+                    delete UE.plugins['auto'].editdom;
+                }
+            };
+            dialog.onok = function (){
+                if ( $G('itemName').value == '' ) {
+                    alert('コントロール名は空にできません。');
+                    $G('itemName').focus();
+                    return false;
+                } else if ( $G('itemType').value == 'sys_sql' || $G('itemType').value=='sys_list_sql' ) {
+                    if ( $G('txtSql').value == '' ) {
+                        alert('SQLクエリ文は空にできません。');
+                        return false;
+                    } else if ( !fnCheckSql( false )) {
+                        return false;
+                    }
+                }
+                if( !oNode ) {
+                    var sUrl = parent.getItemUrl;
+                    var nItemId = null;
+                    ajax.request(sUrl, {timeout:60000,onsuccess:function (xhr) {
+                            try {
+                                nItemId = xhr.responseText;
+                                if ( $G('itemType').value.indexOf('sys_list') < 0 ) {
+                                    oNode = document.createElement("input");
+                                    oNode.setAttribute('type','text');
+                                    oNode.setAttribute('value','{macro}');
+                                } else {
+                                    oNode = document.createElement("select");
+                                    var objOption = new Option('{macro}', '');
+                                    oNode.options[oNode.options.length] = objOption;
+                                }
+                                oNode.setAttribute('title',$G('itemName').value.replace("\"","&quot;") );
+                                oNode.setAttribute('name','data_'+ nItemId );
+                                oNode.setAttribute('class','auto' );
+                                oNode.setAttribute('className','auto');
+                                oNode.setAttribute('datafld',$G('itemType').value );
+                                oNode.setAttribute('datasrc',$G('txtSql').value );
+                                if( $G('hidden').checked ) {
+                                    oNode.setAttribute('hide', '1' ) ;
+                                } else {
+                                    oNode.setAttribute('hide', '0' ) ;
+                                }
+                                if( $G('itemSize').value != '' ) {
+                                    oNode.style.fontSize = $G('itemSize').value + 'px';
+                                }
+                                if( $G('itemWidth').value!="" ) {
+                                    oNode.style.width = $G('itemWidth').value + 'px';
+                                }
+                                editor.execCommand('insertHtml',oNode.outerHTML);
+                                return true;
+                            } catch ( e ) {
+                                alert ( 'コントロールの挿入エラーが発生しました。OA管理者に連絡して解決してください。');
+                                return false;
+                            }
+                        },onerror:function() {
+                            alert('Request TimeOut');
+                        }});
+                } else {
+                    var nItemId = oNode.getAttribute('name').substr(5);
+                    var oNewNode = null;
+                    domUtils.remove(oNode,false);  //删除当前控件，再创建一个新的
+                    if ( $G('itemType').value.indexOf('sys_list') < 0 ) {
+                        oNewNode = document.createElement("input");
+                        oNewNode.setAttribute('type','text');
+                        oNewNode.setAttribute('value','{macro}');
+                    } else {
+                        oNewNode = document.createElement("select");
+                        var objOption = new Option('{macro}', '');
+                        oNewNode.options[oNewNode.options.length] = objOption;
+                    }
+                    oNewNode.setAttribute('title',$G('itemName').value.replace("\"","&quot;") );
+                    oNewNode.setAttribute('name','data_'+ nItemId );
+                    oNewNode.setAttribute('class','auto' );
+                    oNewNode.setAttribute('className','auto');
+                    oNewNode.setAttribute('datafld',$G('itemType').value );
+                    oNewNode.setAttribute('datasrc',$G('txtSql').value );
+                    if( $G('hidden').checked ) {
+                        oNewNode.setAttribute('hide', '1' ) ;
+                    } else {
+                        oNewNode.setAttribute('hide', '0' ) ;
+                    }
+                    if( $G('itemSize').value != '' ) {
+                        oNewNode.style.fontSize = $G('itemSize').value + 'px';
+                    }
+                    if( $G('itemWidth').value!="" ) {
+                        oNewNode.style.width = $G('itemWidth').value + 'px';
+                    }
+                    editor.execCommand('insertHtml',oNewNode.outerHTML);
+                    delete UE.plugins['auto'].editdom; //使用后清空这个对象，变回新增模式
+                }
+            };
+        </script>
+    </body>
+</html>

@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>評価ルール</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("読み込み中です。しばらくお待ちください......");
+
+            //获取流程编码.
+            var flowNo = GetQueryString("FK_Flow");
+
+
+            //时限规则存储表 WF_Part
+            var part = new Entity("BP.WF.Template.Part");
+            part.SetPKVal(flowNo + "_0_DeadLineRole");
+            var count = part.RetrieveFromDBSources();
+
+
+            //调用公共类库的方法.
+            GenerBindEnumKey("DDL_Tag4", "TWay", "1");
+
+            //执行.
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", flowNo);
+
+            //            GenerBindDDL("DDL_Tag5", nodes, "NodeID", "Name");
+            //            GenerBindDDL("DDL_Tag6", nodes, "NodeID", "Name");
+
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(part);
+
+            var str = $("#TB_Tag1").val();
+            if (str == null || str == "")
+                $("#TB_Tag1").val(0);
+
+            str = $("#TB_Tag2").val();
+            if (str == null || str == "")
+                $("#TB_Tag2").val(0);
+
+            str = $("#TB_Tag3").val();
+            if (str == null || str == "")
+                $("#TB_Tag3").val(0);
+
+        });
+
+        function Save() {
+
+            //获取流程编码.
+            var flowNo = GetQueryString("FK_Flow");
+
+            //执行查询.
+            var part = new Entity("BP.WF.Template.Part");
+            part.SetPKVal(flowNo + "_0_DeadLineRole");
+            var count = part.RetrieveFromDBSources();
+
+            part.CopyForm(); //复制表单数据.
+            part.MyPK = flowNo + "_0_DeadLineRole";
+            part.FK_Flow = flowNo;
+            part.FK_Node = 0;
+            part.PartType = "DeadLineRole";
+            if (count == 0)
+                part.Insert();
+            else
+                part.Update();
+
+            window.location.href = window.location.href;
+            return;
+        }
+    </script>
+
+    
+</head>
+<body>
+
+    <form id="cc">
+        <div id="bar" class="cs-tr cs-bar">
+            <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">時間制限ルールの設定</label><input type="button" value="保存" onclick="Save()" />
+        </div>
+        <fieldset>
+            <legend> <input type=radio value="0" id="RB_Tag0_0" name="RB_Tag0" checked='checked' /> <label for="RB_Tag0_0">設定しない</label> </legend>
+            <ul>
+                <li style=" color:Gray">デフォルトでは時間制限ルールは設定されていません。フロー全体に時間制限はありません。</li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend><input type="radio" value="1" id="RB_Tag0_1" name="RB_Tag0" /> <label for="RB_Tag0_1">時間制限ルールの設定</label></legend>
+            <br />
+            <table style=" width:100%;">
+                <tr>
+                    <td nowarp=true> 期限</td>
+                    <td> <input type=text id="TB_Tag1" name="TB_Tag1" style="width:30px;" />日</td>
+                    <td><input type=text id="TB_Tag2" name="TB_Tag2" style="width:30px;" />時間</td>
+                    <td style=" color:Gray"><input type=text id="TB_Tag3" name="TB_Tag3" style="width:30px;" />分</td>
+                </tr>
+                <!--
+                <tr>
+                <td>警告:</td>
+                <td>  <input type=text id="TB_WarningDay" name="TB_WarningDay" /> 日</td>
+                <td> 日数</td>
+                <td style=" color:Gray">日数</td>
+                </tr>
+                -->
+                <tr>
+                    <td>休日</td>
+                    <td>
+                        <select name="DDL_Tag4" id="DDL_Tag4"> </select>
+                    </td>
+
+                    <td colspan="2">
+                        <a href="javascript:WinOpen('../../Comm/Sys/Holiday.htm');"> 休日のメンテナンス</a>
+
+                    </td>
+                </tr>
+                <!--<tr>
+                <td>時間制限ルールの開始ノード</td>
+                <td>
+                <select name="DDL_Tag5" id="DDL_Tag5" > </select>
+                </td>
+                <td>時限規則の終了ノード</td>
+                <td>
+                <select name="DDL_Tag6" id="DDL_Tag6" > </select>
+                </td>
+                </tr>-->
+                <tr>
+                </tr>
+                <tr>
+                    <td>アラーム設定</td>
+                    <td>
+                        <select name="DDL_Tag7" id="DDL_Tag7">
+                            <option value="0">12時間</option>
+                            <option value="1">24時間</option>
+                            <option value="2">48時間</option>
+                            <option value="3">72時間</option>
+                        </select>
+                    </td>
+                    <td colspan="2">説明：期限までどれぐらいの時間で警報が発生する</td>
+                </tr>
+
+                <td colspan="4">
+                    注：WF_CHテーブルは、適時性の評価データを格納するために使用されます。テーブルの構造を調べて、必要な評価データを使用できます。
+                </td>
+            </table>
+        </fieldset>
+
+    </form>
+
+</body>
+</html>

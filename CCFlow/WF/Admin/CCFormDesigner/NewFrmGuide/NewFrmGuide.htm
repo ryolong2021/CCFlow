@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>フォームの作成</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var frmWorkModel = GetQueryString("FrmWorkModel");
+
+        });
+
+        function NewBill() {
+            var url = "0.FoolForm.htm?FK_FrmSort=" + GetQueryString("FK_FrmSort") + "&FormWorkMode=1";
+            window.location.href = url;
+        }
+        function NewFrm() {
+            var url = "0.FoolForm.htm?FK_FrmSort=" + GetQueryString("FK_FrmSort") + "&FormWorkMode=0";
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+    <table style="width: 99%;">
+        <caption>
+            フォームの動作モードを選択してください。</caption>
+        <tr>
+            <th colspan=2>
+              フローフォームフックモード
+            </th>
+        </tr>
+        <tr>
+            <td valign="top">
+                <ul>
+                    <li>このモードは、フローのノードにバインドし、ccbpmのフローと組み合わせるために使用されます。</li>
+                    <li>1つのノードに複数のフォームがあるか、または分岐ノードに使用されることが多い。</li>
+                    <li>独立フォームサポート、ccbpm内蔵の簡易フォーム、フリーフォーム、埋め込み（定義）フォーム、VSTOフォームなどのタイプ</li>
+                    <li>右図は、フォームツリーバインディングのフローの独立したフォームです。</li>
+                    <li><a href="javascript:NewFrm()"><img src='../../../Img/Btn/New.gif' />独立したフォームを作成</a></li>
+                </ul>
+            </td>
+
+            <td>
+            <img src="../../AttrNode/Img/Tree.png" width="400px" alt="" />
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">データモード</th>
+        </tr>
+        <tr>
+            <td valign="top">
+                <ul>
+                    <li>レシートモードとは、現在のフォームがレシートとして表示されます。</li>
+                    <li>フォームを作成し、テーブルに対応して追加、削除、変更、検索、印刷、統計分析を行います。</li>
+                    <li>例： 顧客台帳、購入書、入庫書、連絡先、固定資産台帳など…</li>
+                    <li>レシートモードは簡易フローの承認操作をサポートします。</li>
+                    <li>このモードのフォームはまだフローツリーによってバインドされています。</li>
+                    <li>レシートモードはccbpm内蔵のお簡易フォーム、フリーフォームの2つのタイプしかサポートしていません。</li>
+                    <li><a href="javascript:NewBill()"><img src='../../../Img/Btn/New.gif' />レシートを作成する</a></li>
+
+                </ul>
+            </td>
+
+              <td>
+              <a href="javascript:WinOpen('../../AttrNode/Img/Bill.png');">
+             <img src="../../AttrNode/Img/Bill.png" width="400px" alt=""/></a>
+            </td>
+        </tr>
+    </table>
+
+    <input  type="button" value="次のステップ" />
+    </form>
+</body>
+</html>

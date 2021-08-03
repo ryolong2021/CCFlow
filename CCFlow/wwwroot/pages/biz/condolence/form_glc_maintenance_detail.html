@@ -1,0 +1,335 @@
+﻿<main class="o-modal__body">
+    <section class="m-section m-section--card p-card-main">
+        <section class="m-section m-section--no-padding" id="tehaijyotahenko">
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">香料手配区分</span></h3>
+            <div class="m-form-field">
+                <div class="m-form-field__content">
+                    <div class="a-pulldown" id="pulldown">
+                        <select id="koryokbn_details" name="koryokbn_details" class="a-pulldown__select">
+                        </select>
+                        <div class="a-pulldown__icon-container"><i class="a-icon a-icon--arrow-down"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-form-field">
+                <span class="a-info-table-cell__label">申請番号</span>
+                <div class="m-form-field__content">
+                    <span id="oid_details"></span>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding" id="dairilistview">
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">代理申請者の情報</span></h3>
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">代理社員番号</span>
+                                <span id="dairi_syainbango_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">代理社員名</span>
+                                <span id="dairi_syainname_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">代理所属</span>
+                                <span id="dairi_syozoku_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">連絡先電話番号</span>
+                                <span id="dairi_tel_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">連絡先メール</span>
+                                <span id="dairi_mail_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding">
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label" id="sinseiLi"></span></h3>
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">社員番号</span>
+                                <span id="syainbango_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">氏名</span>
+                                <span id="simei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">氏名（カナ）</span>
+                                <span id="furikana_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">会社名称</span>
+                                <span id="kaisyameisyo_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">正式組織名・上</span>
+                                <span id="syosikiwue_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">正式組織名・下</span>
+                                <span id="sosikisita_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">社員区分</span>
+                                <span id="syainkubu"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">職位</span>
+                                <span id="syokui_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">組合区分</span>
+                                <span id="kumiai_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">グッドライフ区分</span>
+                                <span id="glc_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item telandmail">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">電話番号</span>
+                                <span id="tel_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item telandmail">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">連絡先メール</span>
+                                <span id="mail_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section m-section--no-padding">
+            <div class="m-form-field"><label class="m-form-field__label"></label></div>
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">亡くなられた方について</span></h3>
+            <div class="m-info-table m-info-table--no-border-header">
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">あなたから見た続柄</span>
+                                <span id="dead_jugyoin_zokugarakbn_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">姓</span>
+                                <span id="dead_shimei_sei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">名</span>
+                                <span id="dead_shimei_mei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">姓（カナ）</span>
+                                <span id="dead_kanashimei_sei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">名（カナ）</span>
+                                <span id="dead_kanashimei_mei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">同居/別居</span>
+                                <span id="dead_dokyo_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">性別</span>
+                                <span id="dead_seibetsu_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">逝去日</span>
+                                <span id="deaddate_seikyobi_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">逝去時刻</span>
+                                <span id="deadtime_seikyobi_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item">
+                        <div class="a-info-table-cell a-info-table-cell--pair">
+                            <div class="a-info-table-cell__content">
+                                <span class="a-info-table-cell__label">年齢</span>
+                                <span id="dead_nenrei_details"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="m-section">
+            <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">香料給付</span></h3>
+            <div class="m-form-field">
+                <label class="m-form-field__label">香料</label>
+                <div class="m-form-field__content">
+                    <p class="a-text a-text--align-left" id="koryo_details"></p>
+                </div>
+            </div>
+            <div class="m-info-table">
+                <div class="m-info-table__header">差出人情報</div>
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item" id="label-standard-info0">
+                        <div class="a-info-table-cell">
+                            <div class="a-info-table-cell__content">
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text" id="label-standard-kaishaname0"></span>
+                                </p>
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text" id="label-standard-yakushoku0"></span>
+                                    <span class="a-quota-info__text" id="label-standard-shimei0"></span>
+                                </p>
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text">香料</span>
+                                    <span class="a-quota-info__number" id="label-standard-koryonum0"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-info-table__item" id="label-standard-info1">
+                        <div class="a-info-table-cell">
+                            <div class="a-info-table-cell__content">
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text" id="label-standard-kaishaname1"></span>
+                                </p>
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text" id="label-standard-yakushoku1"></span>
+                                    <span class="a-quota-info__text" id="label-standard-shimei1"></span>
+                                </p>
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text">香料</span>
+                                    <span class="a-quota-info__number" id="label-standard-koryonum1"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-info-table__container">
+                    <div class="m-info-table__item" id="label-standard-info2">
+                        <div class="a-info-table-cell">
+                            <div class="a-info-table-cell__content">
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text" id="label-standard-kaishaname2"></span>
+                                </p>
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text" id="label-standard-yakushoku2"></span>
+                                    <span class="a-quota-info__text" id="label-standard-shimei2"></span>
+                                </p>
+                                <p style="margin-bottom: 13px;">
+                                    <span class="a-quota-info__primary-text">香料</span>
+                                    <span class="a-quota-info__number" id="label-standard-koryonum2"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</main>
+<footer class="o-modal__footer">
+    <button class="a-button a-button--third a-button--huge" id="btn_back_details" type="button">
+        <div class="a-button__label">戻る</div>
+    </button>
+    <button class="a-button a-button--primary a-button--huge" id="btn_submit_detail" type="button">
+        <div class="a-button__label">保存</div>
+    </button>
+</footer>

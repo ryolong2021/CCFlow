@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>検索条件の設定</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        var frmID = GetQueryString("FrmID");
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;読み込み中です。少々お待ちください。");
+
+            InitPage();
+
+            $("#Msg").html("");
+
+        });
+
+        function InitPage() {
+
+
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", frmID);
+
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+
+
+            //关键字查询.
+            document.getElementById("CB_Key").checked = true; //  (mapData.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
+
+            var js = mapData.AtPara.split("@");
+            var RptStringSearchKeys = null;
+            var RptSearchKeys = null;
+            var RptDTSearchWay = null;
+            var RptDTSearchKey = null;
+            for (var i = 0; i < js.length; i++) {
+                 if (js[i].indexOf("RptStringSearchKeys") != -1)
+                    RptStringSearchKeys = js[i].replace("RptStringSearchKeys=", "")
+                if (js[i].indexOf("RptSearchKeys") != -1)
+                    RptSearchKeys = js[i].replace("RptSearchKeys=", "")
+                if (js[i].indexOf("DTSearchWay") != -1)
+                    RptDTSearchWay = js[i].replace("DTSearchWay=", "")
+                if (js[i].indexOf("DTSearchKey") != -1)
+                    RptDTSearchKey = js[i].replace("DTSearchKey=", "")
+            }
+
+
+
+            //绑定外键字段.
+            var dateMapAttrs = [];
+            var count = 0;
+            for (var i = 0, length = mapAttrs.length; i < length; i++) {
+
+                var attr = mapAttrs[i];
+                if (attr.MyDataType == 6 || attr.MyDataType == 7) {
+                    dateMapAttrs.push(attr);
+                    continue;
+                }
+
+               
+                if ( attr.UIVisible == 0) {
+                    continue;
+                }  
+                //文本字段
+                if (attr.MyDataType == 1 && attr.UIContralType == 0) {
+                    count++;
+                    flag = false;
+                    if (RptStringSearchKeys) {
+                        flag = (RptStringSearchKeys.indexOf("*" + attr.KeyOfEn + ",") != -1);
+                    }
+
+                    $("#StringKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "'  data-name='"+attr.Name+"'/><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label>&nbsp;&nbsp;&nbsp;");
+                    if (count == 3) {
+                        $("#StringKeys").append("<br/>");
+                        count = 0;
+                    }
+                       
+                    continue;
+                }
+                if (attr.UIBindKey == ""   ) {
+                    continue;
+                }
+
+                flag = false;
+                if (RptSearchKeys) {
+                    flag = (RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1);
+                }
+
+                $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
+            }
+
+            $("#DDL_DTSearchWay").val(RptDTSearchWay);
+
+            //绑定日期下拉框.
+            if (dateMapAttrs != null) {
+                GenerBindDDL("DDL_DTSearchKey", dateMapAttrs, "KeyOfEn", "Name", RptDTSearchKey);
+            }
+
+        }
+
+        function Save() {
+
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+
+            var checked = document.getElementById("CB_Key").checked ? 1 : 0;
+            mapData.SetPara("IsSearchKey", checked);
+
+            mapData.SetPara("DTSearchWay", document.getElementById("DDL_DTSearchWay").value);
+            mapData.SetPara("DTSearchKey", document.getElementById("DDL_DTSearchKey").value);
+            mapData.SetPara("DTSearchLabel", $("#DDL_DTSearchKey").find("option:selected").text());
+
+            var fields = "";
+            var oChecks = document.getElementById("FKeys").getElementsByTagName("input");
+            for (var i = 0, len = oChecks.length; i < len; i++) {
+                var item = oChecks[i];
+                if (item.checked) {
+                    fields += "*" + item.id;
+                }
+            }
+
+            mapData.SetPara("RptSearchKeys", fields + "*");
+
+            fields = "";
+            oChecks = document.getElementById("StringKeys").getElementsByTagName("input");
+            for (var i = 0, len = oChecks.length; i < len; i++) {
+                var item = oChecks[i];
+                if (item.checked) {
+                    fields += "*" + item.id+","+item.getAttribute("data-name");
+                }
+            }
+            mapData.SetPara("RptStringSearchKeys", fields + "*");
+
+            mapData.Update();
+
+            window.location.href = window.location.href;
+
+        }
+
+        
+    </script>
+    <base target="_self" />
+</head>
+<body>
+    <form id="cc">
+    <table style="width: 96%;">
+        <caption>
+            検索条件の設定</caption>
+        <tr>
+            <th>
+                キーワード検索
+            </th>
+        </tr>
+        <tr>
+            <td>
+                キーワード検索は、ユーザーからキーワードの入力を受け付け、テーブル全体の表示列にlike句で（外部キー、列挙、数値タイプを除く）検索する<br />
+                <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">キーワード検索を追加しますか？</label>
+                <br />
+                選択フィールドのあいまいな検索で検索しますが、フィールドが選択されない場合、キーワードで検索します。
+                <div id="StringKeys">
+                </div>
+                <br/>
+                キーワード検索ヒント
+                <input id="TB_Alert" name="TB_Alert" type="text" value="" />デフォルトでは、キーワードを入力してください。
+            </td>
+        </tr>
+        <tr>
+            <th>
+                外部キーと列挙タイプの検索
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div id="FKeys">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                期間の検索
+            </th>
+        </tr>
+        <tr>
+            <td>
+                データはある期間で検索します。例えば、フローの開始時間によって指定された期間で検索します。<br>
+                選択方式：<select name="DDL_DTSearchWay" id="DDL_DTSearchWay">
+                    <option selected="selected" value="0">有効にしない</option>
+                    <option value="1">日付で</option>
+                    <option value="2">日付時刻によって</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;フィールド:<select name="DDL_DTSearchKey" id="DDL_DTSearchKey">
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="保存" onclick="Save();" />
+    </form>
+</body>
+</html>

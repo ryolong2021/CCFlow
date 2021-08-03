@@ -1,0 +1,120 @@
+<form id="setmailcheckform">
+    <div class="o-modal o-modal--fullscreen o-modal--has-footer" id="setmailcheck">
+        <div class="o-modal__window">
+            <main class="o-modal__body">
+                <section class="m-section p-setting-input-form__heading">
+                    <h1 class="a-heading a-heading--h1 undefined"><span class="a-heading__label">自動送信メール確認</span></h1>
+                </section>
+                <!--<section class="m-section m-section--card p-card-main">-->
+                <section class="m-section m-section--no-padding">
+                    <h2 class="a-heading undefined">
+                        <span class="a-heading__label">※内容に問題がなければ、一番下の「保存ボタン」を押下して設定を保存してください。</span>
+                    </h2>
+                </section>
+                <br>
+                <section class="m-section m-section--no-padding">
+                    <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">管理用タイトル</span></h3>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">管理用タイトル</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="management_title_confirm">弔事連絡が新規作成されたら申請者に送信されるメール</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="m-section m-section--no-padding">
+                    <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">送信タイミング</span></h3>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">ワークフロー</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="workflow_confirm">弔事連絡</p>
+                        </div>
+                    </div>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">申請者区分</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="seisinsyakbn_confirm">従業者本人（プロパー）</p>
+                        </div>
+                    </div>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">ステータス</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="sendtimingkbn_confirm">新規作成</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="m-section m-section--no-padding">
+                    <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">送信先</span></h3>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">TO:</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="email_to_confirm">申請者</p>
+                            <input type="hidden" id="hidden_email_to_confirm" />
+                        </div>
+                    </div>
+                    <div class="m-form-field" id="email_to_other_div">
+                        <label class="m-form-field__label">その他の送信先:</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="email_to_other_confirm"></p>
+                        </div>
+                    </div>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">CC:</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="email_cc_confirm">なし</p>
+                            <input type="hidden" id="hidden_email_cc_confirm" />
+                        </div>
+                    </div>
+                    <div class="m-form-field" id="email_cc_other_div">
+                        <label class="m-form-field__label">その他の送信先:</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="email_cc_other_confirm"></p>
+                        </div>
+                    </div>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">BCC:</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="email_bcc_confirm">なし</p>
+                            <input type="hidden" id="hidden_email_bcc_confirm" />
+                        </div>
+                    </div>
+                    <div class="m-form-field" id="email_bcc_other_div">
+                        <label class="m-form-field__label">その他の送信先:</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="email_bcc_other_confirm"></p>
+                        </div>
+                    </div>
+                </section>
+                <section class="m-section m-section--no-padding">
+                    <h3 class="a-heading a-heading--h3 undefined"><span class="a-heading__label">内容</span></h3>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">件名</label>
+                        <div class="m-form-field__content">
+                            <p class="a-text a-text--align-left" id="email_temp_name_confirm">弔事連絡が送信されました。</p>
+                        </div>
+                    </div>
+                    <div class="m-form-field">
+                        <label class="m-form-field__label">テキスト</label>
+                        <div class="m-form-field__content">
+                            <div class="a-email-template-viewer" id="email_temp_contents_confirm">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--</section>-->
+                <section class="m-section p-footer-action">
+                    <div class="m-button-container m-button-container--veritcal">
+                        <button class="a-button a-button--third" type="button">
+                            <div class="a-button__label">戻る</div>
+                        </button>
+                        <button class="a-button a-button--secondary" type="button">
+                            <div class="a-button__label">停止中で保存</div>
+                        </button>
+                        <button class="a-button a-button--primary" type="button">
+                            <div class="a-button__label">稼働中で保存</div>
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+</form>
