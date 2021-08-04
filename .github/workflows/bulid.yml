@@ -26,6 +26,5 @@ jobs:
         sudo cp -r /home/runner/work/CCFlow/CCFlow/packages/pdflib_dotnet /root/.nuget/packages
         sudo rm -fr /home/runner/work/CCFlow/CCFlow/CCFlow/bin
         sudo rm -fr /home/runner/work/CCFlow/CCFlow/CCFlow/obj
-        cd /home/runner/work/CCFlow/CCFlow/CCFlow
-        sudo dotnet build
+        sudo dotnet build /home/runner/work/CCFlow/CCFlow/CCFlow
         sudo ls /home/runner/work/CCFlow/CCFlow/CCFlow/bin/Debug/netcoreapp3.1
