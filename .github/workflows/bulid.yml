@@ -13,18 +13,18 @@ jobs:
         persist-credentials: false
     - name: dotnet env construction
       run: |
-        apt-get update
-        apt-get install -y wget
-        wget https://packages.microsoft.com/config/ubuntu/20.10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        dpkg -i packages-microsoft-prod.deb
-        rm packages-microsoft-prod.deb
-        apt-get install -y apt-transport-https
-        apt-get install -y dotnet-sdk-3.1
-        mkdir -p /root/.nuget/packages
+        sudo apt-get update
+        sudo apt-get install -y wget
+        sudo wget https://packages.microsoft.com/config/ubuntu/20.10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        sudo rm packages-microsoft-prod.deb
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get install -y dotnet-sdk-3.1
+        sudo mkdir -p /root/.nuget/packages
     - name: ccflow build
       run: |
-        cp /home/runner/work/ccflow/ccflow/packages/pdflib_dotnet /root/.nuget/packages
-        rm -fr /home/runner/work/ccflow/ccflow/CCFlow/bin
-        rm -fr /home/runner/work/ccflow/ccflow/CCFlow/obj
-        dotnet build /home/runner/work/ccflow/ccflow/CCFlow/CCFlow.NetCore.csproj
-        ls /home/runner/work/ccflow/ccflow/CCFlow/bin/Debug/netcoreapp3.1
+        sudo cp /home/runner/work/ccflow/ccflow/packages/pdflib_dotnet /root/.nuget/packages
+        sudo rm -fr /home/runner/work/ccflow/ccflow/CCFlow/bin
+        sudo rm -fr /home/runner/work/ccflow/ccflow/CCFlow/obj
+        sudo dotnet build /home/runner/work/ccflow/ccflow/CCFlow/CCFlow.NetCore.csproj
+        sudo ls /home/runner/work/ccflow/ccflow/CCFlow/bin/Debug/netcoreapp3.1
