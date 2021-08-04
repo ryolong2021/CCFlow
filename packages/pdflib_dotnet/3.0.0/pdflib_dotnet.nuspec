@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>PDFlib_dotnet</id>
+    <version>3.0.0</version>
+    <title>PDFlib_dotnet (.NET core)</title>
+    <authors>PDFlib GmbH</authors>
+    <owners>PDFlib GmbH</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.pdflib.com/products</projectUrl>
+    <description>PDFlib - a library for generating PDF on the fly.</description>
+    <copyright>Copyright (c) PDFlib GmbH 2019</copyright>
+    <tags>PDFlib</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- get the preferred architecture -->
+  <PropertyGroup>
+    <!-- handle VS 2017 live unit testing -->
+    <NativePDFlib Condition=" '$(NativePDFlib)' == '' and '$(BuildingForLiveUnitTesting)' == 'true' and '$(PlatformTarget)' == '' ">x86</NativePDFlib>
+    <!-- handle x86/x64 specifically -->
+    <NativePDFlib Condition=" '$(NativePDFlib)' == '' and ( '$(PlatformTarget)' == 'x64' or '$(PlatformTarget)' == 'x86' ) ">$(PlatformTarget)</NativePDFlib>
+    <!-- handle Any CPU, considering Prefer32Bit -->
+    <NativePDFlib Condition=" '$(NativePDFlib)' == '' and '$(Prefer32Bit)' == 'True' ">x86</NativePDFlib>
+    <!-- fall back to x64 on 64-bit machines -->
+    <NativePDFlib Condition=" '$(NativePDFlib)' == '' and $([System.Environment]::Is64BitOperatingSystem) ">x64</NativePDFlib>
+    <!-- fall back to x86 -->
+    <NativePDFlib Condition=" '$(NativePDFlib)' == '' ">x86</NativePDFlib>
+  </PropertyGroup>
+
+  <!-- get the preferred paths -->
+  <PropertyGroup>
+    <WindowsNativePDFlib>$(MSBuildThisFileDirectory)..\..\runtimes\win-$(NativePDFlib)\native\PDFlib_dotnet.dll</WindowsNativePDFlib>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(WindowsNativePDFlib)" Condition=" Exists('$(WindowsNativePDFlib)') ">
+      <Link>$([System.IO.Path]::GetFilename('$(WindowsNativePDFlib)'))</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
