@@ -23,7 +23,7 @@ jobs:
         sudo mkdir -p /root/.nuget/packages
     - name: ccflow build
       run: |
-        sudo cp /home/runner/work/ccflow/ccflow/packages/pdflib_dotnet /root/.nuget/packages
+        sudo cp -r /home/runner/work/ccflow/ccflow/packages/pdflib_dotnet /root/.nuget/packages
         sudo rm -fr /home/runner/work/ccflow/ccflow/CCFlow/bin
         sudo rm -fr /home/runner/work/ccflow/ccflow/CCFlow/obj
         sudo dotnet build /home/runner/work/ccflow/ccflow/CCFlow/CCFlow.NetCore.csproj
