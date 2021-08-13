@@ -13,6 +13,7 @@ jobs:
         persist-credentials: false
     - name: dotnet env construction
       run: |
+        sudo su
         sudo apt-get update
         sudo apt-get install -y wget
         sudo wget https://packages.microsoft.com/config/ubuntu/20.10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -28,3 +29,4 @@ jobs:
         sudo rm -fr /home/runner/work/CCFlow/CCFlow/CCFlow/obj
         sudo dotnet build /home/runner/work/CCFlow/CCFlow/CCFlow
         sudo ls /home/runner/work/CCFlow/CCFlow/CCFlow/bin/Debug/netcoreapp3.1
+        
