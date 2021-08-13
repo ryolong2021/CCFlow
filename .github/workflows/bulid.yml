@@ -13,6 +13,7 @@ jobs:
         persist-credentials: false
     - name: dotnet env construction
       run: |
+        sudo su
         sudo apt-get update
         sudo apt-get install -y wget
         sudo wget https://packages.microsoft.com/config/ubuntu/20.10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
